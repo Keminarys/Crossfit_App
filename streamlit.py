@@ -7,6 +7,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import plotly.express as px
 import plotly.graph_objects as go
+import json
 
 skey = st.secrets["gcp_service_account"]
 data = json.load(skey)
