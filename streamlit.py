@@ -8,10 +8,7 @@ from oauth2client.service_account import ServiceAccountCredentials
 import plotly.express as px
 import plotly.graph_objects as go
 
-scope = ['https://spreadsheets.google.com/feeds',
-         'https://www.googleapis.com/auth/drive']
-credentials = ServiceAccountCredentials.from_json_keyfile_name(st.secret, scope)
-gc = gspread.authorize(credentials)
+gc = gspread.service_account(filename=st.secret)
 worksheet = gc.open('Database_CF83').All_mvmt
 all_mvt = pd.DataFrame(worksheet.get_all_records())
 list_rm = [1,3,5,10]
