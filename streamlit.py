@@ -10,12 +10,13 @@ import plotly.graph_objects as go
 
 skey = st.secrets["gcp_service_account"]
 
-gc = gspread.service_account(filename=skey)
-worksheet = gc.open('Database_CF83').All_mvmt
-all_mvt = pd.DataFrame(worksheet.get_all_records())
-list_rm = [1,3,5,10]
+# gc = gspread.service_account(filename=skey)
+# worksheet = gc.open('Database_CF83').All_mvmt
+# all_mvt = pd.DataFrame(worksheet.get_all_records())
+# list_rm = [1,3,5,10]
 
-dico_ex = all_mvt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
+# dico_ex = all_mvt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 st.title('Crossfit83 Le Beausset')
-st.dataframe(all_mvt)
-st.write(dico_ex)
+st.write(skey)
+# st.dataframe(all_mvt)
+# st.write(dico_ex)
