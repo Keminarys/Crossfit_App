@@ -9,7 +9,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 
 skey = st.secrets["gcp_service_account"]
-
+data = json.load(skey)
 # gc = gspread.service_account(filename=skey)
 # worksheet = gc.open('Database_CF83').All_mvmt
 # all_mvt = pd.DataFrame(worksheet.get_all_records())
@@ -17,6 +17,6 @@ skey = st.secrets["gcp_service_account"]
 
 # dico_ex = all_mvt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 st.title('Crossfit83 Le Beausset')
-st.write(skey)
+st.write(data)
 # st.dataframe(all_mvt)
 # st.write(dico_ex)
