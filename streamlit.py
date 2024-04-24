@@ -8,7 +8,9 @@ from oauth2client.service_account import ServiceAccountCredentials
 import plotly.express as px
 import plotly.graph_objects as go
 
-gc = gspread.service_account(filename=st.secrets["gcp_service_account"])
+skey = st.secrets["gcp_service_account"]
+
+gc = gspread.service_account(filename=skey)
 worksheet = gc.open('Database_CF83').All_mvmt
 all_mvt = pd.DataFrame(worksheet.get_all_records())
 list_rm = [1,3,5,10]
