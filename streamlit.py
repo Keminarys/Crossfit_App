@@ -21,6 +21,16 @@ list_rm = [1,3,5,10]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 
 st.title('Crossfit83 Le Beausset')
+st.divider()
+st.header('Sélectionner l\'onglet correspondant à votre besoin')
+st.subheader('Si c\'est votre première visite merci d\'ajouter votre profil dans la barre latérale')
+st.write('_Par soucis de RGPD merci de ne renseigner que les 3 premières lettre de votre prénom et la première de votre nom de famille_')
+st.divider()
+
+with st.sidebar :
+    
+    new_ppl = st.text_input('Ecrire votre nom ici')
+  
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator"])
 
 with tab1 :
