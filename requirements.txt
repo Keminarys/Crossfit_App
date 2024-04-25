@@ -1,5 +1,6 @@
-plotly == 5.15.0
+plotly
 pandas
 numpy
-streamlit == 1.33.0
-st-gsheets-connection
+streamlit
+gspread
+oauth2client
