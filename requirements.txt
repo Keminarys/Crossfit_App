@@ -5,3 +5,5 @@ streamlit
 gspread
 oauth2client
 st-gsheets-connection
+matplotlib
+seaborn
