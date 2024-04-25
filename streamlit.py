@@ -24,5 +24,5 @@ st.title('Crossfit83 Le Beausset')
 cat = st.selectbox('Select a category', list(dico_ex.keys()))
 ex = st.selectbox('Select an exercice', dico_ex[cat])
 athl = st.selectbox('Choose your profile', list_name)
-# st.dataframe(all_mvt)
-# st.write(dico_ex)
+if cat == 'WEIGHTLIFTING' : 
+  rm = st.selectbox('Select a RM', list_rm)
