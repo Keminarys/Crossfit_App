@@ -21,7 +21,7 @@ list_rm = [1,3,5,10]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 
 st.title('Crossfit83 Le Beausset')
-tab1, tab2, tab3, tab4 = st.tabs(["🎉 New Record", "📈 Progression Visualisation", "📊 Data","💪🎯 Objectives", "🏋️‍♂️🤖 WOD Generator"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["🎉 New Record", "📈 Progression Visualisation", "📊 Data","💪🎯 Objectives", "🏋️‍♂️🤖 WOD Generator"])
 
 with tab1 :
   cat = st.selectbox('Select a category', list(dico_ex.keys()))
