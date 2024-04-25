@@ -21,7 +21,6 @@ list_rm = [1,3,5,10]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 
 st.title('Crossfit83 Le Beausset')
-st.image("http://www.crossfit83lebeausset.com/s/cc_images/teaserbox_81225875.png?t=1649930726", width=200)
 cat = st.selectbox('Select a category', list(dico_ex.keys()))
 ex = st.selectbox('Select an exercice', dico_ex[cat])
 athl = st.selectbox('Choose your profile', list_name)
