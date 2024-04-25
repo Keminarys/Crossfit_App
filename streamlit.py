@@ -22,7 +22,6 @@ dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict(
 
 st.title('Crossfit83 Le Beausset')
 st.divider()
-st.header('Sélectionner l\'onglet correspondant à votre besoin')
 st.subheader('Si c\'est votre première visite merci d\'ajouter votre profil dans la barre latérale')
 st.write('_Par soucis de RGPD merci de ne renseigner que les 3 premières lettre de votre prénom et la première de votre nom de famille_')
 st.divider()
