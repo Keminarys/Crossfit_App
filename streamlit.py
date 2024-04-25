@@ -16,6 +16,7 @@ all_mvmt = conn.read(worksheet="All_mvmt")
 df = conn.read(worksheet="Progression")
 list_name = conn.read(worksheet="Profils")
 list_name = list(list_name["Name"].unique())
+list_name = [x for x in list_name if str(x) != "nan"]
 list_rm = [1,3,5,10]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 
