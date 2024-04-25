@@ -21,11 +21,12 @@ list_rm = [1,3,5,10]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 
 st.title('Crossfit83 Le Beausset')
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["🎉 New Record", "📈 Progression Visualisation", "📊 Data","💪🎯 Objectives", "🏋️‍♂️🤖 WOD Generator"])
+tab1, tab2, tab3, tab4, tab5 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator"])
 
 with tab1 :
-  cat = st.selectbox('Select a category', list(dico_ex.keys()))
-  ex = st.selectbox('Select an exercice', dico_ex[cat])
-  athl = st.selectbox('Choose your profile', list_name)
+  cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()))
+  ex = st.selectbox('Choix de l"exercice', dico_ex[cat])
+  athl = st.selectbox('Choix du profil', list_name)
   if cat == 'WEIGHTLIFTING' : 
-    rm = st.selectbox('Select a RM', list_rm)
+    rm = st.selectbox('Choix du RM', list_rm)
+  nb = st.number_input('Valeur de la performance', step=1)
