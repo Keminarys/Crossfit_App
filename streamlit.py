@@ -18,6 +18,6 @@ list_rm = [1,3,5,10]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 
 st.title('Crossfit83 Le Beausset')
-st.selectbox('Select a category', dico_ex.key())
+st.selectbox('Select a category', list(dico_ex.keys()))
 # st.dataframe(all_mvt)
 # st.write(dico_ex)
