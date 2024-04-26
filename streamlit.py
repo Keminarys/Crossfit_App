@@ -57,7 +57,7 @@ with tab1 :
     if cat == 'WEIGHTLIFTING' : 
         rm = st.selectbox('Choix du RM', list_rm)
     if cat == 'RUN' :
-        nb = st.text_input('Temps (format mm:ss)', "00:00")
+        nb = st.text_input('Temps au format MM:SS', "00:00")
     else : nb = st.number_input('Max reps/charge', step=1)
     date = st.date_input('Date de réalisation', value = "today")
     unit = dico_units[cat]
