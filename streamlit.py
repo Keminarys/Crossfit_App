@@ -14,8 +14,8 @@ import seaborn as sns
 conn = st.connection("gsheets", type=GSheetsConnection)
 all_mvmt = conn.read(worksheet="All_mvmt")
 df = conn.read(worksheet="Progression")
-list_name = conn.read(worksheet="Profils")
-list_name = list(list_name["Name"].unique())
+df_name = conn.read(worksheet="Profils")
+list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
 list_rm = [1,3,5,10]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
@@ -29,6 +29,12 @@ st.divider()
 with st.sidebar :
     
     new_ppl = st.text_input('Ecrire votre nom ici')
+    if st.button('Ajouter mon profil') :
+        df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl})], ignore_index=True)
+        df_newname = conn.update(
+            worksheet="Profils",
+            data=df_newname)
+        st.experimental_rerun()
   
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator"])
 
