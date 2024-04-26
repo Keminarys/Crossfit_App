@@ -57,8 +57,19 @@ with tab1 :
     if cat == 'WEIGHTLIFTING' : 
         rm = st.selectbox('Choix du RM', list_rm)
     nb = st.number_input('Valeur de la performance', step=1)
+    if cat == 'RUN' :
+        nb = st.text_input('Temps de course (format mm:ss)', "00:00")
     date = st.date_input('Date de réalisation', value = "today")
     unit = dico_units[cat]
-    st.write(unit)
+    new_entry = {'Profil' : athl,
+                'Category' : cat,
+                'Exercice' : ex,
+                'Date' : date,
+                'Perf' : nb,
+                'Unité' : unit}
+    if st.button('Ajouter un nouveau record à mon profil :muscle:') :
+        df_record = pd.concat([df, pd.DataFrame(new_entry, index=[len(df)])], ignore_index=True)
+        df_record = conn.update(worksheet="Progression",data=df_record)
+        st.rerun()
     
 
