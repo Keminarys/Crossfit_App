@@ -35,7 +35,7 @@ with st.sidebar :
         df_newname = conn.update(
             worksheet="Profils",
             data=df_newname)
-        st.experimental_rerun()
+        st.rerun()
   
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator"])
 
