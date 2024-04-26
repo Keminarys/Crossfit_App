@@ -31,7 +31,7 @@ with st.sidebar :
     
     new_ppl = st.text_input('Ecrire votre nom ici')
     if st.button('Ajouter mon profil') :
-        df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, , index=[len(df_name)], ignore_index=True)
+        df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, index=[len(df_name)], ignore_index=True)
         df_newname = conn.update(
             worksheet="Profils",
             data=df_newname)
