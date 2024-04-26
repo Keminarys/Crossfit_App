@@ -74,3 +74,6 @@ with tab1 :
         st.rerun()
     
 
+with tab3 :
+    df_perso = df.loc[df['Profil'] == athl]
+    st.dataframe(df_perso)
