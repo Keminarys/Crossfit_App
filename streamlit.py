@@ -15,7 +15,6 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 all_mvmt = conn.read(worksheet="All_mvmt")
 df = conn.read(worksheet="Progression")
 df_name = conn.read(worksheet="Profils")
-st.write(type(df_name))
 st.dataframe(df_name)
 list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
