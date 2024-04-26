@@ -11,6 +11,18 @@ import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+### Function 
+def update_list_name():
+    df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, index=[len(df_name)])], ignore_index=True)
+    df_newname = conn.update(worksheet="Profils",data=df_newname)
+    del df_newname, df_name
+    df_name = conn.read(worksheet="Profils")
+    df_name = df_name[['Name']].dropna()
+    list_name = list(df_name["Name"].unique())
+
+
+
+
 conn = st.connection("gsheets", type=GSheetsConnection)
 all_mvmt = conn.read(worksheet="All_mvmt")
 df = conn.read(worksheet="Progression")
@@ -30,12 +42,7 @@ st.divider()
 with st.sidebar :
     
     new_ppl = st.text_input('Ecrire votre nom ici')
-    if st.button('Ajouter mon profil') :
-        df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, index=[len(df_name)])], ignore_index=True)
-        df_newname = conn.update(
-            worksheet="Profils",
-            data=df_newname)
-        st.rerun()
+    st.button('Ajouter mon profil',on_click=update_list_name)
   
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator"])
 
