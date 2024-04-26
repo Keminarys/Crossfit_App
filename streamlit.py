@@ -21,8 +21,7 @@ conn = st.connection("gsheets", type=GSheetsConnection)
 all_mvmt = conn.read(worksheet="All_mvmt")
 
 df = conn.read(worksheet="Progression")
-st.dataframe(df)
-#df = df[['Profil','Category','Exercice','Date','Perf','Unité']].dropna()
+df = df[['Profil','Category','Exercice','Date','Perf','Unité']].dropna()
 
 df_name = conn.read(worksheet="Profils")
 df_name = df_name[['Name']].dropna()
