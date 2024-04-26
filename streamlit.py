@@ -56,9 +56,9 @@ with tab1 :
     athl = st.selectbox('Choix du profil', list_name)
     if cat == 'WEIGHTLIFTING' : 
         rm = st.selectbox('Choix du RM', list_rm)
-    nb = st.number_input('Valeur de la performance', step=1)
     if cat == 'RUN' :
         nb = st.text_input('Temps de course (format mm:ss)', "00:00")
+    else : nb = st.number_input('Valeur de la performance', step=1)
     date = st.date_input('Date de réalisation', value = "today")
     unit = dico_units[cat]
     new_entry = {'Profil' : athl,
