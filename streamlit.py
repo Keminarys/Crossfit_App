@@ -19,7 +19,7 @@ def update_list_name():
     df_name = conn.read(worksheet="Profils")
     df_name = df_name[['Name']].dropna()
     list_name = list(df_name["Name"].unique())
-
+    return list_name
 
 
 
@@ -28,6 +28,7 @@ all_mvmt = conn.read(worksheet="All_mvmt")
 df = conn.read(worksheet="Progression")
 df_name = conn.read(worksheet="Profils")
 df_name = df_name[['Name']].dropna()
+st.dataframe(df_name)
 list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
 list_rm = [1,3,5,10]
