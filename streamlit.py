@@ -16,7 +16,6 @@ all_mvmt = conn.read(worksheet="All_mvmt")
 df = conn.read(worksheet="Progression")
 df_name = conn.read(worksheet="Profils")
 df_name = df_name[['Name']].dropna()
-st.dataframe(df_name)
 list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
 list_rm = [1,3,5,10]
@@ -32,7 +31,7 @@ with st.sidebar :
     
     new_ppl = st.text_input('Ecrire votre nom ici')
     if st.button('Ajouter mon profil') :
-        df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl})], ignore_index=True)
+        df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, , index=[len(df_name)], ignore_index=True)
         df_newname = conn.update(
             worksheet="Profils",
             data=df_newname)
