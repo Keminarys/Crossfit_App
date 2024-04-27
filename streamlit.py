@@ -50,6 +50,8 @@ with st.sidebar :
     if st.button('Ajouter mon profil') :
         df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, index=[len(df_name)])], ignore_index=True)
         df_newname = conn.update(worksheet="Profils",data=df_newname)
+        st.cache_data.clear()
+        st.rerun()
   
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator"])
 
@@ -73,7 +75,8 @@ with tab1 :
     if st.button('Ajouter un nouveau record à mon profil :muscle:') :
         df_record = pd.concat([df, pd.DataFrame(new_entry, index=[len(df)])], ignore_index=True)
         df_record = conn.update(worksheet="Progression",data=df_record)
-        st.success('Ajouté avec succès, vous pouvez retrouver toutes vos performances dans l\'onglet Data', icon="✅")
+        st.write('Ajouté avec succès, vous pouvez retrouver toutes vos performances dans l\'onglet Data ✅')
+        st.cache_data.clear()
         st.rerun()
     
 
