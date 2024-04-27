@@ -12,18 +12,22 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 ### Function 
-
-
+def get_conn() :
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    return conn
+def get_df(sheet_name) :
+    datas = conn.read(worksheet=sheet_name)
+    return datas
 
 ### Variable
 
-conn = st.connection("gsheets", type=GSheetsConnection)
-all_mvmt = conn.read(worksheet="All_mvmt")
+conn = get_conn()
+all_mvmt = get_df("All_mvmt")
 
-df = conn.read(worksheet="Progression")
+df = get_df("Progression")
 df = df[['Profil','Category','Exercice','Date','Perf','Unité']].dropna()
 
-df_name = conn.read(worksheet="Profils")
+df_name = get_df("Profils")
 df_name = df_name[['Name']].dropna()
 
 list_name = list(df_name["Name"].unique())
@@ -46,8 +50,6 @@ with st.sidebar :
     if st.button('Ajouter mon profil') :
         df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, index=[len(df_name)])], ignore_index=True)
         df_newname = conn.update(worksheet="Profils",data=df_newname)
-
-    if st.button('Refresh Data') : st.rerun()
   
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator"])
 
