@@ -47,7 +47,7 @@ with st.sidebar :
         df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, index=[len(df_name)])], ignore_index=True)
         df_newname = conn.update(worksheet="Profils",data=df_newname)
 
-    st.button('Refresh Data', on_click = st.rerun())
+    if st.button('Refresh Data') : st.rerun()
   
 tab1, tab2, tab3, tab4, tab5 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator"])
 
