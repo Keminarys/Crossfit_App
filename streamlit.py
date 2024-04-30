@@ -30,6 +30,9 @@ df = df[['Profil','Category','Exercice','Date','Perf','Unité']].dropna()
 df_name = get_df("Profils")
 df_name = df_name[['Name']].dropna()
 
+df_obj = get_df("Objectif")
+df_obj = df_obj[['Name','Task','Description','Start','Finish','Completed']].dropna()
+
 list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
 list_rm = [1,3,5,10]
@@ -83,3 +86,6 @@ with tab1 :
 with tab3 :
     df_perso = df.loc[df['Profil'] == athl]
     st.dataframe(df_perso)
+
+with tab4 :
+    edited_obj = st.data_editor(df_obj)
