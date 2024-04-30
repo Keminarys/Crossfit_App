@@ -90,6 +90,7 @@ with tab3 :
 with tab4 :
     edited_obj = st.data_editor(df_obj, num_rows='dynamic', hide_index=True)
     if st.button('Mettre à jour mes objectifs') :
+        edited_obj = edited_obj.reset_index()
         df_obj_edit = conn.update(worksheet="Objectif",data=edited_obj)
         st.cache_data.clear()
         st.rerun()
