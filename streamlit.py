@@ -88,7 +88,7 @@ with tab3 :
     st.dataframe(df_perso)
 
 with tab4 :
-    edited_obj = st.data_editor(df_obj, num_rows='dynamic')
+    edited_obj = st.data_editor(df_obj, num_rows='dynamic', hide_index=True)
     if st.button('Mettre à jour mes objectifs') :
         df_obj_edit = conn.update(worksheet="Objectif",data=edited_obj)
         st.cache_data.clear()
