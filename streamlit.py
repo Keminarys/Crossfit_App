@@ -89,7 +89,7 @@ with tab3 :
 
 with tab4 :
     edited_obj = st.data_editor(df_obj)
-    if st.button('Ajouter mon profil') :
-        df_obj_edit = conn.update(worksheet="Profils",data=edited_obj)
+    if st.button('Mettre à jour mes objectifs') :
+        df_obj_edit = conn.update(worksheet="Objectif",data=edited_obj)
         st.cache_data.clear()
         st.rerun()
