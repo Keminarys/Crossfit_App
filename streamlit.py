@@ -85,13 +85,11 @@ with tab1 :
 
 with tab3 :
     st.write('Vous pouvez consulter l\'entièreté de vos performances ci dessous.')
-    st.divider()
     df_perso = df.loc[df['Profil'] == athl]
     st.dataframe(df_perso)
 
 with tab4 :
     st.write('Vous pouvez alimenter le tableau ci dessous pour définir un programme pour atteindre un objectif')
-    st.divider()
     edited_obj = st.data_editor(df_obj, num_rows='dynamic', hide_index=True)
     if st.button('Mettre à jour mes objectifs') :
         df_obj_edit = conn.update(worksheet="Objectif",data=edited_obj)
