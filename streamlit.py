@@ -31,7 +31,7 @@ df_name = get_df("Profils")
 df_name = df_name[['Name']].dropna()
 
 df_obj = get_df("Objectif")
-df_obj = df_obj[['Name','Task','Description','Start','Finish','Completed']].dropna()
+df_obj = df_obj[['Name','Task','Description','Start','Finish','Completed']].dropna().set_index('Name')
 
 list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
@@ -90,6 +90,7 @@ with tab3 :
 with tab4 :
     edited_obj = st.data_editor(df_obj, num_rows='dynamic', hide_index=True)
     if st.button('Mettre à jour mes objectifs') :
+        edited_obj = edited_obj.reset_index()
         df_obj_edit = conn.update(worksheet="Objectif",data=edited_obj)
         st.cache_data.clear()
         st.rerun()
