@@ -68,7 +68,7 @@ with tab1 :
     ex = st.selectbox('Choix de l"exercice', dico_ex[cat])
     if cat == 'WEIGHTLIFTING' : 
         rm = st.selectbox('Choix du RM', list_rm)
-    else : rm = ''
+    else : rm = 'NA'
     if cat == 'RUN' :
         nb = st.text_input('Temps au format mm\:ss', "00:00")
     else : nb = st.number_input('Max reps/charge', step=1)
