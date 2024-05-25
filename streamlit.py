@@ -32,6 +32,9 @@ df_name = df_name[['Name']].dropna()
 
 df_obj = get_df("Objectif")
 df_obj = df_obj[['Name','Task','Description','Start','Finish','Completed']].dropna()
+df_obj['Start'] = pd.to_datetime(df_obj['Start'])
+df_obj['Finish'] = pd.to_datetime(df_obj['Finish'])
+
 
 list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
@@ -123,6 +126,6 @@ with tab4 :
         st.rerun()
     st.divider()
     st.write('Ici vous retrouverez la visualisation graphique !')
-    fig_gantt = px.timeline(df_obj[df_obj['Name'] == athl], x_start="Start", x_end="Finish", y="Task", color="Description")
+    fig_gantt = px.timeline(df_obj[df_obj['Name'] == athl], x_start="Start", x_end="Finish", y="Description", color="Task")
     fig_gantt.update_yaxes(autorange="reversed")
     st.plotly_chart(fig_gantt,use_container_width=True)
