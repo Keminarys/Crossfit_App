@@ -103,7 +103,7 @@ with tab2 :
     selected_ex = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[data_full_scoped['Category'] == selected_cat]['Exercice'].unique()))
     if selected_cat == 'WEIGHTLIFTING' and len(selected_ex) > 0:
         selected_rm = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]['RM'].unique()))
-        data_graph = data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex)) & (data_full_scoped[].isin(selected_rm))]
+        data_graph = data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex)) & (data_full_scoped['RM'].isin(selected_rm))]
     else : data_graph = data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]
 
     fig_line = px.line(data_graph,x="Date", y="Perf", color=["Exercice","RM"], markers=True)
