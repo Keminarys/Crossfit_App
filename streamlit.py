@@ -25,7 +25,7 @@ conn = get_conn()
 all_mvmt = get_df("All_mvmt")
 
 df = get_df("Progression")
-df = df[['Profil','Category','Exercice','Date','Perf','Unité']].dropna()
+df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM']].dropna()
 
 df_name = get_df("Profils")
 df_name = df_name[['Name']].dropna()
