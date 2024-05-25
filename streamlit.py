@@ -105,8 +105,8 @@ with tab2 :
         selected_rm = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]['RM'].unique()))
         data_graph = data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex)) & (data_full_scoped['RM'].isin(selected_rm))]
     else : data_graph = data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]
-
-    fig_line = px.line(data_graph,x="Date", y="Perf", color=["Exercice","RM"], markers=True)
+    data_graph['Exo_RM'] = data_graph['Exercice'] + '_' +data_graph['RM'].astype(str)
+    fig_line = px.line(data_graph,x="Date", y="Perf", color='Exo_RM', markers=True)
     st.plotly_chart(fig_line,use_container_width=True)
     
 with tab3 :
