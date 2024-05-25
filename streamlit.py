@@ -101,9 +101,13 @@ with tab2 :
     st.divider()
     selected_cat = st.selectbox('Choix de la catégorie', list(data_full_scoped.Category.unique()))
     selected_ex = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[data_full_scoped['Category'] == selected_cat]['Exercice'].unique()))
-    if selected_cat == 'WEIGHTLIFTING' :
-        selected_rm = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'] == selected_ex)]['RM'].unique()))
-    
+    if selected_cat == 'WEIGHTLIFTING' and len(selected_ex) > 0:
+        selected_rm = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]['RM'].unique())
+        data_graph = data_full_scoped.loc[(data_full_scoped['Category']) == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex)) & (data_full_scoped[].isin(selected_rm))]
+    else : data_graph = data_full_scoped.loc[(data_full_scoped['Category']) == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]
+
+    fig_line = px.line(data_graph,x="Date", y="Perf", color=["Exercice","RM"], markers=True)
+    st.plotly_chart(fig_line,use_container_width=True)
     
 with tab3 :
     st.write('Vous pouvez consulter l\'entièreté de vos performances ci dessous.')
