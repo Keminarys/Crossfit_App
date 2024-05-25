@@ -64,6 +64,7 @@ with tab1 :
     athl = st.selectbox('Choix du profil', list_name)
     if cat == 'WEIGHTLIFTING' : 
         rm = st.selectbox('Choix du RM', list_rm)
+    else : rm = ''
     if cat == 'RUN' :
         nb = st.text_input('Temps au format mm\:ss', "00:00")
     else : nb = st.number_input('Max reps/charge', step=1)
@@ -74,7 +75,8 @@ with tab1 :
                 'Exercice' : ex,
                 'Date' : date,
                 'Perf' : nb,
-                'Unité' : unit}
+                'Unité' : unit,
+                'RM' : rm}
     if st.button('Ajouter un nouveau record à mon profil :muscle:') :
         df_record = pd.concat([df, pd.DataFrame(new_entry, index=[len(df)])], ignore_index=True)
         df_record = conn.update(worksheet="Progression",data=df_record)
@@ -82,7 +84,9 @@ with tab1 :
         st.cache_data.clear()
         st.rerun()
     
-
+with tab2 : 
+    st.write('Sélectionner un mouvement spécifique pour avoir un aperçu de votre progression')
+    
 with tab3 :
     st.write('Vous pouvez consulter l\'entièreté de vos performances ci dessous.')
     df_perso = df.loc[df['Profil'] == athl]
