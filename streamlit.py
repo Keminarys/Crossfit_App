@@ -48,6 +48,9 @@ st.write('_Par soucis de RGPD merci de ne renseigner que les 3 premières lettre
 st.divider()
 athl = st.selectbox('Choix du profil', list_name)
 st.divider()
+
+data_full_scoped = df.loc[df['Profil'] == athl]
+
 with st.sidebar :
     
     new_ppl = st.text_input('Ecrire votre nom ici')
@@ -86,7 +89,7 @@ with tab1 :
     
 with tab2 : 
     st.write('Sélectionner un mouvement spécifique pour avoir un aperçu de votre progression')
-    data_full_scoped = df.loc[df['Profil'] == athl]
+    
     data_grouped =  data_full_scoped.groupby(['Category', 'Exercice']).count().reset_index()
     
     fig = px.bar(data_grouped, x="Category", y="Profil", color="Exercice")
@@ -101,18 +104,15 @@ with tab2 :
     st.divider()
     selected_cat = st.selectbox('Choix de la catégorie', list(data_full_scoped.Category.unique()))
     selected_ex = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[data_full_scoped['Category'] == selected_cat]['Exercice'].unique()))
-    if selected_cat == 'WEIGHTLIFTING' and len(selected_ex) > 0:
-        selected_rm = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]['RM'].unique()))
-        data_graph = data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex)) & (data_full_scoped['RM'].isin(selected_rm))]
-    else : data_graph = data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]
-    data_graph['Exo_RM'] = data_graph['Exercice'] + '_' +data_graph['RM'].astype(str)
+    
+    data_graph = data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]
+    data_graph['Exo_RM'] = data_graph['Exercice'] + '// RM : ' +data_graph['RM'].astype(str)
     fig_line = px.line(data_graph,x="Date", y="Perf", color='Exo_RM', markers=True)
     st.plotly_chart(fig_line,use_container_width=True)
     
 with tab3 :
     st.write('Vous pouvez consulter l\'entièreté de vos performances ci dessous.')
-    df_perso = df.loc[df['Profil'] == athl]
-    st.dataframe(df_perso)
+    st.dataframe(data_full_scoped)
 
 with tab4 :
     st.write('Vous pouvez alimenter le tableau ci dessous pour définir un programme pour atteindre un objectif')
@@ -123,3 +123,6 @@ with tab4 :
         st.rerun()
     st.divider()
     st.write('Ici vous retrouverez la visualisation graphique !')
+    fig_gantt = px.timeline(df_obj[df_obj['Name'] == athl], x_start="Start", x_end="Finish", y="Task", color="Description")
+    fig_gantt.update_yaxes(autorange="reversed")
+    st.plotly_chart(fig_gantt,use_container_width=True)
