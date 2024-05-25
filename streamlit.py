@@ -100,9 +100,10 @@ with tab2 :
     st.plotly_chart(fig,use_container_width=True)
     st.divider()
     selected_cat = st.selectbox('Choix de la catégorie', list(data_full_scoped.Category.unique()))
-    selected_ex = st.selectbox('Choix de la catégorie', list(data_full_scoped.loc[data_full_scope['Category'] == selected_cat]['Exercice'].unique()))
+    selected_ex = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[data_full_scoped['Category'] == selected_cat]['Exercice'].unique()))
     if selected_cat == 'WEIGHTLIFTING' :
-        selected_rm = st.selectbox('Choix de la catégorie', list(data_full_scoped.loc[(data_full_scope['Category'] == selected_cat) & (data_full_scope['Exercice'] == selected_ex)]['RM'].unique()))
+        selected_rm = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'] == selected_ex)]['RM'].unique()))
+    
     
 with tab3 :
     st.write('Vous pouvez consulter l\'entièreté de vos performances ci dessous.')
