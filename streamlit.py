@@ -46,7 +46,8 @@ st.divider()
 st.subheader('Si c\'est votre première visite merci d\'ajouter votre profil dans la barre latérale')
 st.write('_Par soucis de RGPD merci de ne renseigner que les 3 premières lettre de votre prénom et la première de votre nom de famille_')
 st.divider()
-
+athl = st.selectbox('Choix du profil', list_name)
+st.divider()
 with st.sidebar :
     
     new_ppl = st.text_input('Ecrire votre nom ici')
@@ -61,7 +62,6 @@ tab1, tab2, tab3, tab4, tab5 = st.tabs(["🎉 Nouvelle Performance", "📈 Aper�
 with tab1 :
     cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()))
     ex = st.selectbox('Choix de l"exercice', dico_ex[cat])
-    athl = st.selectbox('Choix du profil', list_name)
     if cat == 'WEIGHTLIFTING' : 
         rm = st.selectbox('Choix du RM', list_rm)
     else : rm = ''
@@ -86,6 +86,23 @@ with tab1 :
     
 with tab2 : 
     st.write('Sélectionner un mouvement spécifique pour avoir un aperçu de votre progression')
+    data_full_scoped = df.loc[df['Profil'] == athl]
+    data_grouped =  data_full_scoped.groupby(['Category', 'Exercice']).count().reset_index()
+
+    fig = px.bar(data_grouped, x="Category", y="count", color="Exercice")
+    fig.update_layout(
+                title="Répartitions des performances",
+                xaxis_title="Categories",
+                yaxis_title="Nombre d\'entrées",
+                autosize=False,
+                width=500,
+                height=300)
+    st.plotly_chart(fig,use_container_width=True)
+    st.divider()
+    selected_cat = st.selectbox('Choix de la catégorie', list(data_full_scoped.Category.unique()))
+    selected_ex = st.selectbox('Choix de la catégorie', list(data_full_scoped.loc[data_full_scope['Category'] == selected_cat]['Exercice'].unique()))
+    if selected_cat == 'WEIGHTLIFTING' :
+        selected_rm = st.selectbox('Choix de la catégorie', list(data_full_scoped.loc[(data_full_scope['Category'] == selected_cat) & (data_full_scope['Exercice'] == selected_ex)]['RM'].unique()))
     
 with tab3 :
     st.write('Vous pouvez consulter l\'entièreté de vos performances ci dessous.')
