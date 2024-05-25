@@ -95,7 +95,7 @@ with tab2 :
     
     data_grouped =  data_full_scoped.groupby(['Category', 'Exercice']).count().reset_index()
     
-    fig = px.bar(data_grouped, x="Category", y="Profil", color="Exercice")
+    fig = px.bar(data_grouped, x="Category", y="Perf", color="Exercice")
     fig.update_layout(
                 title="Répartitions des performances",
                 xaxis_title="Categories",
