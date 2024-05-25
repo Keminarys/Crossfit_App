@@ -52,8 +52,6 @@ st.divider()
 athl = st.selectbox('Choix du profil', list_name)
 st.divider()
 
-data_full_scoped = df.loc[df['Profil'] == athl]
-
 with st.sidebar :
     
     new_ppl = st.text_input('Ecrire votre nom ici')
@@ -92,7 +90,7 @@ with tab1 :
     
 with tab2 : 
     st.write('Sélectionner un mouvement spécifique pour avoir un aperçu de votre progression')
-    
+    data_full_scoped = df.loc[df['Profil'] == athl]
     data_grouped =  data_full_scoped.groupby(['Category', 'Exercice']).count().reset_index()
     
     fig = px.bar(data_grouped, x="Category", y="Perf", color="Exercice")
@@ -115,7 +113,8 @@ with tab2 :
     
 with tab3 :
     st.write('Vous pouvez consulter l\'entièreté de vos performances ci dessous.')
-    st.dataframe(data_full_scoped)
+    data_perso = df.loc[df['Profil'] == athl]
+    st.dataframe(data_perso)
 
 with tab4 :
     st.write('Vous pouvez alimenter le tableau ci dessous pour définir un programme pour atteindre un objectif')
