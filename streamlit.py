@@ -32,8 +32,8 @@ df_name = df_name[['Name']].dropna()
 
 df_obj = get_df("Objectif")
 df_obj = df_obj[['Name','Task','Description','Start','Finish','Completed']].dropna()
-df_obj['Start'] = pd.to_datetime(df_obj['Start'])
-df_obj['Finish'] = pd.to_datetime(df_obj['Finish'])
+df_obj['Start'] = pd.to_datetime(df_obj['Start'], format='%Y-%m-%d')
+df_obj['Finish'] = pd.to_datetime(df_obj['Finish'], format='%Y-%m-%d')
 
 
 list_name = list(df_name["Name"].unique())
