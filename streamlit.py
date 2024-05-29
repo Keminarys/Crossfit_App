@@ -138,13 +138,13 @@ with tab6 :
         @st.cache_data  
         def getVideoLink() : 
             video_links = Playlist("https://www.youtube.com/playlist?list=PLdWvFCOAvyr1qYhgPz_-wnCcxTO7VHdFo").video_urls
-        return list(video_links)
+            return list(video_links)
     
         def getVideoTitle(video_links):
             video_titles = []
             for link in video_links:
                 video_titles.append(YouTube(link).title)
-        return video_titles
+            return video_titles
 
         video_links = getVideoLink() 
         video_titles = getVideoTitle(video_links)
