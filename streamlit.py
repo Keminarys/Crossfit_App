@@ -61,7 +61,7 @@ with st.sidebar :
         st.cache_data.clear()
         st.rerun()
   
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator"])
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator", "🥇🏋️‍♂️ Démonstration Mouvement"])
 
 with tab1 :
     cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()))
@@ -128,3 +128,8 @@ with tab4 :
     fig_gantt = px.timeline(df_obj[df_obj['Name'] == athl], x_start="Start", x_end="Finish", y="Description", color="Task")
     fig_gantt.update_yaxes(autorange="reversed")
     st.plotly_chart(fig_gantt,use_container_width=True)
+
+with tab5 :
+
+with tab6 :
+    st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
