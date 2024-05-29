@@ -142,7 +142,7 @@ with tab4 :
     fig_gantt.update_yaxes(autorange="reversed")
     st.plotly_chart(fig_gantt,use_container_width=True)
 
-with tab6 :
+# with tab6 :
     # st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
     # on = st.toggle("Voir la liste des mouvements ?")
 
