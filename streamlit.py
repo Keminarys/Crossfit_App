@@ -144,7 +144,10 @@ with tab4 :
 
 with tab6 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
-    title_id = st.selectbox('Quel mouvement voulez vous voir ?',video_titles)
-    video_url = video_links[video_titles.index(title_id)]
-    st.video(video_url)
+    on = st.toggle("Voir la liste des mouvements ?")
+
+    if on : 
+        title_id = st.selectbox('Quel mouvement voulez vous voir ?',video_titles)
+        video_url = video_links[video_titles.index(title_id)]
+        st.video(video_url)
     
