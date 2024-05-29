@@ -24,7 +24,7 @@ def getVideoLink() :
     video_links = Playlist("https://www.youtube.com/playlist?list=PLdWvFCOAvyr1qYhgPz_-wnCcxTO7VHdFo").video_urls
     return video_links
     
-def getVideoTitle():
+def getVideoTitle(video_links):
     video_titles = []
     for link in video_links:
         video_titles.append(YouTube(link).title)
@@ -52,7 +52,7 @@ list_rm = [1,3,5,10]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 dico_units = all_mvmt[['Category','Units']].drop_duplicates().set_index('Category').to_dict()['Units']
 video_titles = getVideoTitle()
-video_links = getVideoLink() 
+video_links = getVideoLink(video_links) 
 
 ### Main
 
