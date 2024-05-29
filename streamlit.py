@@ -51,8 +51,9 @@ list_name = [x for x in list_name if str(x) != "nan"]
 list_rm = [1,3,5,10]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 dico_units = all_mvmt[['Category','Units']].drop_duplicates().set_index('Category').to_dict()['Units']
-video_titles = getVideoTitle()
-video_links = getVideoLink(video_links) 
+
+video_links = getVideoLink() 
+video_titles = getVideoTitle(video_links)
 
 ### Main
 
