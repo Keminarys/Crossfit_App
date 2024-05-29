@@ -19,7 +19,13 @@ def get_conn() :
 def get_df(sheet_name) :
     datas = conn.read(worksheet=sheet_name)
     return datas
-
+@st.cache_data  
+def getVideoTitle(url):
+    video_links = Playlist(url).video_urls
+    video_titles = []
+    for link in video_links:
+        video_titles.append(YouTube(link).title)
+    return video_titles
 ### Variable
 
 conn = get_conn()
@@ -42,11 +48,7 @@ list_name = [x for x in list_name if str(x) != "nan"]
 list_rm = [1,3,5,10]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 dico_units = all_mvmt[['Category','Units']].drop_duplicates().set_index('Category').to_dict()['Units']
-video_links = Playlist("https://www.youtube.com/playlist?list=PLdWvFCOAvyr1qYhgPz_-wnCcxTO7VHdFo").video_urls
-
-video_titles = []
-for link in video_links:
-    video_titles.append(YouTube(link).title)
+video_titles = getVideoTitle("https://www.youtube.com/playlist?list=PLdWvFCOAvyr1qYhgPz_-wnCcxTO7VHdFo")
 
 ### Main
 
