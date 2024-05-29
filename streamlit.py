@@ -42,6 +42,11 @@ list_name = [x for x in list_name if str(x) != "nan"]
 list_rm = [1,3,5,10]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 dico_units = all_mvmt[['Category','Units']].drop_duplicates().set_index('Category').to_dict()['Units']
+video_links = Playlist("https://www.youtube.com/playlist?list=PLdWvFCOAvyr1qYhgPz_-wnCcxTO7VHdFo").video_urls
+
+video_titles = []
+for link in video_links:
+    video_titles.append(YouTube(link).title)
 
 ### Main
 
@@ -132,14 +137,7 @@ with tab4 :
 
 with tab6 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
-    if st.button('Voir la video tutoriel ?') : 
-        video_links = Playlist("https://www.youtube.com/playlist?list=PLdWvFCOAvyr1qYhgPz_-wnCcxTO7VHdFo").video_urls
-
-        video_titles = []
-        for link in video_links:
-            video_titles.append(YouTube(link).title)
-        title_id = st.selectbox('Quel mouvement voulez vous voir ?',video_titles)
-
-        video_url = video_links[video_titles.index(title_id)]
-        st.video(video_url)
+    title_id = st.selectbox('Quel mouvement voulez vous voir ?',video_titles)
+    video_url = video_links[video_titles.index(title_id)]
+    st.video(video_url)
     
