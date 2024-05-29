@@ -19,16 +19,7 @@ def get_conn() :
 def get_df(sheet_name) :
     datas = conn.read(worksheet=sheet_name)
     return datas
-@st.cache_data  
-def getVideoLink() : 
-    video_links = Playlist("https://www.youtube.com/playlist?list=PLdWvFCOAvyr1qYhgPz_-wnCcxTO7VHdFo").video_urls
-    return list(video_links)
-    
-def getVideoTitle(video_links):
-    video_titles = []
-    for link in video_links:
-        video_titles.append(YouTube(link).title)
-    return video_titles
+
 ### Variable
 
 conn = get_conn()
@@ -51,9 +42,6 @@ list_name = [x for x in list_name if str(x) != "nan"]
 list_rm = [1,3,5,10]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 dico_units = all_mvmt[['Category','Units']].drop_duplicates().set_index('Category').to_dict()['Units']
-
-video_links = getVideoLink() 
-video_titles = getVideoTitle(video_links)
 
 ### Main
 
@@ -142,12 +130,26 @@ with tab4 :
     fig_gantt.update_yaxes(autorange="reversed")
     st.plotly_chart(fig_gantt,use_container_width=True)
 
-# with tab6 :
-    # st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
-    # on = st.toggle("Voir la liste des mouvements ?")
+with tab6 :
+    st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
+    on = st.toggle("Voir la liste des mouvements ?")
 
-    # if on : 
-    #     title_id = st.selectbox('Quel mouvement voulez vous voir ?',video_titles)
-    #     video_url = video_links[video_titles.index(title_id)]
-    #     st.video(video_url)
+    if on : 
+        @st.cache_data  
+        def getVideoLink() : 
+            video_links = Playlist("https://www.youtube.com/playlist?list=PLdWvFCOAvyr1qYhgPz_-wnCcxTO7VHdFo").video_urls
+        return list(video_links)
+    
+        def getVideoTitle(video_links):
+            video_titles = []
+            for link in video_links:
+                video_titles.append(YouTube(link).title)
+        return video_titles
+
+        video_links = getVideoLink() 
+        video_titles = getVideoTitle(video_links)
+        
+        title_id = st.selectbox('Quel mouvement voulez vous voir ?',video_titles)
+        video_url = video_links[video_titles.index(title_id)]
+        st.video(video_url)
     
