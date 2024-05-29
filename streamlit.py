@@ -10,6 +10,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
+from pytube import YouTube, Playlist
 
 ### Function 
 def get_conn() :
@@ -131,3 +132,14 @@ with tab4 :
 
 with tab6 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
+    if st.button('Voir la video tutoriel ?') : 
+        video_links = Playlist("https://www.youtube.com/playlist?list=PLdWvFCOAvyr1qYhgPz_-wnCcxTO7VHdFo").video_urls
+
+        video_titles = []
+        for link in video_links:
+            video_titles.append(YouTube(link).title)
+        title_id = st.selectbox('Quel mouvement voulez vous voir ?',video_titles)
+
+        video_url = video_links[video_titles.index(title_id)]
+        st.video(video_url)
+    
