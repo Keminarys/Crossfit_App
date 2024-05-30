@@ -23,7 +23,7 @@ def get_df(sheet_name) :
 
 ### Auth 
 
-authenticator = stauth.Authenticate(st.secret['usersLogin'])
+authenticator = stauth.Authenticate(st.secrets['usersLogin'])
 authentication_status = authenticator.login('Login', 'main')
 if authentication_status:
     authenticator.logout('Logout', 'main')
