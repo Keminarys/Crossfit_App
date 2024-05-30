@@ -8,3 +8,4 @@ st-gsheets-connection
 matplotlib
 seaborn
 pytube
+streamlit-authenticator
