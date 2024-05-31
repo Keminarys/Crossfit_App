@@ -78,7 +78,7 @@ if st.session_state["authentication_status"]:
             st.rerun()
         with st.sidebar.expander("Reset password") :
             if st.session_state["authentication_status"]:
-                st.write(stauth.Hasher(['c0Nnex1onàl4d4tab4s3!']).generate())
+                st.write(stauth.utilities.Hasher(['c0Nnex1onàl4d4tab4s3!']).generate())
                 try:
                     if authenticator.reset_password(st.session_state["username"]):
                         st.success('Password modified successfully')
