@@ -37,10 +37,6 @@ def get_df(sheet_name) :
 authenticator.login()
 if st.session_state["authentication_status"]:
     authenticator.logout()
-    with open('/mount/src/crossfit_app/config.yaml', 'w') as file:
-        yaml.dump(config, file, default_flow_style=False)
-    hashed_passwords = stauth.Hasher(['c0Nnex1onàl4d4tab4s3!', 'Crossfit83']).generate()
-    st.write(hashed_passwords)
     conn = get_conn()
     all_mvmt = get_df("All_mvmt")
     
@@ -80,6 +76,13 @@ if st.session_state["authentication_status"]:
             df_newname = conn.update(worksheet="Profils",data=df_newname)
             st.cache_data.clear()
             st.rerun()
+        with st.sidebar :
+            if st.session_state["authentication_status"]:
+                try:
+                    if authenticator.reset_password(st.session_state["username"]):
+                        st.success('Password modified successfully')
+                except Exception as e:
+                    st.error(e)
     
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator", "🥇🏋️‍♂️ Démonstration Mouvement"])
     
