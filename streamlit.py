@@ -6,6 +6,7 @@ import datetime
 import re
 import streamlit as st
 import streamlit_authenticator as stauth
+from streamlit_authenticator.utilities import Hasher
 from streamlit_gsheets import GSheetsConnection
 import plotly.express as px
 import plotly.graph_objects as go
