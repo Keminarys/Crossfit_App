@@ -20,6 +20,8 @@ with open('/mount/src/crossfit_app/config.yaml') as file:
 
 authenticator = stauth.Authenticate(
     config['credentials'],
+    config['cookie']['expiry_days'],
+    config['cookie']['key'],
     config['cookie']['expiry_days']
 )
 ### Function 
