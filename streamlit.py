@@ -34,7 +34,7 @@ def get_df(sheet_name) :
 
 
 ### Variable
-authenticator.login('Login', 'main')
+authenticator.login()
 if st.session_state["authentication_status"]:
     authenticator.logout()
     conn = get_conn()
