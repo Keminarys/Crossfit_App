@@ -83,6 +83,8 @@ if st.session_state["authentication_status"]:
                         st.success('Password modified successfully')
                 except Exception as e:
                     st.error(e)
+            with open('/mount/src/crossfit_app/config.yaml', 'w') as file:
+                yaml.dump(config, file, default_flow_style=False)
     
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator", "🥇🏋️‍♂️ Démonstration Mouvement"])
     
