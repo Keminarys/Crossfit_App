@@ -76,16 +76,6 @@ if st.session_state["authentication_status"]:
             df_newname = conn.update(worksheet="Profils",data=df_newname)
             st.cache_data.clear()
             st.rerun()
-        with st.sidebar.expander("Reset password") :
-            if st.session_state["authentication_status"]:
-                st.write(stauth.utilities.hasher.Hasher(['c0Nnex1onàl4d4tab4s3!']).generate())
-                try:
-                    if authenticator.reset_password(st.session_state["username"]):
-                        st.success('Password modified successfully')
-                except Exception as e:
-                    st.error(e)
-            with open('/mount/src/crossfit_app/config.yaml', 'w') as file:
-                yaml.dump(config, file, default_flow_style=False)
     
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator", "🥇🏋️‍♂️ Démonstration Mouvement"])
     
