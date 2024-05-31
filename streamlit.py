@@ -39,7 +39,7 @@ if st.session_state["authentication_status"]:
     authenticator.logout()
     with open('/mount/src/crossfit_app/config.yaml', 'w') as file:
         yaml.dump(config, file, default_flow_style=False)
-    hashed_passwords = stauth.Hasher(['c0Nnex1onàl4d4tab4s3!']).generate()
+    hashed_passwords = stauth.Hasher(['c0Nnex1onàl4d4tab4s3!', 'Crossfit83']).generate()
     st.write(hashed_passwords)
     conn = get_conn()
     all_mvmt = get_df("All_mvmt")
