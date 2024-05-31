@@ -15,7 +15,7 @@ from pytube import YouTube, Playlist
 import yaml
 from yaml.loader import SafeLoader
 
-with open('/app/Crossfit_App/config.yaml','rb') as file:
+with open('../config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
 
 authenticator = stauth.Authenticate(
