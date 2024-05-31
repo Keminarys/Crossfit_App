@@ -37,6 +37,8 @@ def get_df(sheet_name) :
 authenticator.login()
 if st.session_state["authentication_status"]:
     authenticator.logout()
+    with open('../config.yaml', 'w') as file:
+    yaml.dump(config, file, default_flow_style=False)
     conn = get_conn()
     all_mvmt = get_df("All_mvmt")
     
