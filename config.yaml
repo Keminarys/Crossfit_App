@@ -7,3 +7,5 @@ credentials:
       password: c0Nnex1onàl4d4tab4s3! # Will be hashed automatically
 cookie:  
   expiry_days: 30
+  key: some_signature_key # Must be string
+  name: some_cookie_name
