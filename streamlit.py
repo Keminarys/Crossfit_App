@@ -18,8 +18,8 @@ import os
 
 st.write(os.getcwd())
 st.write(os.listdir())
-# with open('app/crossfitapp/config.yaml') as file:
-#     config = yaml.load(file, Loader=SafeLoader)
+with open('/mount/src/crossfit_app/config.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
 
 # authenticator = stauth.Authenticate(
 #     config['credentials'],
