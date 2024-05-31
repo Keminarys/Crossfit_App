@@ -1,0 +1,7 @@
+credentials:
+  usernames:
+    Crossfit83:
+      failed_login_attempts: 0 # Will be managed automatically
+      logged_in: False # Will be managed automatically
+      name: Crossfit83
+      password: c0Nnex1onàl4d4tab4s3! # Will be hashed automatically
