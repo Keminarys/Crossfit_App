@@ -15,7 +15,7 @@ from pytube import YouTube, Playlist
 import yaml
 from yaml.loader import SafeLoader
 
-with open('/app/scoring-model-for-credit-risk//config.yaml') as file:
+with open('/app/Crossfit_App/config.yaml') as file:
     config = yaml.load(file, Loader=SafeLoader)
 
 authenticator = stauth.Authenticate(
@@ -32,7 +32,7 @@ def get_df(sheet_name) :
 
 
 ### Variable
-authenticator.login()
+authenticator.login('Login', 'main')
 if st.session_state["authentication_status"]:
     authenticator.logout()
     conn = get_conn()
