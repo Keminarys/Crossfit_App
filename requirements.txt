@@ -9,3 +9,4 @@ matplotlib
 seaborn
 pytube
 streamlit-authenticator
+yaml
