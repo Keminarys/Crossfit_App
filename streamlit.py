@@ -6,7 +6,6 @@ import datetime
 import re
 import streamlit as st
 import streamlit_authenticator as stauth
-from streamlit_authenticator.utilities.hasher import Hasher
 from streamlit_gsheets import GSheetsConnection
 import plotly.express as px
 import plotly.graph_objects as go
@@ -79,7 +78,7 @@ if st.session_state["authentication_status"]:
             st.rerun()
         with st.sidebar.expander("Reset password") :
             if st.session_state["authentication_status"]:
-                st.write(Hasher.generate(["c0Nnex1onàl4d4tab4s3!"]))
+                st.write(stauth.Hasher(['c0Nnex1onàl4d4tab4s3!']).generate())
                 try:
                     if authenticator.reset_password(st.session_state["username"]):
                         st.success('Password modified successfully')
