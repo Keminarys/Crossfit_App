@@ -17,6 +17,7 @@ from yaml.loader import SafeLoader
 import os
 
 st.write(os.getcwd())
+st.write(os.listdir())
 # with open('app/crossfitapp/config.yaml') as file:
 #     config = yaml.load(file, Loader=SafeLoader)
 
