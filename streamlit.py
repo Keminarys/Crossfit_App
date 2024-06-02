@@ -41,7 +41,7 @@ if st.session_state["authentication_status"]:
     all_mvmt = get_df("All_mvmt")
     
     df = get_df("Progression")
-    df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM']].dropna()
+    df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
         
     df_name = get_df("Profils")
     df_name = df_name[['Name']].dropna()
@@ -56,7 +56,7 @@ if st.session_state["authentication_status"]:
     list_name = [x for x in list_name if str(x) != "nan"]
     list_rm = [1,3,5,10]
     dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
-    dico_units = all_mvmt[['Category','Units']].drop_duplicates().set_index('Category').to_dict()['Units']
+    dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercice').to_dict()['Units']
     
     ### Main
     
@@ -85,18 +85,22 @@ if st.session_state["authentication_status"]:
         if cat == 'WEIGHTLIFTING' : 
             rm = st.selectbox('Choix du RM', list_rm)
         else : rm = 1
-        if cat == 'RUN' :
-           nb = st.text_input('Temps au format mm\:ss', "00:00")
+        if dico_units[ex] == 'HH:MM:SS' :
+           nb = st.text_input('Temps au format HH\:MM\:SS', "00:00:00")
         else : nb = st.number_input('Max reps/charge', step=1)
         date = st.date_input('Date de réalisation', value = "today")
-        unit = dico_units[cat]
+        unit = dico_units[ex]
+        if cat == "WOD":
+            commentary = st.text_input('Commentaire sur la réalisation', 'Rien')
+        else : commentary = 'Rien'
         new_entry = {'Profil' : athl,
                     'Category' : cat,
                     'Exercice' : ex,
                     'Date' : date,
                     'Perf' : nb,
                     'Unité' : unit,
-                    'RM' : rm}
+                    'RM' : rm, 
+                    'Commentaire' : commentary}
         if st.button('Ajouter un nouveau record à mon profil :muscle:') :
             df_record = pd.concat([df, pd.DataFrame(new_entry, index=[len(df)])], ignore_index=True)
             df_record = conn.update(worksheet="Progression",data=df_record)
