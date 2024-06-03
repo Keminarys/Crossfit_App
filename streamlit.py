@@ -81,11 +81,11 @@ if st.session_state["authentication_status"]:
         
         new_cat = st.selectbox("Sélectionnez la catégorie", list(dico_ex.keys()))
         new_ex = st.text_input("Nom de l'exercice")
-        new_units = st.selectbox("Sélectionnez l'unité adéquat", list(all_mvt['Units'].unique()))
+        new_units = st.selectbox("Sélectionnez l'unité adéquat", list(all_mvmt['Units'].unique()))
         if st.button('Ajouter l\'exercice à la base de données') :
-            df_newexo = pd.concat([all_mvt, pd.DataFrame({'Category' : new_cat, 
+            df_newexo = pd.concat([all_mvmt, pd.DataFrame({'Category' : new_cat, 
                                                           'Exercice' : new_ex ,
-                                                          'Units' : new_units}, index=[len(all_mvt)])], ignore_index=True)
+                                                          'Units' : new_units}, index=[len(all_mvmt)])], ignore_index=True)
             df_newexo = conn.update(worksheet="All_mvmt",data= df_newexo)
             st.write('Ajouté avec succès, la page va se rafraîchir automatiquement ✅')
             st.cache_data.clear()
