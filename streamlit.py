@@ -68,12 +68,26 @@ if st.session_state["authentication_status"]:
     athl = st.selectbox('Choix du profil', list_name)
     st.divider()
     
-    with st.sidebar :
+    with st.sidebar.expander("Ajout d'un nouveau profil") :
         
         new_ppl = st.text_input('Ecrire votre nom ici')
         if st.button('Ajouter mon profil') :
             df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, index=[len(df_name)])], ignore_index=True)
             df_newname = conn.update(worksheet="Profils",data=df_newname)
+            st.cache_data.clear()
+            st.rerun()
+
+    with st.sidebar.expander("Ajout d'un WOD/Exercice non présent dans la liste") :
+        
+        new_cat = st.selectbox("Sélectionnez la catégorie", list(dico_ex.keys()))
+        new_ex = st.text_input("Nom de l'exercice")
+        new_units = st.selectbox("Sélectionnez l'unité adéquat", list(all_mvt['Units'].unique()))
+        if st.button('Ajouter l\'exercice à la base de données') :
+            df_newexo = pd.concat([all_mvt, pd.DataFrame({'Category' : new_cat, 
+                                                          'Exercice' : new_ex ,
+                                                          'Units' : new_units}, index=[len(all_mvt)])], ignore_index=True)
+            df_newexo = conn.update(worksheet="All_mvmt",data= df_newexo)
+            st.write('Ajouté avec succès, la page va se rafraîchir automatiquement ✅')
             st.cache_data.clear()
             st.rerun()
     
@@ -158,15 +172,19 @@ if st.session_state["authentication_status"]:
             def getVideoLink() : 
                 video_links = Playlist("https://www.youtube.com/playlist?list=PLdWvFCOAvyr1qYhgPz_-wnCcxTO7VHdFo").video_urls
                 return list(video_links)
-        
+            @st.cache_data 
             def getVideoTitle(video_links):
                 video_titles = []
                 for link in video_links:
                     video_titles.append(YouTube(link).title)
                 return video_titles
-    
-            video_links = getVideoLink() 
-            video_titles = getVideoTitle(video_links)
+
+            with st.status("Chargement de la playlist CrossFit©️ ...", expanded=True) as status:
+                st.write("Recherche de la playlist YouTube ...")
+                video_links = getVideoLink() 
+                st.write("Création de la liste contenant les titres des vidéos ...")
+                video_titles = getVideoTitle(video_links)
+                status.update(label="Chargement Terminé !", state="complete", expanded=False)
             
             title_id = st.selectbox('Quel mouvement voulez vous voir ?',video_titles)
             video_url = video_links[video_titles.index(title_id)]
