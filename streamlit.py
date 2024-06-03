@@ -39,6 +39,7 @@ if st.session_state["authentication_status"]:
     authenticator.logout()
     conn = get_conn()
     all_mvmt = get_df("All_mvmt")
+    all_mvmt = all_mvmt[['Category','Exercice','Units']].dropna()
     
     df = get_df("Progression")
     df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
