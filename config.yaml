@@ -3,8 +3,8 @@ credentials:
     Crossfit83:
       failed_login_attempts: 0 # Will be managed automatically
       logged_in: False # Will be managed automatically
-      name: 
-      password: 
+      name: Crossfit83
+      password: test123!
 cookie:  
   expiry_days: 30
   key: some_signature_key # Must be string
