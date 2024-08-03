@@ -37,7 +37,7 @@ def get_df(sheet_name) :
 # authenticator.login()
 # if st.session_state["authentication_status"]:
 #     authenticator.logout()
-    conn = get_conn()
+conn = get_conn()
 all_mvmt = get_df("All_mvmt")
 all_mvmt = all_mvmt[['Category','Exercice','Units']].dropna()
 
