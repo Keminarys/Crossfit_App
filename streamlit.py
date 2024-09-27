@@ -55,7 +55,7 @@ df_obj['Finish'] = pd.to_datetime(df_obj['Finish'], format='%d/%m/%Y')
 
 list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
-list_rm = [1,3,5,10]
+list_rm = [i for i in range (1,11)]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercice').to_dict()['Units']
 
