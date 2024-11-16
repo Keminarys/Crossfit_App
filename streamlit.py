@@ -25,6 +25,11 @@ from pytube import YouTube, Playlist
 #     config['cookie']['key'],
 #     config['cookie']['expiry_days']
 # )
+
+### Setting up the page 
+
+st.set_page_config(layout="wide")
+
 ### Function 
 def get_conn() :
     conn = st.connection("gsheets", type=GSheetsConnection)
