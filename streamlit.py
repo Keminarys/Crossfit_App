@@ -10,6 +10,7 @@ from streamlit_gsheets import GSheetsConnection
 import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
+import matplotlib.colors as mcolors
 import seaborn as sns
 from pytube import YouTube, Playlist
 # import yaml
@@ -36,7 +37,7 @@ def apply_colormap(df, column, colormap='bwr'):
     norm = plt.Normalize(df[column].min(), df[column].max())
     sm = plt.cm.ScalarMappable(cmap=colormap, norm=norm)
     colors = sm.to_rgba(df[column])
-    hex_colors = [plt.colors.rgb2hex(color) for color in colors]
+    hex_colors = [mcolors.rgb2hex(color) for color in colors]
     df_styled = df.style.applymap(lambda x, color=hex_colors: f'background-color: {color[x.name]};', subset=[column])
     return df_styled
 
