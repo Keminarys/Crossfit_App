@@ -244,8 +244,7 @@ with tab6 :
     chosen_hero = st.selectbox("Quel WOD Hero voulez vous voir", [i["name"] for i in wods])
     if len(chosen_hero) > 0 : 
         wod = next((wod for wod in wods if wod['name'] == chosen_hero), None)
-        st.markdown(f"### {wod['name']}") 
-        st.markdown(wod['description'].replace('\n', '<br>'), unsafe_allow_html=True)
+        st.markdown(wod['description'].replace('\n\n', '<br>'), unsafe_allow_html=True)
 
 with tab7 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
