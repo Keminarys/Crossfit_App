@@ -80,11 +80,19 @@ def UniqueWOD(url) :
         if h1_tag:
             wod_name = h1_tag.get_text(strip=True)
             description_div = soup.find('div', class_='_wrapper_3kipy_96 _text-block_1ex2o_95')
+            
             if description_div:
                 wod_description = description_div.get_text(separator="\n", strip=True)
                 wod_description = wod_description.replace('<br/>', '\n').replace('<br>', '\n').strip()
-                formatted_description = "\n\n".join([line.strip() for line in wod_description.split('\n') if line.strip() != ''])
-    return wod_name, wod_description
+                lines = wod_description.split('\n')
+                filtered_lines = []
+                for line in lines:
+                    if line.startswith("Resources:"):
+                        break
+                    filtered_lines.append(line.strip())
+                
+                formatted_description = "\n\n".join([line for line in filtered_lines if line])
+    return wod_name, formatted_description
 
 @st.dialog("Consulter mes RM",  width="large")
 def get_best_rm(df, athl) :
