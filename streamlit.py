@@ -149,7 +149,7 @@ with tab2 :
   
 with tab3 :
     st.write('Vous pouvez consulter l\'entièreté de vos performances ci dessous.')
-    data_perso = df.loc[df['Profil'] == athl]
+    data_perso = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
     st.dataframe(data_perso)
 
 with tab4 :
