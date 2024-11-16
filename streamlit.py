@@ -33,7 +33,7 @@ def get_df(sheet_name) :
     datas = conn.read(worksheet=sheet_name)
     return datas
 
-def apply_colormap(df, column, colormap='bwr'): 
+def apply_colormap(df, column, colormap='viridis'): 
     norm = plt.Normalize(df[column].min(), df[column].max())
     sm = plt.cm.ScalarMappable(cmap=colormap, norm=norm)
     colors = sm.to_rgba(df[column])
@@ -208,7 +208,7 @@ with tab5 :
         updatedBerger.at[int(repMax), "Charge"] = chargeMax
         updatedBerger.loc[int(repMax)+1:, "Charge"] = updatedBerger.loc[int(repMax)+1:, "Pourcentage"] * chargeMax
         updatedBerger = updatedBerger.loc[updatedBerger.Charge > 0]
-        styled_Berger = apply_colormap(updatedBerger, 'Charge')
+        styled_Berger = apply_colormap(updatedBerger, "Charge")
         st.dataframe(styled_Berger, use_container_width=True, hide_index = True)
 
 with tab7 :
