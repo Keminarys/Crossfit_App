@@ -82,7 +82,7 @@ def UniqueWOD(url) :
             description_div = soup.find('div', class_='_wrapper_3kipy_96 _text-block_1ex2o_95')
             if description_div:
                 wod_description = description_div.get_text(separator="\n", strip=True)
-                wod_description = wod_description.replace('<br/>', '\n').replace('<br>', '\n').replace('\n\n', '\n').strip()
+                wod_description = wod_description.replace('<br/>', '\n').replace('<br>', '\n').strip()
                 formatted_description = "\n\n".join([line.strip() for line in wod_description.split('\n') if line.strip() != ''])
     return wod_name, wod_description
 
@@ -257,7 +257,7 @@ with tab5 :
         updatedBerger = updatedBerger.loc[updatedBerger.Charge > 0]
         st.dataframe(updatedBerger, use_container_width=True, hide_index = True)
 with tab6 : 
-    st.write("Tous les wods présentés ici sont issus du site officiel de Crossfit.com ©️")
+    st.subheader("Tous les wods présentés ici sont issus du site officiel de Crossfit.com ©️")
     st.subheader("Workout of the day")
     wod_name_today, wod_description_today = UniqueWOD(WOD())
     st.write(f"**{wod_name_today}**\n\n{wod_description_today}")
