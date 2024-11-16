@@ -260,7 +260,7 @@ with tab6 :
     st.write("Tous les wods présentés ici sont issus du site officiel de Crossfit.com ©️")
     st.subheader("Workout of the day")
     wod_name_today, wod_description_today = UniqueWOD(WOD())
-    st.write(f"**{wod_name}**\n\n{wod_description}")
+    st.write(f"**{wod_name_today}**\n\n{wod_description_today}")
     st.divider()
     st.subheader("WOD au hasard")
     st.divider()
