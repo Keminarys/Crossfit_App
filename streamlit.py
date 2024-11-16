@@ -40,8 +40,8 @@ def get_best_rm(df, athl) :
     temp = temp.groupby(["Exercice", "RM"]).agg({"Perf" : "max"}).reset_index()
     selection = st.pills("Exercice", temp["Exercice"].unique().tolist(), selection_mode="single")
     temp = temp.loc[temp.Exercice == selection]
-    return st.dataframe(temp, width = 300, height = 300)
-    
+    return st.dataframe(temp, use_container_width=True, hide_index = True)
+
 ### Variable
 # authenticator.login()
 # if st.session_state["authentication_status"]:
