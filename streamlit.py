@@ -184,7 +184,7 @@ with tab5 :
         "Nb de series": ["3 à 5", "6", "8"]
     }
 )
-    st.dataframe(explaination,hide_index=True)
+    st.dataframe(explaination,hide_index=True, use_container_width=True)
     st.divider()
     st.write("Si vous souhaitez consulter vos meilleurs RM, cliquez sur le bouton ci dessous")
     
@@ -193,7 +193,12 @@ with tab5 :
             get_best_rm(data_perso, athl)
     repMax = st.number_input('Votre RM max (RM1/2/3/5 etc) (indiquez seulement le chiffre)', step=1)
     chargeMax = st.number_input('Votre charge max pour ce RM (indiquez seulement le chiffre)', step=1)
-    
+
+if repMax and chargeMax != 0 :
+    updatedBerger = berger.copy()
+    updatedBerger.at[int(repMax), "Charge"] = chargeMax
+    updatedBerger.loc[int(repMax)+1:, "Charge"] = updatedBerger.loc[int(repMax):, "Charge"] * chargeMax
+    st.dataframe(updatedBerger, use_container_width=True)
 
 with tab7 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
