@@ -12,6 +12,8 @@ import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
 from pytube import YouTube, Playlist
+import requests
+from bs4 import BeautifulSoup
 # import yaml
 # from yaml.loader import SafeLoader
 
@@ -36,7 +38,24 @@ def get_conn() :
 def get_df(sheet_name) :
     datas = conn.read(worksheet=sheet_name)
     return datas
-
+def get_all_heroes() : 
+    url = 'https://www.crossfit.com/heroes'
+    response = requests.get(url)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, 'html.parser')
+        wods = []
+        sections = soup.find_all('section', class_='_component_1ugao_79')
+    
+        for section in sections:
+            wod_name_tag = section.find('h3')
+            if wod_name_tag:
+                wod_name = wod_name_tag.get_text(strip=True)
+                wod_description_tag = section.find('p')
+                if wod_description_tag:
+                    wod_description = wod_description_tag.get_text(separator="\n", strip=True)
+                    wods.append({"name": wod_name, "description": wod_description})
+    return wods
+    
 @st.dialog("Consulter mes RM",  width="large")
 def get_best_rm(df, athl) :
     st.write("Voici vos meilleurs performances pour chaque exercice")
@@ -214,6 +233,41 @@ with tab6 :
     st.subheader("WOD au hasard")
     st.divider()
     st.subheader("WOD Hero au hasard")
+    carousel_html = """
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+  </ol>
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" src="https://via.placeholder.com/800x400?text=Slide+1" alt="First slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="https://via.placeholder.com/800x400?text=Slide+2" alt="Second slide">
+    </div>
+    <div class="carousel-item">
+      <img class="d-block w-100" src="https://via.placeholder.com/800x400?text=Slide+3" alt="Third slide">
+    </div>
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+"""
+    st.markdown(carousel_html, unsafe_allow_html=True)
+
 with tab7 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
     on = st.toggle("Voir la liste des mouvements ?")
