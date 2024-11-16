@@ -80,9 +80,9 @@ def UniqueWOD(url) :
         if h1_tag:
             wod_name = h1_tag.get_text(strip=True)
             description_div = soup.find('div', class_='_wrapper_3kipy_96 _text-block_1ex2o_95')
-                if description_div:
-                    wod_description = description_div.get_text(separator="\n", strip=True)
-                    wod_description = wod_description.strip('<br/><br/>').replace('<br/><br/>', '\n\n').replace('<br/>', '\n')
+            if description_div:
+                wod_description = description_div.get_text(separator="\n", strip=True)
+                wod_description = wod_description.strip('<br/><br/>').replace('<br/><br/>', '\n\n').replace('<br/>', '\n')
     return wod_name, wod_description
 
 @st.dialog("Consulter mes RM",  width="large")
