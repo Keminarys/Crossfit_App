@@ -234,7 +234,9 @@ with tab6 :
     st.divider()
     st.subheader("WOD Hero au hasard")
     wods = get_all_heroes()
-    for wod in wods: st.markdown(f"### {wod['name']}") st.markdown(wod['description'].replace('\n', '<br>'), unsafe_allow_html=True)
+    for wod in wods: 
+        st.markdown(f"### {wod['name']}") 
+        st.markdown(wod['description'].replace('\n', '<br>'), unsafe_allow_html=True)
 
 with tab7 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
