@@ -233,40 +233,54 @@ with tab6 :
     st.subheader("WOD au hasard")
     st.divider()
     st.subheader("WOD Hero au hasard")
-    carousel_html = """
-<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-  <ol class="carousel-indicators">
-    <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
-    <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
-  </ol>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img class="d-block w-100" src="https://via.placeholder.com/800x400?text=Slide+1" alt="First slide">
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="https://via.placeholder.com/800x400?text=Slide+2" alt="Second slide">
-    </div>
-    <div class="carousel-item">
-      <img class="d-block w-100" src="https://via.placeholder.com/800x400?text=Slide+3" alt="Third slide">
-    </div>
-  </div>
-  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
-    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-    <span class="sr-only">Previous</span>
-  </a>
-  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
-    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-    <span class="sr-only">Next</span>
-  </a>
-</div>
+    # List of WODs
+wods = [
+    {'name': 'JT', 'description': '21-15-9 reps for time of:\nHandstand push-ups\nRing dips\nPush-ups'},
+    {'name': 'Michael', 'description': '3 rounds for time of:\nRun 800 meters\n50 back extensions\n50 sit-ups'},
+    {'name': 'Murph', 'description': 'For time:\n1-mile run\n100 pull-ups\n200 push-ups\n300 squats\n1-mile run'},
+    {'name': 'Daniel', 'description': 'For time:\n50 pull-ups\n400-meter run\n95-lb thruster, 21 reps\n800-meter run\n95-lb thruster, 21 reps\n400-meter run\n50 pull-ups'}
+]
 
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-"""
-    st.markdown(carousel_html, unsafe_allow_html=True)
+# Function to create carousel slides from WODs list
+def create_carousel(wods):
+    indicators = ''.join([f'<li data-target="#carouselExampleIndicators" data-slide-to="{i}" class="{"active" if i == 0 else ""}"></li>' for i in range(len(wods))])
+    slides = ''.join([f'''
+    <div class="carousel-item {"active" if i == 0 else ""}">
+        <div class="d-block w-100">
+            <h3><strong>{wod['name']}</strong></h3>
+            <p>{wod['description'].replace("\n", "<br/>")}</p>
+        </div>
+    </div>
+    ''' for i, wod in enumerate(wods)])
+    
+    return f'''
+    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+      <ol class="carousel-indicators">
+        {indicators}
+      </ol>
+      <div class="carousel-inner">
+        {slides}
+      </div>
+      <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+      </a>
+      <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+      </a>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    '''
+
+# Generate the carousel HTML
+carousel_html = create_carousel(wods)
+
+# Display the HTML carousel in Streamlit
+st.markdown(carousel_html, unsafe_allow_html=True)
 
 with tab7 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
