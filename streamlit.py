@@ -243,7 +243,7 @@ with tab6 :
     wods = get_all_heroes()
     chosen_hero = st.selectbox("Quel WOD Hero voulez vous voir", [i["name"] for i in wods])
     if len(chosen_hero) > 0 : 
-        murph_wod = next((wod for wod in wods if wod['name'] == chosen_hero), None)
+        wod = next((wod for wod in wods if wod['name'] == chosen_hero), None)
         st.markdown(f"### {wod['name']}") 
         st.markdown(wod['description'].replace('\n', '<br>'), unsafe_allow_html=True)
 
