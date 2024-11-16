@@ -108,7 +108,7 @@ with st.sidebar.expander("Ajout d'un WOD/Exercice non présent dans la liste") :
         st.cache_data.clear()
         st.rerun()
 
-tab1, tab2, tab3, tab4, tab5, tab6, tab7= st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data", "💪🎯 Objectifs", "🖥️ Table de Berger","🏋️‍♂️🤖 WOD Generator", "🥇🏋️‍♂️ Démonstration Mouvement"])
+tab1, tab2, tab3, tab4, tab5, tab6, tab7= st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data", "💪🎯 Objectifs", "🖥️ Table de Berger","🏋️‍♂️ WOD", "🥇🏋️‍♂️ Démonstration Mouvement"])
 
 with tab1 :
     cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()))
@@ -208,7 +208,13 @@ with tab5 :
         updatedBerger.loc[int(repMax)+1:, "Charge"] = updatedBerger.loc[int(repMax)+1:, "Pourcentage"] * chargeMax
         updatedBerger = updatedBerger.loc[updatedBerger.Charge > 0]
         st.dataframe(updatedBerger, use_container_width=True, hide_index = True)
-
+with tab6 : 
+    st.write("Tous les wods présentés ici sont issus du site officiel de Crossfit.com ©️")
+    st.subheader("Workout of the day")
+    st.divider()
+    st.subheader("WOD au hasard").
+    st.divider()
+    st.subheader("WOD Hero au hasard")
 with tab7 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
     on = st.toggle("Voir la liste des mouvements ?")
