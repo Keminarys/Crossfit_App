@@ -34,13 +34,13 @@ def get_df(sheet_name) :
 
 @st.dialog("Consulter mes RM",  width="large")
 def get_best_rm(df, athl) :
-    st.write("Voici vos meilleurs performances pour chaque exercices")
+    st.write("Voici vos meilleurs performances pour chaque exercice")
     st.divider()
     temp = df.loc[(df.Category == "WEIGHTLIFTING") & (df['Profil'] == athl)]
     temp = temp.groupby(["Exercice", "RM"]).agg({"Perf" : "max"}).reset_index()
     selection = st.pills("Exercice", temp["Exercice"].unique().tolist(), selection_mode="single")
     temp = temp.loc[temp.Exercice == selection]
-    return st.dataframe(temp)
+    return st.dataframe(temp, width = 300, height = 300)
     
 ### Variable
 # authenticator.login()
