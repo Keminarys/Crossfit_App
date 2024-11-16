@@ -42,25 +42,25 @@ def get_all_heroes() :
     url = 'https://www.crossfit.com/heroes'
     response = requests.get(url)
     if response.status_code == 200:
-    soup = BeautifulSoup(response.content, 'html.parser')
-    wods = []
-    sections = soup.find_all('section', class_='_component_1ugao_79')
+        soup = BeautifulSoup(response.content, 'html.parser')
+        wods = []
+        sections = soup.find_all('section', class_='_component_1ugao_79')
     
-    for section in sections:
-        hr_tag = section.find('hr')
-        if hr_tag:
-            h3_tag = hr_tag.find_next('h3')
-            if h3_tag:
-                wod_name = h3_tag.get_text(strip=True)
-                wod_description = ''
-                for sibling in h3_tag.find_next_siblings():
-                    if sibling.name == 'p':
-                        text = sibling.get_text(separator="<br/>", strip=True)
-                        wod_description += text + '<br/>'
-                    else:
-                        break
-                wod_description = wod_description.strip('<br/>')
-                wods.append({"name": wod_name, "description": wod_description})
+        for section in sections:
+            hr_tag = section.find('hr')
+            if hr_tag:
+                h3_tag = hr_tag.find_next('h3')
+                if h3_tag:
+                    wod_name = h3_tag.get_text(strip=True)
+                    wod_description = ''
+                    for sibling in h3_tag.find_next_siblings():
+                        if sibling.name == 'p':
+                            text = sibling.get_text(separator="<br/>", strip=True)
+                            wod_description += text + '<br/>'
+                        else:
+                            break
+                    wod_description = wod_description.strip('<br/>')
+                    wods.append({"name": wod_name, "description": wod_description})
     return wods
     
 @st.dialog("Consulter mes RM",  width="large")
