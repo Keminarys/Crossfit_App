@@ -175,7 +175,7 @@ with tab5 :
         "Nb de series": ["3 à 5", "6", "8"]
     }
 )
-    st.dataframe(df,hide_index=True)
+    st.dataframe(explaination,hide_index=True)
     repMax = st.number_input('Votre RM max (RM1/2/3/5 etc) (indiquez seulement le chiffre)', step=1)
     chargeMax = st.number_input('Votre charge max pour ce RM (indiquez seulement le chiffre)', step=1)
     
