@@ -82,7 +82,8 @@ def UniqueWOD(url) :
             description_div = soup.find('div', class_='_wrapper_3kipy_96 _text-block_1ex2o_95')
             if description_div:
                 wod_description = description_div.get_text(separator="\n", strip=True)
-                wod_description = wod_description.strip('<br/><br/>').replace('<br/><br/>', '\n\n').replace('<br/>', '\n')
+                wod_description = wod_description.replace('<br/>', '\n').replace('<br>', '\n').replace('\n\n', '\n').strip()
+                formatted_description = "\n\n".join([line.strip() for line in wod_description.split('\n') if line.strip() != ''])
     return wod_name, wod_description
 
 @st.dialog("Consulter mes RM",  width="large")
