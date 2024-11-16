@@ -10,3 +10,5 @@ seaborn
 pytube
 streamlit-authenticator 
 pyyaml
+bs4
+requests
