@@ -194,11 +194,11 @@ with tab5 :
     repMax = st.number_input('Votre RM max (RM1/2/3/5 etc) (indiquez seulement le chiffre)', step=1)
     chargeMax = st.number_input('Votre charge max pour ce RM (indiquez seulement le chiffre)', step=1)
 
-if repMax and chargeMax != 0 :
-    updatedBerger = berger.copy()
-    updatedBerger.at[int(repMax), "Charge"] = chargeMax
-    updatedBerger.loc[int(repMax)+1:, "Charge"] = updatedBerger.loc[int(repMax):, "Charge"] * chargeMax
-    st.dataframe(updatedBerger, use_container_width=True, hide_index = True)
+    if repMax and chargeMax != 0 :
+        updatedBerger = berger.copy()
+        updatedBerger.at[int(repMax), "Charge"] = chargeMax
+        updatedBerger.loc[int(repMax)+1:, "Charge"] = updatedBerger.loc[int(repMax)+1:, "Charge"] * chargeMax
+        st.dataframe(updatedBerger, use_container_width=True, hide_index = True)
 
 with tab7 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
