@@ -7,6 +7,7 @@ import re
 import streamlit as st
 import streamlit_authenticator as stauth
 from streamlit_gsheets import GSheetsConnection
+from datetime import date
 import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
@@ -63,7 +64,27 @@ def get_all_heroes() :
                     wod_description = wod_description.strip('<br/><br/>').replace('<br/><br/>', '\n\n').replace('<br/>', '\n')
                     wods.append({"name": wod_name, "description": wod_description})
     return wods
-    
+
+def WOD() :
+    url = "https://www.crossfit.com/"
+    today = date.today()
+    formatted_date = today.strftime('%y%m%d')
+    url_today = url+formatted_date
+    return url_today
+
+def UniqueWOD(url) : 
+    response = requests.get(url)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, 'html.parser')
+        h1_tag = soup.find('title')
+        if h1_tag:
+            wod_name = h1_tag.get_text(strip=True)
+            description_div = soup.find('div', class_='_wrapper_3kipy_96 _text-block_1ex2o_95')
+                if description_div:
+                    wod_description = description_div.get_text(separator="\n", strip=True)
+                    wod_description = wod_description.strip('<br/><br/>').replace('<br/><br/>', '\n\n').replace('<br/>', '\n')
+    return wod_name, wod_description
+
 @st.dialog("Consulter mes RM",  width="large")
 def get_best_rm(df, athl) :
     st.write("Voici vos meilleurs performances pour chaque exercice")
@@ -237,6 +258,8 @@ with tab5 :
 with tab6 : 
     st.write("Tous les wods présentés ici sont issus du site officiel de Crossfit.com ©️")
     st.subheader("Workout of the day")
+    wod_name_today, wod_description_today = UniqueWOD(WOD())
+    st.markdown(wod['description'].replace('\n', '<br>'), unsafe_allow_html=True)
     st.divider()
     st.subheader("WOD au hasard")
     st.divider()
