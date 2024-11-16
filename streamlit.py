@@ -31,6 +31,8 @@ def get_conn() :
 def get_df(sheet_name) :
     datas = conn.read(worksheet=sheet_name)
     return datas
+
+@st.dialog("Consulter mes RM")
 def get_best_rm(df) :
     temp = df.loc[df.Category == "WEIGHTLIFTING"]
     temp = pd.groupby(temp, "Exercice").agg({"Perf" : "max"})["RM"]
@@ -181,7 +183,7 @@ with tab5 :
     st.dataframe(explaination,hide_index=True)
     st.divider()
     st.write("Si vous souhaitez consulter vos meilleurs RM, cliquez sur le bouton ci dessous")
-    @st.dialog("Consulter mes RM")
+    
     if "get_best_rm" not in st.session_state:
         if st.button("Consulter mes RM"):
             st.dataframe(get_best_rm(data_perso))
