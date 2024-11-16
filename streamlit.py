@@ -51,7 +51,7 @@ def get_all_heroes() :
             if hr_tag:
                 h3_tag = hr_tag.find_next('h3')
                 if h3_tag:
-                    wod_name = h3_tag.get_text(strip=True)
+                    wod_name = h3_tag.get_text(strip=True).upper()
                     wod_description = ''
                     for sibling in h3_tag.find_next_siblings():
                         if sibling.name == 'p':
@@ -243,7 +243,7 @@ with tab6 :
     wods = get_all_heroes()
     chosen_hero = st.selectbox("Quel WOD Hero voulez vous voir", [i["name"] for i in wods])
     if len(chosen_hero) > 0 : 
-        wod = wods[wods.index(chosen_hero)]
+        murph_wod = next((wod for wod in wods if wod['name'] == chosen_hero), None)
         st.markdown(f"### {wod['name']}") 
         st.markdown(wod['description'].replace('\n', '<br>'), unsafe_allow_html=True)
 
