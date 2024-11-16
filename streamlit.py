@@ -182,8 +182,9 @@ with tab5 :
     st.divider()
     st.write("Si vous souhaitez consulter vos meilleurs RM, cliquez sur le bouton ci dessous")
     @st.dialog("Consulter mes RM")
-    if st.button("Consulter mes RM"):
-        st.dataframe(get_best_rm(data_perso))
+    if "get_best_rm" not in st.session_state:
+        if st.button("Consulter mes RM"):
+            st.dataframe(get_best_rm(data_perso))
     repMax = st.number_input('Votre RM max (RM1/2/3/5 etc) (indiquez seulement le chiffre)', step=1)
     chargeMax = st.number_input('Votre charge max pour ce RM (indiquez seulement le chiffre)', step=1)
     
