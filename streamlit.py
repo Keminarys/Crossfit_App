@@ -212,7 +212,7 @@ with tab6 :
     st.write("Tous les wods présentés ici sont issus du site officiel de Crossfit.com ©️")
     st.subheader("Workout of the day")
     st.divider()
-    st.subheader("WOD au hasard").
+    st.subheader("WOD au hasard")
     st.divider()
     st.subheader("WOD Hero au hasard")
 with tab7 :
