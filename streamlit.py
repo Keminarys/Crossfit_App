@@ -158,7 +158,7 @@ with tab2 :
     selected_ex = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[data_full_scoped['Category'] == selected_cat]['Exercice'].unique()))
    
     data_graph = data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]
-    if data_graph["Unité"] == "HH:MM:SS" :
+    if data_graph["Unité"].unique().tolist()[0] = "HH:MM:SS" :
         data_graph["Perf"] = pd.to_datetime(data_graph["Perf"]).dt.strftime('%H:%M:%S')
     data_graph['Exo_RM'] = data_graph['Exercice'] + '// RM : ' +data_graph['RM'].astype(str)
     fig_line = px.line(data_graph,x="Date", y="Perf", color='Exo_RM', markers=True)
