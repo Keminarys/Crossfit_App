@@ -32,6 +32,14 @@ def get_df(sheet_name) :
     datas = conn.read(worksheet=sheet_name)
     return datas
 
+def apply_colormap(df, column, colormap='bwr'): 
+    norm = plt.Normalize(df[column].min(), df[column].max())
+    sm = plt.cm.ScalarMappable(cmap=colormap, norm=norm)
+    colors = sm.to_rgba(df[column])
+    hex_colors = [plt.colors.rgb2hex(color) for color in colors]
+    df_styled = df.style.applymap(lambda x, color=hex_colors: f'background-color: {color[x.name]};', subset=[column])
+    return df_styled
+
 @st.dialog("Consulter mes RM",  width="large")
 def get_best_rm(df, athl) :
     st.write("Voici vos meilleurs performances pour chaque exercice")
@@ -198,6 +206,8 @@ with tab5 :
         updatedBerger = berger.copy()
         updatedBerger.at[int(repMax), "Charge"] = chargeMax
         updatedBerger.loc[int(repMax)+1:, "Charge"] = updatedBerger.loc[int(repMax)+1:, "Pourcentage"] * chargeMax
+        updatedBerger = updatedBerger.loc[updatedBerger.Charge > 0]
+        styled_Berger = apply_colormap(updatedBerger, 'Charge')
         st.dataframe(updatedBerger, use_container_width=True, hide_index = True)
 
 with tab7 :
