@@ -38,7 +38,7 @@ def apply_colormap(df, column, colormap='viridis'):
     sm = plt.cm.ScalarMappable(cmap=colormap, norm=norm)
     colors = sm.to_rgba(df[column])
     hex_colors = [mcolors.rgb2hex(color) for color in colors]
-    df_styled = df.style.applymap(lambda x, color=hex_colors: f'background-color: {color[x.name]};', subset=[column])
+    df_styled = df.style.applymap(lambda x: [f'background-color: {hex_colors[i]}' for i in range(len(x))], subset=[column])
     return df_styled
 
 @st.dialog("Consulter mes RM",  width="large")
