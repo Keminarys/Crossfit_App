@@ -10,7 +10,6 @@ from streamlit_gsheets import GSheetsConnection
 import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
-import matplotlib.colors as mcolors
 import seaborn as sns
 from pytube import YouTube, Playlist
 # import yaml
