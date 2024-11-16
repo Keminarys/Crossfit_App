@@ -37,7 +37,7 @@ def get_best_rm(df, athl) :
     st.write("Voici vos meilleurs performances pour chaque exercices")
     st.divider()
     temp = df.loc[(df.Category == "WEIGHTLIFTING") & (df['Profil'] == athl)]
-    temp = temp.groupby(["Exercice", "RM"]).agg({"Perf" : "max"})
+    temp = temp.groupby(["Exercice", "RM"]).agg({"Perf" : "max"}).reset_index()
     selection = st.pills("Exercice", list(temp['Exercice'].tolist()), selection_mode="single")
     temp = temp.loc[temp.Exercice == selection]
     return st.dataframe(temp)
