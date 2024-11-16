@@ -52,6 +52,7 @@ df_obj = df_obj[['Name','Task','Description','Start','Finish','Completed']].drop
 df_obj['Start'] = pd.to_datetime(df_obj['Start'], format='%d/%m/%Y')
 df_obj['Finish'] = pd.to_datetime(df_obj['Finish'], format='%d/%m/%Y')
 
+berger = get_df("berger")
 
 list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
@@ -92,7 +93,7 @@ with st.sidebar.expander("Ajout d'un WOD/Exercice non présent dans la liste") :
         st.cache_data.clear()
         st.rerun()
 
-tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data","💪🎯 Objectifs", "🏋️‍♂️🤖 WOD Generator", "🥇🏋️‍♂️ Démonstration Mouvement"])
+tab1, tab2, tab3, tab4, tab5, tab6, tab7= st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data", "💪🎯 Objectifs", "🖥️ Table de Berger","🏋️‍♂️🤖 WOD Generator", "🥇🏋️‍♂️ Démonstration Mouvement"])
 
 with tab1 :
     cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()))
@@ -164,7 +165,22 @@ with tab4 :
     fig_gantt.update_yaxes(autorange="reversed")
     st.plotly_chart(fig_gantt,use_container_width=True)
 
-with tab6 :
+with tab5 : 
+    st.write("Afin d'atteindre votre charge de travail le plus efficacement possible, vous pouvez utiliser cette table de Berger personnalisée")
+    explaination = pd.DataFrame(
+    {
+        "REPS": ["1 à 6", "7 à 10", "11 à 15"],
+        "Benefice": ["Force", "Volume Hypertrophie", "Endurance"],
+        "Repos": ["3'+", "2'-3'", "2'"],
+        "Nb de series": ["3 à 5", "6", "8"]
+    }
+)
+    st.dataframe(df,hide_index=True)
+    repMax = st.number_input('Votre RM max (RM1/2/3/5 etc) (indiquez seulement le chiffre)', step=1)
+    chargeMax = st.number_input('Votre charge max pour ce RM (indiquez seulement le chiffre)', step=1)
+    
+
+with tab7 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
     on = st.toggle("Voir la liste des mouvements ?")
 
