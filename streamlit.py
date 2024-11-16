@@ -33,8 +33,8 @@ def get_df(sheet_name) :
     return datas
 
 @st.dialog("Consulter mes RM")
-def get_best_rm(df) :
-    temp = df.loc[df.Category == "WEIGHTLIFTING"]
+def get_best_rm(df, athl) :
+    temp = df.loc[(df.Category == "WEIGHTLIFTING") & (df['Profil'] == athl)]
     temp = temp.groupby(["Exercice", "RM"]).agg({"Perf" : "max"})
     return temp
     
@@ -186,7 +186,7 @@ with tab5 :
     
     if "get_best_rm" not in st.session_state:
         if st.button("Consulter mes RM"):
-            st.dataframe(get_best_rm(data_perso))
+            st.dataframe(get_best_rm(data_perso, athl))
     repMax = st.number_input('Votre RM max (RM1/2/3/5 etc) (indiquez seulement le chiffre)', step=1)
     chargeMax = st.number_input('Votre charge max pour ce RM (indiquez seulement le chiffre)', step=1)
     
