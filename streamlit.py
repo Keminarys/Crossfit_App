@@ -35,7 +35,7 @@ def get_df(sheet_name) :
 @st.dialog("Consulter mes RM")
 def get_best_rm(df) :
     temp = df.loc[df.Category == "WEIGHTLIFTING"]
-    temp = pd.groupby(temp, "Exercice").agg({"Perf" : "max"})["RM"]
+    temp = temp.groupby("Exercice").agg({"Perf" : "max"})["RM"]
     return temp
     
 ### Variable
