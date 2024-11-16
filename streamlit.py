@@ -209,7 +209,7 @@ with tab5 :
         updatedBerger.loc[int(repMax)+1:, "Charge"] = updatedBerger.loc[int(repMax)+1:, "Pourcentage"] * chargeMax
         updatedBerger = updatedBerger.loc[updatedBerger.Charge > 0]
         styled_Berger = apply_colormap(updatedBerger, 'Charge')
-        st.dataframe(updatedBerger, use_container_width=True, hide_index = True)
+        st.dataframe(styled_Berger, use_container_width=True, hide_index = True)
 
 with tab7 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
