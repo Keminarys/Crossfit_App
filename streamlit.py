@@ -64,7 +64,15 @@ def get_all_heroes() :
                     wod_description = wod_description.strip('<br/><br/>').replace('<br/><br/>', '\n\n').replace('<br/>', '\n')
                     wods.append({"name": wod_name, "description": wod_description})
     return wods
-
+    
+def format_text(text):
+    formatted_text = re.sub(r'Compare to', '\n\nCompare to', text)
+    formatted_text = re.sub(r'Scaling:', '\n\nScaling:\n', formatted_text)
+    formatted_text = re.sub(r'Intermediate option:', '\n\nIntermediate option:\n', formatted_text)
+    formatted_text = re.sub(r'Beginner option:', '\n\nBeginner option:\n', formatted_text)
+    formatted_text = re.sub(r'Coaching cues:', '\n\nCoaching cues:\n', formatted_text)
+    return formatted_text
+    
 def WOD() :
     url = "https://www.crossfit.com/"
     today = date.today()
@@ -82,8 +90,7 @@ def UniqueWOD(url) :
             description_div = soup.find('div', class_='_wrapper_3kipy_96 _text-block_1ex2o_95')
             
             if description_div:
-                wod_description = description_div.get_text(separator="\n", strip=True)
-                wod_description = wod_description.replace('<br/>', '\n').replace('<br>', '\n').strip()
+                wod_description = description_div.get_text(separator=" ", strip=True).replace('.', '.\n').replace(':', ':\n\n')
                 lines = wod_description.split('\n')
                 filtered_lines = []
                 for line in lines:
@@ -91,7 +98,8 @@ def UniqueWOD(url) :
                         break
                     filtered_lines.append(line.strip())
                 
-                formatted_description = "\n\n".join([line for line in filtered_lines if line])
+                formatted_description = "\n".join([line for line in filtered_lines if line])
+                formatted_description = format_text(formatted_description)
     return wod_name, formatted_description
 
 @st.dialog("Consulter mes RM",  width="large")
