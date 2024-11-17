@@ -73,6 +73,17 @@ def format_text(text):
     formatted_text = re.sub(r'Coaching cues:', '\n\nCoaching cues:\n', formatted_text)
     return formatted_text
     
+def random_date_url():
+    start_date = datetime.datetime.strptime("2001-10-02", "%Y-%m-%d")
+    end_date = datetime.datetime.now()
+    delta = end_date - start_date
+    random_days = random.randrange(delta.days)
+    random_date = start_date + datetime.timedelta(days=random_days)
+    old_format = random_date.strftime("%Y/%m/%d")
+    url = "https://www.crossfit.com/"
+    url_random = url+old_format
+    return url_random    
+    
 def WOD() :
     url = "https://www.crossfit.com/"
     today = date.today()
@@ -287,6 +298,9 @@ with tab6 :
     st.write(f"**{wod_name_today}**\n\n{wod_description_today}")
     st.divider()
     st.subheader(":red[WOD au hasard]")
+    if st.button("Générer un WOD au hasard"):
+        wod_name_random, wod_description_random = UniqueWOD(random_date_url())
+        st.write(f"**{wod_name_random}**\n\n{wod_description_random}")
     st.divider()
     st.subheader(":red[Tous les WOD Hero]")
     wods = get_all_heroes()
