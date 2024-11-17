@@ -123,7 +123,7 @@ def UniqueWOD(url) :
                 
                 formatted_description = "\n".join([line for line in filtered_lines if line])
                 formatted_description = format_text(formatted_description)
-    return wod_name, formatted_description
+    return formatted_description
 
 @st.dialog("Consulter mes RM",  width="large")
 def get_best_rm(df, athl) :
@@ -306,22 +306,22 @@ with tab6 :
         st.write("Votre charge en kg est de :", lbs*0.453592)
     
     st.subheader(":red[Workout of the day]")
-    wod_name_today, wod_description_today = UniqueWOD(WOD())
-    st.write(f"**{wod_name_today}**\n\n{wod_description_today}")
+    wod_description_today = UniqueWOD(WOD())
+    st.write(f"{wod_description_today}")
     st.divider()
     st.subheader(":red[WOD au hasard]")
     if st.button("Générer un WOD au hasard"):
         url_random_old, url_random_new = random_date_url()
         try :
-          wod_name, wod_description = UniqueWOD(url_random_new)
-          st.write(f"**{wod_name_random}**\n\n{wod_description_random}")
+          wod_description_random = UniqueWOD(url_random_new)
+          st.write(f"{wod_description_random}")
         except :
           try :
-            wod_description = UniqueWOD_OldFormat(url_random_new)
+            wod_description_random = UniqueWOD_OldFormat(url_random_new)
             st.write(f"{wod_description_random}")
           except :
             try :
-              wod_description = UniqueWOD_OldFormat(url_random_old)
+              wod_description_random = UniqueWOD_OldFormat(url_random_old)
               st.write(f"{wod_description_random}")
             except :
               st.write("Il y a eu une erreur réessayer")
