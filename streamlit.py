@@ -80,10 +80,12 @@ def random_date_url():
     delta = end_date - start_date
     random_days = random.randrange(delta.days)
     random_date = start_date + datetime.timedelta(days=random_days)
+    new_format = random_date.strftime("%y%m%d")
     old_format = random_date.strftime("%Y/%m/%d")
-    url = "https://www.crossfit.com/"
-    url_random = url+old_format
-    return url_random    
+    url = "https://www.crossfit.com/workout/"
+    url_random_old = url+old_format+"#/comments"
+    url_random_new = "https://www.crossfit.com/"+new_format
+    return url_random_old, url_random_new  
     
 def WOD() :
     url = "https://www.crossfit.com/"
@@ -92,6 +94,15 @@ def WOD() :
     url_today = url+formatted_date
     return url_today
 
+def UniqueWOD_OldFormat(url) :
+    response = requests.get(url)
+    if response.status_code == 200:
+        soup = BeautifulSoup(response.content, 'html.parser')
+        wod_container = soup.find('div', class_='col-sm-7', id='wodContainer')
+        wod_content = wod_container.find('div', class_='wod active')
+        wod_description = wod_content.get_text(separator=" ", strip=True).replace('.', '.\n').replace(':', ':\n\n')
+        return wod_description
+        
 def UniqueWOD(url) : 
     response = requests.get(url)
     if response.status_code == 200:
@@ -300,8 +311,20 @@ with tab6 :
     st.divider()
     st.subheader(":red[WOD au hasard]")
     if st.button("Générer un WOD au hasard"):
-        wod_name_random, wod_description_random = UniqueWOD(random_date_url())
-        st.write(f"**{wod_name_random}**\n\n{wod_description_random}")
+        url_random_old, url_random_new = random_date_url()
+        try :
+          wod_name, wod_description = UniqueWOD(url_random_new)
+          st.write(f"**{wod_name_random}**\n\n{wod_description_random}")
+        except :
+          try :
+            wod_description = UniqueWOD_OldFormat(url_random_new)
+            st.write(f"{wod_description_random}")
+          except :
+            try :
+              wod_description = UniqueWOD_OldFormat(url_random_old)
+              st.write(f"{wod_description_random}")
+            except :
+              st.write("Il y a eu une erreur réessayer")
     st.divider()
     st.subheader(":red[Tous les WOD Hero]")
     wods = get_all_heroes()
