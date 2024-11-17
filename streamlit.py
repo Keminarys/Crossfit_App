@@ -268,9 +268,9 @@ with tab6 :
     st.subheader("Tous les wods présentés ici sont issus du site officiel de Crossfit.com ©️")
     st.write("Crossfit.com ©️ étant un site américain, les charges sont en lbs.")
     st.write("Pour les convertir en Kg, il faut soit diviser la charge par 2.2, sinon vous pouvez utiliser le convertisseur ci dessous")
-    col1, col2 = st.columns(2,vertical_alignment="center")
+    col1, col2 = st.columns([1,3],vertical_alignment="center")
     with col1:
-        lbs = st.number_input("Charge en lbs", use_container_width=False)
+        lbs = st.number_input("Charge en lbs")
     with col2 : 
         st.write("Votre charge en kg est de :", lbs*0.453592)
     
