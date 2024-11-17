@@ -266,6 +266,14 @@ with tab5 :
         st.dataframe(updatedBerger, use_container_width=True, hide_index = True)
 with tab6 : 
     st.subheader("Tous les wods présentés ici sont issus du site officiel de Crossfit.com ©️")
+    st.write("Crossfit.com ©️ étant un site américain, les charges sont en lbs.")
+    st.write("Pour les convertir en Kg, il faut soit diviser la charge par 2.2, sinon vous pouvez utiliser le convertisseur ci dessous")
+    col1, col2 = st.columns(2)
+    with col1:
+        lbs = st.number_input("Charge en lbs")
+    with col2 : 
+        st.write("Votre charge en kg est de :", lbs*0.453592)
+    
     st.subheader("Workout of the day")
     wod_name_today, wod_description_today = UniqueWOD(WOD())
     st.write(f"**{wod_name_today}**\n\n{wod_description_today}")
