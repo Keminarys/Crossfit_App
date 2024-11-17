@@ -164,7 +164,7 @@ with st.sidebar.expander("Ajout d'un WOD/Exercice non présent dans la liste") :
         st.cache_data.clear()
         st.rerun()
 
-tab1, tab2, tab3, tab4, tab5, tab6, tab7= st.tabs(["##🎉 Nouvelle Performance", "##📈 Aperçu de la progression", "##📊 Data", "##💪🎯 Objectifs", "##🖥️ Table de Berger","##🏋️‍♂️ WOD", "##🥇🏋️‍♂️ Démonstration Mouvement"])
+tab1, tab2, tab3, tab4, tab5, tab6, tab7= st.tabs(["🎉 Nouvelle Performance", "📈 Aperçu de la progression", "📊 Data", "💪🎯 Objectifs", "🖥️ Table de Berger","🏋️‍♂️ WOD", "🥇🏋️‍♂️ Démonstration Mouvement"])
 
 with tab1 :
     cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()))
@@ -274,13 +274,13 @@ with tab6 :
     with col2 : 
         st.write("Votre charge en kg est de :", lbs*0.453592)
     
-    st.subheader("red[Workout of the day]")
+    st.subheader(":red[Workout of the day]")
     wod_name_today, wod_description_today = UniqueWOD(WOD())
     st.write(f"**{wod_name_today}**\n\n{wod_description_today}")
     st.divider()
-    st.subheader("red[WOD au hasard]")
+    st.subheader(":red[WOD au hasard]")
     st.divider()
-    st.subheader("red[Tous les WOD Hero]")
+    st.subheader(":red[Tous les WOD Hero]")
     wods = get_all_heroes()
     chosen_hero = st.selectbox("Quel WOD Hero voulez vous voir", [i["name"] for i in wods])
     if len(chosen_hero) > 0 : 
