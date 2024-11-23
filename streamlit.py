@@ -270,6 +270,7 @@ with tab4 :
     st.plotly_chart(fig_gantt,use_container_width=True)
 
 with tab5 : 
+    st.write("Si vous souhaitez faire du travail de force, vous pouvez vous aider des onglets ci dessous suivant le but de votre séance.")
     expander1 = st.expander("Table de Berger pour une seule série")
 
     expander1.write("Afin d'atteindre votre charge de travail le plus efficacement possible, vous pouvez utiliser cette table de Berger personnalisée")
@@ -299,6 +300,37 @@ with tab5 :
         updatedBerger = updatedBerger.loc[updatedBerger.Charge > 0]
         updatedBerger['Charge'] = updatedBerger['Charge'].astype(int)
         expander1.dataframe(updatedBerger, use_container_width=True, hide_index = True)
+
+    expander2 = st.expander("Table de Berger pour plusieurs séries")
+    expander2.write("Afin d'atteindre votre charge de travail le plus efficacement possible, vous pouvez utiliser cette table de Berger personnalisée et adaptée à un travail sur plusieurs séries")
+
+
+    code = {
+        "Difficulty": ["RM1", "RM2-3", "RM4-5", "RM6-7", "RM8-9", "RM10-11", "RM12-13", "RM14-15"],
+        "Recommendations": [
+            "True Test Sets, 1-8/12 weeks, Peaking LOW-OPT",
+            "Test Sets, Evaluation Sets, 0-1/4 weeks, Peaking LOW-OPT",
+            "Evaluation Sets, Occasional Load Weeks, 0-1/4 weeks, Peaking LOW-OPT",
+            "Majority of Load Weeks, Occasional Open Sets, 1-3/4 weeks, Peaking LOW-HIGH",
+            "Majority of Base Work, Occasional Unload Work, 0-1/4 weeks, Peaking LOW-HIGH",
+            "Majority of Unload Work, Occasional Base Work, 1-2/4 weeks",
+            "Super Unload, 0-1/4 weeks, Seldom used as Unload",
+            "Rarely used in Cycles, 0-1/4 weeks, Not enough load to yield adaptation"
+        ]
+    }
+    
+    code = pd.DataFrame(code)
+    expander2.dataframe(code,hide_index=True, use_container_width=True)
+    expander2.divider()
+    expander2.write("Si vous souhaitez consulter vos meilleurs RM, cliquez sur le bouton ci dessous")
+     if "get_best_rm" not in st.session_state:
+        if expander2.button("Consulter mes RM"):
+            get_best_rm(data_perso, athl)
+    repMaxMulti = expander2.number_input('Votre RM max (RM1/2/3/5 etc) (indiquez seulement le chiffre)', step=1)
+    chargeMaxMulti = expander2.number_input('Votre charge max pour ce RM (indiquez seulement le chiffre)', step=1)
+    Serie_nb = expander2.selectbox('Nb de séries', (1,2,3,4,5,6,7,8,10))
+
+
 with tab6 : 
     st.subheader("Tous les wods présentés ici sont issus du site officiel de Crossfit.com ©️")
     st.write("Crossfit.com ©️ étant un site américain, les charges sont en lbs.")
