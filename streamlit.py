@@ -402,7 +402,7 @@ with tab7 :
             titles_and_urls = getVideoLink() 
             status.update(label="Chargement Terminé !", state="complete", expanded=False)
         list_title = [title for title, _ in titles_and_urls]
-        title_id = st.selectbox('Quel mouvement voulez vous voir ?',titles_and_urls)
+        title_id = st.selectbox('Quel mouvement voulez vous voir ?',list_title)
         video_url = [url for title, url in titles_and_urls if title == title_id][0]
         st.video(video_url)
 # elif st.session_state["authentication_status"] is False:
