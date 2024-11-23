@@ -13,7 +13,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-from pytube import YouTube, Playlist
+import yt_dlp
 import requests
 from bs4 import BeautifulSoup
 # import yaml
@@ -387,24 +387,23 @@ with tab7 :
     if on : 
         @st.cache_data  
         def getVideoLink() : 
-            video_links = Playlist("https://www.youtube.com/playlist?list=PLdWvFCOAvyr1qYhgPz_-wnCcxTO7VHdFo").video_urls
-            return list(video_links)
-        @st.cache_data 
-        def getVideoTitle(video_links):
-            video_titles = []
-            for link in video_links:
-                video_titles.append(YouTube(link).title)
-            return video_titles
+            ydl_opts = {'quiet': True, 'extract_flat': True, 'skip_download': True, 'force_generic_extractor': True}
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                info = ydl.extract_info('https://www.youtube.com/playlist?list=PLdWvFCOAvyr1qYhgPz_-wnCcxTO7VHdFo', download=False)
+            titles_and_urls = []
+            for entry in info['entries']:
+                title = entry['title']
+                url = f"https://www.youtube.com/watch?v={entry['id']}"
+                titles_and_urls.append((title, url))
+            return titles_and_urls
 
         with st.status("Chargement de la playlist CrossFit©️ ...", expanded=True) as status:
-            st.write("Recherche de la playlist YouTube ...")
-            video_links = getVideoLink() 
             st.write("Création de la liste contenant les titres des vidéos ...")
-            video_titles = getVideoTitle(video_links)
+            titles_and_urls = getVideoLink() 
             status.update(label="Chargement Terminé !", state="complete", expanded=False)
-        
-        title_id = st.selectbox('Quel mouvement voulez vous voir ?',video_titles)
-        video_url = video_links[video_titles.index(title_id)]
+        list_title = [title for title, _ in titles_and_urls]
+        title_id = st.selectbox('Quel mouvement voulez vous voir ?',titles_and_urls)
+        video_url = [url for title, url in titles_and_urls if title == title_id][0]
         st.video(video_url)
 # elif st.session_state["authentication_status"] is False:
 #    st.error('Username/password is incorrect')
