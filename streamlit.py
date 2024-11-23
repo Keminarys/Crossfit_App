@@ -272,6 +272,11 @@ with tab4 :
 
 with tab5 : 
     st.write("Si vous souhaitez faire du travail de force, vous pouvez vous aider des onglets ci dessous suivant le but de votre séance.")
+
+    if "get_best_rm" not in st.session_state:
+    if st.button("Consulter mes RM"):
+        get_best_rm(data_perso, athl)
+            
     expander1 = st.expander("Table de Berger pour une seule série")
 
     expander1.write("Afin d'atteindre votre charge de travail le plus efficacement possible, vous pouvez utiliser cette table de Berger personnalisée")
@@ -286,10 +291,6 @@ with tab5 :
     expander1.dataframe(explaination,hide_index=True, use_container_width=True)
     expander1.divider()
     expander1.write("Si vous souhaitez consulter vos meilleurs RM, cliquez sur le bouton ci dessous")
-    
-    if "get_best_rm" not in st.session_state:
-        if expander1.button("Consulter mes RM"):
-            get_best_rm(data_perso, athl)
     repMax = expander1.number_input('Votre RM max (RM1/2/3/5 etc) (indiquez seulement le chiffre)', step=1)
     chargeMax = expander1.number_input('Votre charge max pour ce RM (indiquez seulement le chiffre)', step=1)
 
