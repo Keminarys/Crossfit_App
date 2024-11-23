@@ -270,7 +270,9 @@ with tab4 :
     st.plotly_chart(fig_gantt,use_container_width=True)
 
 with tab5 : 
-    st.write("Afin d'atteindre votre charge de travail le plus efficacement possible, vous pouvez utiliser cette table de Berger personnalisée")
+    expander1 = st.expander("Table de Berger pour une seule série")
+
+    expander1.write("Afin d'atteindre votre charge de travail le plus efficacement possible, vous pouvez utiliser cette table de Berger personnalisée")
     explaination = pd.DataFrame(
     {
         "REPS": ["1 à 6", "7 à 10", "11 à 15"],
@@ -279,15 +281,15 @@ with tab5 :
         "Nb de series": ["3 à 5", "6", "8"]
     }
 )
-    st.dataframe(explaination,hide_index=True, use_container_width=True)
-    st.divider()
-    st.write("Si vous souhaitez consulter vos meilleurs RM, cliquez sur le bouton ci dessous")
+    expander1.dataframe(explaination,hide_index=True, use_container_width=True)
+    expander1.divider()
+    expander1.write("Si vous souhaitez consulter vos meilleurs RM, cliquez sur le bouton ci dessous")
     
     if "get_best_rm" not in st.session_state:
-        if st.button("Consulter mes RM"):
+        if expander1.button("Consulter mes RM"):
             get_best_rm(data_perso, athl)
-    repMax = st.number_input('Votre RM max (RM1/2/3/5 etc) (indiquez seulement le chiffre)', step=1)
-    chargeMax = st.number_input('Votre charge max pour ce RM (indiquez seulement le chiffre)', step=1)
+    repMax = expander1.number_input('Votre RM max (RM1/2/3/5 etc) (indiquez seulement le chiffre)', step=1)
+    chargeMax = expander1.number_input('Votre charge max pour ce RM (indiquez seulement le chiffre)', step=1)
 
     if repMax and chargeMax != 0 :
         updatedBerger = berger.copy()
@@ -296,7 +298,7 @@ with tab5 :
         updatedBerger.loc[1:, "Charge"] = updatedBerger.loc[1:, "Pourcentage"] * rm1_calulated
         updatedBerger = updatedBerger.loc[updatedBerger.Charge > 0]
         updatedBerger['Charge'] = updatedBerger['Charge'].astype(int)
-        st.dataframe(updatedBerger, use_container_width=True, hide_index = True)
+        expander1.dataframe(updatedBerger, use_container_width=True, hide_index = True)
 with tab6 : 
     st.subheader("Tous les wods présentés ici sont issus du site officiel de Crossfit.com ©️")
     st.write("Crossfit.com ©️ étant un site américain, les charges sont en lbs.")
