@@ -329,7 +329,7 @@ with tab5 :
     Serie_nb = expander2.selectbox('Nb de séries', (1,2,3,4,5,6,7,8,10)) 
     if repMaxMulti and chargeMaxMulti != 0 : 
         updatedbergerModified = bergerModified.copy()
-        updatedbergerModified = updatedbergerModified[updatedbergerModified.columns == Serie_nb]
+        updatedbergerModified = updatedbergerModified[[updatedbergerModified.columns == Serie_nb]]
         expander2.dataframe(updatedbergerModified)
 
 
