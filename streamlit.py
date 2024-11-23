@@ -330,7 +330,7 @@ with tab5 :
     if repMaxMulti and chargeMaxMulti != 0 : 
         updatedbergerModified = bergerModified.copy()
         
-        updatedbergerModified = updatedbergerModified.iloc[:,Serie_nb]
+        updatedbergerModified = updatedbergerModified.iloc[:,[0,Serie_nb]]
         expander2.dataframe(updatedbergerModified)
 
 
