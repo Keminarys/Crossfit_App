@@ -331,7 +331,10 @@ with tab5 :
     if repMaxMulti and chargeMaxMulti != 0 : 
         updatedbergerModified = bergerModified.copy()
         updatedbergerModified = updatedbergerModified.iloc[:,[0,Serie_nb]]
-        rm1_calulated_multi = int((chargeMaxMulti) * (updatedbergerModified.iloc[int(repMaxMulti)][Serie_nb]))
+        
+        updatedBergerTemp = berger.copy()
+        rm1_calulated_multi = int((chargeMaxMulti) / (updatedBerger.iloc[int(repMaxMulti)]["Pourcentage"]))
+        
         updatedbergerModified["Charge"] = updatedbergerModified[Serie_nb] * rm1_calulated_multi
         updatedbergerModified['Charge'] = updatedbergerModified['Charge'].astype(int)
         updatedbergerModified = updatedbergerModified.loc[updatedbergerModified.Charge > 0]
