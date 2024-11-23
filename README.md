@@ -2,5 +2,4 @@ Link to the app [![Streamlit App](https://static.streamlit.io/badges/streamlit_b
 
 Improvement incoming : 
 - Change Objective tab
-- Change pytube librairy to another one working
 - Get feedbacks
