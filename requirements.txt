@@ -7,7 +7,7 @@ oauth2client
 st-gsheets-connection
 matplotlib
 seaborn
-pytube
+yt_dlp
 streamlit-authenticator 
 pyyaml
 bs4
