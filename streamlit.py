@@ -323,8 +323,8 @@ with tab5 :
     expander2.dataframe(code,hide_index=True, use_container_width=True)
     expander2.divider()
     expander2.write("Si vous souhaitez consulter vos meilleurs RM, cliquez sur le bouton ci dessous")
-    repMaxMulti = expander2.number_input('Votre RM max (RM1/2/3/5 etc) (indiquez seulement le chiffre)', step=1)
-    chargeMaxMulti = expander2.number_input('Votre charge max pour ce RM (indiquez seulement le chiffre)', step=1)
+    repMaxMulti = expander2.number_input('Votre RM max pour la session de travail', step=1)
+    chargeMaxMulti = expander2.number_input('Votre Charge max pour la session de travail', step=1)
     Serie_nb = expander2.selectbox('Nb de séries', (1,2,3,4,5,6,7,8,10))
 
 
