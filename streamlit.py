@@ -329,9 +329,14 @@ with tab5 :
     Serie_nb = expander2.selectbox('Nb de séries', (1,2,3,4,5,6,7,8,10)) 
     if repMaxMulti and chargeMaxMulti != 0 : 
         updatedbergerModified = bergerModified.copy()
-        
         updatedbergerModified = updatedbergerModified.iloc[:,[0,Serie_nb]]
-        expander2.dataframe(updatedbergerModified)
+        updatedbergerModified["Charge"] = 0
+        updatedbergerModified.at[int(repMaxMulti), "Charge"] = chargeMaxMulti
+        rm1_calulated_multi = int((chargeMaxMulti) / (updatedbergerModified.iloc[int(repMax)][Serie_nb]))
+        updatedbergerModified.loc[1:, "Charge"] = updatedbergerModified.loc[1:, "Pourcentage"] * rm1_calulated_multi
+        updatedbergerModified = updatedbergerModified.loc[updatedbergerModified.Charge > 0]
+        updatedbergerModified['Charge'] = updatedbergerModified['Charge'].astype(int)
+        expander2.dataframe(updatedbergerModified, use_container_width=True, hide_index = True)
 
 
 with tab6 : 
