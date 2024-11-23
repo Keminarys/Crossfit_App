@@ -323,7 +323,7 @@ with tab5 :
     expander2.dataframe(code,hide_index=True, use_container_width=True)
     expander2.divider()
     expander2.write("Si vous souhaitez consulter vos meilleurs RM, cliquez sur le bouton ci dessous")
-     if "get_best_rm" not in st.session_state:
+    if "get_best_rm" not in st.session_state:
         if expander2.button("Consulter mes RM"):
             get_best_rm(data_perso, athl)
     repMaxMulti = expander2.number_input('Votre RM max (RM1/2/3/5 etc) (indiquez seulement le chiffre)', step=1)
