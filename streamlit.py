@@ -332,7 +332,7 @@ with tab5 :
         updatedbergerModified = bergerModified.copy()
         updatedbergerModified = updatedbergerModified.iloc[:,[0,Serie_nb]]
         rm1_calulated_multi = int((chargeMaxMulti) / (updatedbergerModified.iloc[int(repMaxMulti)][Serie_nb]))
-        expander2.write(rm1_calulated_multi, chargeMaxMulti, updatedbergerModified.iloc[int(repMaxMulti)][Serie_nb])
+        expander2.write(f'{rm1_calulated_multi}, {chargeMaxMulti}, {updatedbergerModified.iloc[int(repMaxMulti)][Serie_nb]}')
         updatedbergerModified["Charge"] = updatedbergerModified[Serie_nb] * rm1_calulated_multi
         # updatedbergerModified['Charge'] = updatedbergerModified['Charge'].astype(int)
         updatedbergerModified = updatedbergerModified.rename(columns={Serie_nb: "Pourcentage pour "+str(Serie_nb)+" séries"})
