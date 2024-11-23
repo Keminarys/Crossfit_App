@@ -155,6 +155,7 @@ df_obj['Start'] = pd.to_datetime(df_obj['Start'], format='%d/%m/%Y')
 df_obj['Finish'] = pd.to_datetime(df_obj['Finish'], format='%d/%m/%Y')
 
 berger = get_df("berger")
+bergerModified = get_df("bergerModified")
 
 list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
@@ -325,7 +326,11 @@ with tab5 :
     expander2.write("Si vous souhaitez consulter vos meilleurs RM, cliquez sur le bouton ci dessous")
     repMaxMulti = expander2.number_input('Votre RM max pour la session de travail', step=1)
     chargeMaxMulti = expander2.number_input('Votre Charge max pour la session de travail', step=1)
-    Serie_nb = expander2.selectbox('Nb de séries', (1,2,3,4,5,6,7,8,10))
+    Serie_nb = expander2.selectbox('Nb de séries', (1,2,3,4,5,6,7,8,10)) 
+    if repMaxMulti and chargeMaxMulti != 0 : 
+        updatedbergerModified = bergerModified.copy()
+        updatedbergerModified = updatedbergerModified[updatedbergerModified.column == Serie_nb]
+        expander2.dataframe(updatedbergerModified)
 
 
 with tab6 : 
