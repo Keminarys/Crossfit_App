@@ -332,7 +332,7 @@ with tab5 :
         updatedbergerModified = bergerModified.copy()
         updatedbergerModified = updatedbergerModified.iloc[:,[0,Serie_nb]]
         updatedbergerModified["Charge"] = 0
-        updatedbergerModified.at[int(repMaxMulti), "Charge"] = chargeMaxMulti
+        # updatedbergerModified.at[int(repMaxMulti), "Charge"] = chargeMaxMulti
         rm1_calulated_multi = int((chargeMaxMulti) / (updatedbergerModified.iloc[int(repMaxMulti)][Serie_nb]))
         updatedbergerModified.loc[1:, "Charge"] = updatedbergerModified.loc[1:, Serie_nb] * rm1_calulated_multi
         updatedbergerModified = updatedbergerModified.loc[updatedbergerModified.Charge > 0]
