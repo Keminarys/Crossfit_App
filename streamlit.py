@@ -291,8 +291,8 @@ with tab5 :
 
     if repMax and chargeMax != 0 :
         updatedBerger = berger.copy()
-        updatedBerger.at[int(repMax)+1, "Charge"] = chargeMax
-        rm1_calulated = int((chargeMax) / (updatedBerger.iloc[int(repMax)+1]["Pourcentage"]))
+        updatedBerger.at[int(repMax), "Charge"] = chargeMax
+        rm1_calulated = int((chargeMax) / (updatedBerger.iloc[int(repMax)]["Pourcentage"]))
         updatedBerger.loc[1:, "Charge"] = updatedBerger.loc[1:, "Pourcentage"] * rm1_calulated
         updatedBerger = updatedBerger.loc[updatedBerger.Charge > 0]
         st.dataframe(updatedBerger, use_container_width=True, hide_index = True)
