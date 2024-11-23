@@ -333,9 +333,10 @@ with tab5 :
         updatedbergerModified["Charge"] = 0
         updatedbergerModified.at[int(repMaxMulti), "Charge"] = chargeMaxMulti
         rm1_calulated_multi = int((chargeMaxMulti) / (updatedbergerModified.iloc[int(repMaxMulti)][Serie_nb]))
-        updatedbergerModified.loc[1:, "Charge"] = updatedbergerModified.loc[1:, "Pourcentage"] * rm1_calulated_multi
+        updatedbergerModified.loc[1:, "Charge"] = updatedbergerModified.loc[1:, Serie_nb] * rm1_calulated_multi
         updatedbergerModified = updatedbergerModified.loc[updatedbergerModified.Charge > 0]
         updatedbergerModified['Charge'] = updatedbergerModified['Charge'].astype(int)
+        updatedbergerModified.rename(columns={Serie_nb: "Pourcentage pour "+str(Serie_nb)+" séries"})
         expander2.dataframe(updatedbergerModified, use_container_width=True, hide_index = True)
 
 
