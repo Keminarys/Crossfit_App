@@ -274,8 +274,8 @@ with tab5 :
     st.write("Si vous souhaitez faire du travail de force, vous pouvez vous aider des onglets ci dessous suivant le but de votre séance.")
 
     if "get_best_rm" not in st.session_state:
-    if st.button("Consulter mes RM"):
-        get_best_rm(data_perso, athl)
+        if st.button("Consulter mes RM"):
+            get_best_rm(data_perso, athl)
             
     expander1 = st.expander("Table de Berger pour une seule série")
 
