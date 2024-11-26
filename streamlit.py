@@ -124,7 +124,7 @@ def UniqueWOD(url) :
                     formatted_description = format_text(formatted_description)
                 else :
                     formatted_description = "Il y a une erreur sur le site Crossfit.com"
-    return formatted_description
+                    return formatted_description
 
 @st.dialog("Consulter mes RM",  width="large")
 def get_best_rm(df, athl) :
