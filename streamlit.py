@@ -102,10 +102,12 @@ def UniqueWOD_OldFormat(url) :
         wod_description = wod_content.get_text(separator=" ", strip=True).replace('.', '.\n').replace(':', ':\n\n')
         return wod_description
         
-def UniqueWOD(url) : 
-    response = requests.get(url)
-    if response.status_code == 200:
+def UniqueWOD(url): 
+    try:
+        response = requests.get(url)
+        response.raise_for_status()  # Will raise an HTTPError for bad responses
         soup = BeautifulSoup(response.content, 'html.parser')
+        
         h1_tag = soup.find('title')
         if h1_tag:
             wod_name = h1_tag.get_text(strip=True)
@@ -115,16 +117,25 @@ def UniqueWOD(url) :
                 wod_description = description_div.get_text(separator=" ", strip=True).replace('.', '.\n').replace(':', ':\n\n')
                 lines = wod_description.split('\n')
                 filtered_lines = []
+                
                 for line in lines:
                     if line.startswith("Resources:"):
                         break
                     filtered_lines.append(line.strip())
-                if len(filtered_lines) > 0 :
+                
+                if filtered_lines:
                     formatted_description = "\n".join([line for line in filtered_lines if line])
                     formatted_description = format_text(formatted_description)
-                else :
+                else:
                     formatted_description = "Il y a une erreur sur le site Crossfit.com"
-            return formatted_description
+            else:
+                formatted_description = "Il y a une erreur sur le site Crossfit.com"
+        else:
+            formatted_description = "Il y a une erreur sur le site Crossfit.com"
+    except requests.exceptions.RequestException as e:
+        formatted_description = f"An error occurred: {e}"
+
+    return formatted_description
 
 @st.dialog("Consulter mes RM",  width="large")
 def get_best_rm(df, athl) :
