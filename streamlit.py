@@ -353,33 +353,33 @@ with tab6 :
     with col2 : 
         st.write("Votre charge en kg est de :", lbs*0.453592)
     
-    st.subheader(":red[Workout of the day]")
+    expanderWODDAY = st.expander(":red[Workout of the day]")
     wod_description_today = UniqueWOD(WOD())
-    st.write(f"{wod_description_today}")
+    expanderWODDAY.write(f"{wod_description_today}")
     st.divider()
-    st.subheader(":red[WOD au hasard]")
-    if st.button("Générer un WOD au hasard"):
+    expanderWODRandom = st.expander(":red[WOD au hasard]")
+    if expanderWODRandom.button("Générer un WOD au hasard"):
         url_random_old, url_random_new = random_date_url()
         try :
           wod_description_random = UniqueWOD(url_random_new)
-          st.write(f"{wod_description_random}")
+          expanderWODRandom.write(f"{wod_description_random}")
         except :
           try :
             wod_description_random = UniqueWOD_OldFormat(url_random_new)
-            st.write(f"{wod_description_random}")
+            expanderWODRandom.write(f"{wod_description_random}")
           except :
             try :
               wod_description_random = UniqueWOD_OldFormat(url_random_old)
-              st.write(f"{wod_description_random}")
+              expanderWODRandom.write(f"{wod_description_random}")
             except :
-              st.write("Il y a eu une erreur réessayer")
+              expanderWODRandom.write("Il y a eu une erreur réessayer")
     st.divider()
-    st.subheader(":red[Tous les WOD Hero]")
+    expanderWODHero = st.expander(":red[Tous les WOD Hero]")
     wods = get_all_heroes()
-    chosen_hero = st.selectbox("Quel WOD Hero voulez vous voir", [i["name"] for i in wods])
+    chosen_hero = expanderWODHero.selectbox("Quel WOD Hero voulez vous voir", [i["name"] for i in wods])
     if len(chosen_hero) > 0 : 
         wod = next((wod for wod in wods if wod['name'] == chosen_hero), None)
-        st.markdown(wod['description'].replace('\n', '<br>'), unsafe_allow_html=True)
+        expanderWODHero.markdown(wod['description'].replace('\n', '<br>'), unsafe_allow_html=True)
 
 with tab7 :
     st.write("Vous pouvez voir chaque mouvement officiel issu de la chaîne YouTube officielle de CrossFit©️")
