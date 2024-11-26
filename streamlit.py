@@ -32,7 +32,6 @@ from bs4 import BeautifulSoup
 ### Setting up the page 
 
 st.set_page_config(layout="wide")
-st.set_option('client.showErrorDetails', False)
 ### Function 
 def get_conn() :
     conn = st.connection("gsheets", type=GSheetsConnection)
