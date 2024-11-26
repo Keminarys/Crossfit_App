@@ -119,9 +119,11 @@ def UniqueWOD(url) :
                     if line.startswith("Resources:"):
                         break
                     filtered_lines.append(line.strip())
-                
-                formatted_description = "\n".join([line for line in filtered_lines if line])
-                formatted_description = format_text(formatted_description)
+                if len(filtered_lines) > 0 :
+                    formatted_description = "\n".join([line for line in filtered_lines if line])
+                    formatted_description = format_text(formatted_description)
+                else :
+                    formatted_description = "Il y a une erreur sur le site Crossfit.com"
     return formatted_description
 
 @st.dialog("Consulter mes RM",  width="large")
