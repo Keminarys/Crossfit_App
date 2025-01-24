@@ -4,3 +4,6 @@ Improvement incoming :
 - Change Objective tab
 - Get feedbacks
 - Implement a system to schedule course and reservation
+- Randomizer for Daily Home Workout
+
+- Review the app layout, One hub and multiple tabs per category
