@@ -3,3 +3,4 @@ Link to the app [![Streamlit App](https://static.streamlit.io/badges/streamlit_b
 Improvement incoming : 
 - Change Objective tab
 - Get feedbacks
+- Implement a system to schedule course and reservation
