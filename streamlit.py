@@ -1,5 +1,4 @@
 import streamlit as st
-from streamlit_option_menu import option_menu
 
 def load_profil(profil_name):
     # Dummy function to represent profile loading
