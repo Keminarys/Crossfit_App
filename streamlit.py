@@ -29,7 +29,8 @@ def display_card(page_name):
     """, unsafe_allow_html=True)
 
 def main():
-
+    
+    conn = get_conn()
     df_name = get_df("Profils")
     df_name = df_name[['Name']].dropna()
     
