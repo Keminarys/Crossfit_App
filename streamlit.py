@@ -1,5 +1,12 @@
 import streamlit as st
 from pages import profiles_page, progress, ressources, scheduleResa
+import pandas as pd
+import numpy as np
+import datetime
+import re
+from streamlit_gsheets import GSheetsConnection
+from datetime import date
+
 
 PAGES = {
     "Profile": profiles_page,
