@@ -113,5 +113,5 @@ if "athl" in st.session_state :
     st.write("Tu peux visualiser toutes tes performances dans le tableau ci-dessous !")
     st.divider()
     
-    data_perso = data_perso()
+    data_perso = data_perso(df)
     st.dataframe(data_perso)
