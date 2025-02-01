@@ -29,6 +29,18 @@ def data_perso(df) :
     athl = str(st.session_state.athl)
     temp = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
     return temp
+
+def highlight_rows(row):
+    styles = {
+        'GYMNASTIC': 'background-color: lightblue;',
+        'BODYWEIGHT': 'background-color: lightgreen;',
+        'WEIGHTLIFTING': 'background-color: lightcoral;', 
+        'DB_KB_WB': 'background-color: lightseagreen;', 
+        'ROPE': 'background-color: lightcyan;', 
+        'ERGO': 'background-color: lightyellow;', 
+        'RUN': 'background-color: lightslategray;'
+    }
+    return [styles.get(row.category, '')] * len(row)
 conn = get_conn()
 all_mvmt = get_df("All_mvmt")
 all_mvmt = all_mvmt[['Category','Exercice','Units']].dropna()
@@ -114,4 +126,5 @@ if "athl" in st.session_state :
     st.divider()
     
     data_perso = data_perso(df)
-    st.dataframe(data_perso, use_container_width=True)
+    styled_df = data_perso.style.apply(highlight_rows, axis=1)
+    st.dataframe(styled_df, use_container_width=True)
