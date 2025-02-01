@@ -32,13 +32,14 @@ def data_perso(df) :
 
 def highlight_rows(row):
     styles = {
-        'GYMNASTIC': 'background-color: lightblue;',
-        'BODYWEIGHT': 'background-color: lightgreen;',
-        'WEIGHTLIFTING': 'background-color: lightcoral;', 
-        'DB_KB_WB': 'background-color: lightseagreen;', 
-        'ROPE': 'background-color: lightcyan;', 
-        'ERGO': 'background-color: lightyellow;', 
-        'RUN': 'background-color: lightslategray;'
+        'GYMNASTIC': 'background-color: darkgray;',
+        'BODYWEIGHT': 'background-color: darseagreen;',
+        'WEIGHTLIFTING': 'background-color: darkorange;', 
+        'DB_KB_WB': 'background-color: sandybrown;', 
+        'ROPE': 'background-color: chocolate;', 
+        'ERGO': 'background-color: darksalmon;', 
+        'WOD': 'background-color: tan;', 
+        'RUN': 'background-color: slategray;'
     }
     return [styles.get(row.Category, '')] * len(row)
 conn = get_conn()
