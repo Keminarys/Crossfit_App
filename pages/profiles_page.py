@@ -42,6 +42,22 @@ def highlight_rows(row):
         'RUN': 'background-color: slategray;'
     }
     return [styles.get(row.Category, '')] * len(row)
+
+def ChartDataFS(df) :
+    athl = str(st.session_state.athl)
+    data_full_scoped = df.loc[df['Profil'] == athl]
+    data_grouped =  data_full_scoped.groupby(['Category', 'Exercice']).count().reset_index()
+ 
+    fig = px.bar(data_grouped, x="Category", y="Perf", color="Exercice")
+    fig.update_layout(
+            title="Répartitions des performances",
+                xaxis_title="Categories",
+                yaxis_title="Nombre d\'entrées",
+                autosize=False,
+                width=500,
+                height=300)
+    return fig
+    
 conn = get_conn()
 all_mvmt = get_df("All_mvmt")
 all_mvmt = all_mvmt[['Category','Exercice','Units']].dropna()
@@ -125,7 +141,27 @@ if "athl" in st.session_state :
     st.divider()
     st.write("Tu peux visualiser toutes tes performances dans le tableau ci-dessous !")
     st.divider()
+
+    col1, col2 = st.columns(2)
     
-    data_perso = data_perso(df)
-    styled_df = data_perso.style.apply(highlight_rows, axis=1)
-    st.dataframe(styled_df, use_container_width=True)
+    with col1 :
+        data_perso = data_perso(df)
+        styled_df = data_perso.style.apply(highlight_rows, axis=1)
+        st.dataframe(styled_df, use_container_width=True)
+    
+    with col2 :
+        fig = ChartDataFS(df)
+        st.plotly_chart(fig,use_container_width=True)
+        
+        st.divider()
+        data_full_scoped = df.loc[df['Profil'] == str(st.session_state.athl)]
+        selected_cat = st.selectbox('Choix de la catégorie', list(data_full_scoped.Category.unique()))
+        selected_ex = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[data_full_scoped['Category'] == selected_cat]['Exercice'].unique()))
+       
+        data_graph = data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]
+        if (len(selected_cat) > 0) and (len(selected_ex) > 0) and (data_graph["Unité"].unique().tolist()[0] == "HH:MM:SS") :
+            data_graph = data_graph.assign(**data_graph[['Perf']].apply(pd.to_datetime, format='%H:%M:%S'))
+        data_graph['Exo_RM'] = data_graph['Exercice'] + '// RM : ' +data_graph['RM'].astype(str)
+        fig_line = px.line(data_graph,x="Date", y="Perf", color='Exo_RM', markers=True)
+        st.plotly_chart(fig_line,use_container_width=True)
+    
