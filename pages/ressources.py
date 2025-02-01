@@ -145,8 +145,39 @@ if on :
     st.video(video_url)
 
 st.divider()
-st.write("Vous trouverez ci dessous les WODs HERO")
+st.subheader("Tous les wods présentés ici sont issus du site officiel de Crossfit.com ©️")
+st.write("Crossfit.com ©️ étant un site américain, les charges sont en lbs.")
+st.write("Pour les convertir en Kg, il faut soit diviser la charge par 2.2, sinon vous pouvez utiliser le convertisseur ci dessous")
+col1, col2 = st.columns([1,3],vertical_alignment="center")
+with col1:
+    lbs = st.number_input("Charge en lbs")
+with col2 : 
+    st.write("Votre charge en kg est de :", lbs*0.453592)
 
+expanderWODDAY = st.expander(":red[Workout of the day]")
+wod_description_today = UniqueWOD(WOD())
+expanderWODDAY.write(f"{wod_description_today}")
+st.divider()
+
+expanderWODRandom = st.expander(":red[WOD au hasard]")
+if expanderWODRandom.button("Générer un WOD au hasard"):
+    url_random_old, url_random_new = random_date_url()
+    try :
+      wod_description_random = UniqueWOD(url_random_new)
+      expanderWODRandom.write(f"{wod_description_random}")
+    except :
+      try :
+        wod_description_random = UniqueWOD_OldFormat(url_random_new)
+        expanderWODRandom.write(f"{wod_description_random}")
+      except :
+        try :
+          wod_description_random = UniqueWOD_OldFormat(url_random_old)
+          expanderWODRandom.write(f"{wod_description_random}")
+        except :
+          expanderWODRandom.write("Il y a eu une erreur réessayer")
+st.divider()
+
+st.write("Vous trouverez ci dessous les WODs HERO")
 expanderWODHero = st.expander(":red[Tous les WOD Hero]")
 wods = get_all_heroes()
 chosen_hero = expanderWODHero.selectbox("Quel WOD Hero voulez vous voir", [i["name"] for i in wods])
