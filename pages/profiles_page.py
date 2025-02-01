@@ -53,6 +53,7 @@ dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercic
 def SelectProfile() :
     athl = st.selectbox('Choix du profil', list_name)
     if st.button("Valider"):
+        st.session_state.athl = athl
         st.rerun()
     st.divider()
     st.write('Si c\'est votre première visite merci d\'ajouter votre profil. \n _Par soucis de RGPD merci de ne renseigner que les 3 premières lettre de votre prénom et la première de votre nom de famille_')
