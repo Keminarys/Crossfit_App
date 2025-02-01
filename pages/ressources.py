@@ -43,78 +43,35 @@ def get_all_heroes() :
                     wod_description = wod_description.strip('<br/><br/>').replace('<br/><br/>', '\n\n').replace('<br/>', '\n')
                     wods.append({"name": wod_name, "description": wod_description})
     return wods
-    
-def format_text(text):
-    formatted_text = re.sub(r'Compare to', '\n\nCompare to', text)
-    formatted_text = re.sub(r'Scaling:', '\n\nScaling:\n', formatted_text)
-    formatted_text = re.sub(r'Intermediate option:', '\n\nIntermediate option:\n', formatted_text)
-    formatted_text = re.sub(r'Beginner option:', '\n\nBeginner option:\n', formatted_text)
-    formatted_text = re.sub(r'Coaching cues:', '\n\nCoaching cues:\n', formatted_text)
-    return formatted_text
-    
-def random_date_url():
-    start_date = datetime.datetime.strptime("2001-10-02", "%Y-%m-%d")
-    end_date = datetime.datetime.now()
-    delta = end_date - start_date
-    random_days = random.randrange(delta.days)
-    random_date = start_date + datetime.timedelta(days=random_days)
-    new_format = random_date.strftime("%y%m%d")
-    old_format = random_date.strftime("%Y/%m/%d")
-    url = "https://www.crossfit.com/workout/"
-    url_random_old = url+old_format+"#/comments"
-    url_random_new = "https://www.crossfit.com/"+new_format
-    return url_random_old, url_random_new  
-    
-def WOD() :
-    url = "https://www.crossfit.com/"
-    today = date.today()
-    formatted_date = today.strftime('%y%m%d')
-    url_today = url+formatted_date
-    return url_today
 
-def UniqueWOD_OldFormat(url) :
-    response = requests.get(url)
+def wodGirls() :
+    
+    response = requests.get("https://www.nocsy.fr/wod/wod-girl/")
+    wodGirlsName = []
+    wodGirls = []
+    
     if response.status_code == 200:
         soup = BeautifulSoup(response.content, 'html.parser')
-        wod_container = soup.find('div', class_='col-sm-7', id='wodContainer')
-        wod_content = wod_container.find('div', class_='wod active')
-        wod_description = wod_content.get_text(separator=" ", strip=True).replace('.', '.\n').replace(':', ':\n\n')
-        return wod_description
+        h3_tags = soup.find_all('h3')
+        for i, h3 in enumerate(h3_tags):
+          span_tags = h3.find_all('span')
+          for span in span_tags:
+            span_id = span.get('id')
+            wodGirlsName.append(span_id)
+   
+    for wod in wodGirlsName:
+      soup = BeautifulSoup(response.content, 'html.parser')
+      title = soup.find('span', id=wod).text
+      description = soup.find('span', id=wod).find_next('p').text
+      mouvements = "".join([li.text for li in soup.find('span', id=wod).find_next('ul')])
+      workout_dict = {
+          "title": title,
+          "description": description,
+          "mvmt": mouvements
+      }
+      wodGirls.append(workout_dict)
         
-def UniqueWOD(url): 
-    try:
-        response = requests.get(url)
-        response.raise_for_status()  # Will raise an HTTPError for bad responses
-        soup = BeautifulSoup(response.content, 'html.parser')
-        
-        h1_tag = soup.find('title')
-        if h1_tag:
-            wod_name = h1_tag.get_text(strip=True)
-            description_div = soup.find('div', class_='_wrapper_3kipy_96 _text-block_1ex2o_95')
-            
-            if description_div:
-                wod_description = description_div.get_text(separator=" ", strip=True).replace('.', '.\n').replace(':', ':\n\n')
-                lines = wod_description.split('\n')
-                filtered_lines = []
-                
-                for line in lines:
-                    if line.startswith("Resources:"):
-                        break
-                    filtered_lines.append(line.strip())
-                
-                if filtered_lines:
-                    formatted_description = "\n".join([line for line in filtered_lines if line])
-                    formatted_description = format_text(formatted_description)
-                else:
-                    formatted_description = "Il y a une erreur sur le site Crossfit.com"
-            else:
-                formatted_description = "Il y a une erreur sur le site Crossfit.com"
-        else:
-            formatted_description = "Il y a une erreur sur le site Crossfit.com"
-    except requests.exceptions.RequestException as e:
-        formatted_description = f"An error occurred: {e}"
-
-    return formatted_description
+    return wodGirls
 
 st.title("Cette page vous sera utile lors de vos sessions open gym ou bien si vous souhaitez vous challenger sur des WODs références !")
 st.divider()
@@ -154,30 +111,6 @@ with col1:
 with col2 : 
     st.write("Votre charge en kg est de :", lbs*0.453592)
 st.divider()
-
-expanderWODDAY = st.expander(":red[Workout of the day]")
-wod_description_today = UniqueWOD(WOD())
-expanderWODDAY.write(f"{wod_description_today}")
-st.divider()
-
-expanderWODRandom = st.expander(":red[WOD au hasard]")
-if expanderWODRandom.button("Générer un WOD au hasard"):
-    url_random_old, url_random_new = random_date_url()
-    try :
-      wod_description_random = UniqueWOD(url_random_new)
-      expanderWODRandom.write(f"{wod_description_random}")
-    except :
-      try :
-        wod_description_random = UniqueWOD_OldFormat(url_random_new)
-        expanderWODRandom.write(f"{wod_description_random}")
-      except :
-        try :
-          wod_description_random = UniqueWOD_OldFormat(url_random_old)
-          expanderWODRandom.write(f"{wod_description_random}")
-        except :
-          expanderWODRandom.write("Il y a eu une erreur réessayer")
-st.divider()
-
 st.write("Vous trouverez ci dessous les WODs HERO")
 expanderWODHero = st.expander(":red[Tous les WOD Hero]")
 wods = get_all_heroes()
@@ -185,3 +118,13 @@ chosen_hero = expanderWODHero.selectbox("Quel WOD Hero voulez vous voir", [i["na
 if len(chosen_hero) > 0 : 
     wod = next((wod for wod in wods if wod['name'] == chosen_hero), None)
     expanderWODHero.markdown(wod['description'].replace('\n', '<br>'), unsafe_allow_html=True)
+st.divider()
+
+st.write("Vous trouverez ci dessous les WODs GIRL")
+expanderWODGirl = st.expander(":red[Tous les WOD Girl]")
+wodGirls = wodGirls()
+chosen_wod = expanderWODGirl.selectbox("Quel WOD Girl voulez vous voir", [i["title"] for i in wodGirls])
+if len(chosen_wod) > 0 : 
+    wodgirlchosen = next((wod for wod in wodGirls if wod['title'] == chosen_wod), None)
+    expanderWODGirl.markdown(wodgirlchosen['description'].replace('\n', '<br>'), unsafe_allow_html=True)
+    expanderWODGirl.markdown(wodgirlchosen['mvmt'].replace('\n', '<br>'), unsafe_allow_html=True)
