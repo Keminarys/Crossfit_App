@@ -1,8 +1,15 @@
 import streamlit as st
+from pages import profile_page, page1, page2, page3
+
+PAGES = {
+    "Profile": profile_page,
+    "Page 1": page1,
+    "Page 2": page2,
+    "Page 3": page3
+}
 
 def load_profil(profil_name):
-    # Dummy function to represent profile loading
-    st.write(f"Profile {profil_name} loaded!")
+    st.sidebar.write(f"Profile {profil_name} loaded!")
 
 def display_card(page_name):
     st.markdown(f"""
@@ -14,16 +21,17 @@ def display_card(page_name):
     """, unsafe_allow_html=True)
 
 def main():
-    st.title("Crossfit App Hub")
+    st.sidebar.title("Crossfit App Hub")
 
     profil_options = ["Profil 1", "Profil 2", "Profil 3"]
-    selected_profil = st.selectbox("Select a Profil", profil_options)
+    selected_profil = st.sidebar.selectbox("Select a Profil", profil_options)
     load_profil(selected_profil)
 
-    st.header("Pages")
-    pages = ["Page 1", "Page 2", "Page 3"]
-    for page in pages:
-        display_card(page)
+    st.sidebar.title("Pages")
+    selection = st.sidebar.selectbox("Choose Page", list(PAGES.keys()))
+
+    page = PAGES[selection]
+    page.show()
 
 if __name__ == "__main__":
     main()
