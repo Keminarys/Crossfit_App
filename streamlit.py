@@ -42,7 +42,7 @@ def main():
     # df_name = df_name[['Name']].dropna()
     title, logo = st.columns([3,1])
     with title :
-        st.title('Crossfit83 Le Beausset')
+        st.title('\n \n \n Crossfit83 Le Beausset')
     with logo :
         st.image("LogoCrossfit.jpg")
     st.divider()
