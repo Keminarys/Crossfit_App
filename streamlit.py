@@ -37,9 +37,9 @@ def display_card(page_name):
 
 def main():
     
-    conn = get_conn()
-    df_name = get_df("Profils")
-    df_name = df_name[['Name']].dropna()
+    # conn = get_conn()
+    # df_name = get_df("Profils")
+    # df_name = df_name[['Name']].dropna()
     
     st.title('Crossfit83 Le Beausset')
     st.divider()
