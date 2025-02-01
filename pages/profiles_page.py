@@ -114,4 +114,4 @@ if "athl" in st.session_state :
     st.divider()
     
     data_perso = data_perso(df)
-    st.dataframe(data_perso)
+    st.dataframe(data_perso, use_container_width=True)
