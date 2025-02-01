@@ -153,6 +153,7 @@ with col1:
     lbs = st.number_input("Charge en lbs")
 with col2 : 
     st.write("Votre charge en kg est de :", lbs*0.453592)
+st.divider()
 
 expanderWODDAY = st.expander(":red[Workout of the day]")
 wod_description_today = UniqueWOD(WOD())
