@@ -45,15 +45,16 @@ def main():
     st.divider()
     st.header("Pages")
     pages = PAGES.keys()
-    col1, col2 = st.columns(2) 
-    with col1 :
-        display_card(pages[0])
-    with col2 :
-        display_card(pages[1])
-    col3, col4 = st.columns(2)    
-    with col3 :
-        display_card(pages[2])
-    with col4 :
-        display_card(pages[3])
+    st.write(pages)
+    # col1, col2 = st.columns(2) 
+    # with col1 :
+    #     display_card(pages[0])
+    # with col2 :
+    #     display_card(pages[1])
+    # col3, col4 = st.columns(2)    
+    # with col3 :
+    #     display_card(pages[2])
+    # with col4 :
+    #     display_card(pages[3])
 if __name__ == "__main__":
     main()
