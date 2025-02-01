@@ -33,8 +33,8 @@ def data_perso(df) :
 def highlight_rows(row):
     styles = {
         'GYMNASTIC': 'background-color: darkgray;',
-        'BODYWEIGHT': 'background-color: darseagreen;',
-        'WEIGHTLIFTING': 'background-color: darkorange;', 
+        'BODYWEIGHT': 'background-color: darkseagreen;',
+        'WEIGHTLIFTING': 'background-color: cadetblue;', 
         'DB_KB_WB': 'background-color: sandybrown;', 
         'ROPE': 'background-color: chocolate;', 
         'ERGO': 'background-color: darksalmon;', 
