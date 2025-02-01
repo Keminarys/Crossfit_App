@@ -45,7 +45,7 @@ def main():
     st.divider()
     st.header("Pages")
     pages = PAGES.keys()
-    st.write(pages[0])
+    st.write(type(pages))
     # col1, col2 = st.columns(2) 
     # with col1 :
     #     display_card(pages[0])
