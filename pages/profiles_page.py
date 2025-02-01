@@ -40,7 +40,7 @@ def highlight_rows(row):
         'ERGO': 'background-color: lightyellow;', 
         'RUN': 'background-color: lightslategray;'
     }
-    return [styles.get(row.category, '')] * len(row)
+    return [styles.get(row.Category, '')] * len(row)
 conn = get_conn()
 all_mvmt = get_df("All_mvmt")
 all_mvmt = all_mvmt[['Category','Exercice','Units']].dropna()
