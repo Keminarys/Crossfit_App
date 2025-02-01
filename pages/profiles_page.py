@@ -51,8 +51,11 @@ dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercic
 ### Main
 @st.dialog("Choisis ton profil")
 def SelectProfile() :
-    st.write('Si c\'est votre première visite merci d\'ajouter votre profil. \n _Par soucis de RGPD merci de ne renseigner que les 3 premières lettre de votre prénom et la première de votre nom de famille_')
     athl = st.selectbox('Choix du profil', list_name)
+    if st.button("Valider"):
+        st.rerun()
+    st.divider()
+    st.write('Si c\'est votre première visite merci d\'ajouter votre profil. \n _Par soucis de RGPD merci de ne renseigner que les 3 premières lettre de votre prénom et la première de votre nom de famille_')
     new_ppl = st.text_input('Ecrire votre nom ici')
     if st.button('Ajouter mon profil') :
         df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, index=[len(df_name)])], ignore_index=True)
