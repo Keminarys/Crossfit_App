@@ -49,7 +49,7 @@ dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict(
 dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercice').to_dict()['Units']
 
 ### Main
-@st.dialog("Consulter mes RM",  width="large")
+
 def SelectProfile() :
     st.write('Si c\'est votre première visite merci d\'ajouter votre profil. \n _Par soucis de RGPD merci de ne renseigner que les 3 premières lettre de votre prénom et la première de votre nom de famille_')
     athl = st.selectbox('Choix du profil', list_name)
@@ -60,6 +60,7 @@ def SelectProfile() :
         st.cache_data.clear()
         st.rerun()
     return athl
-  
+if "athl" not in st.session_state : 
+    athl = SelectProfile()
 st.title(f"Bienvenue sur ton profil {athl} :muscle:")
 
