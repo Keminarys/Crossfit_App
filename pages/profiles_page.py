@@ -66,5 +66,5 @@ def SelectProfile() :
     return athl
 if "athl" not in st.session_state : 
     athl = SelectProfile()
-st.title(f"Bienvenue sur ton profil {athl} :muscle:")
+st.title(f"Bienvenue sur ton profil {st.session_state.athl} :muscle:")
 
