@@ -29,8 +29,8 @@ def get_df(sheet_name) :
 def display_card(page_name):
     st.markdown(f"""
     <a href='/{page_name}' style='text-decoration: none;'>
-    <div style='background-color: lightblue; padding: 10px; margin: 10px; border-radius: 5px;'>
-    <h2>{page_name}</h2>
+    <div style='background-color: red; padding: 20px; margin: 10px; border-radius: 0; text-align: center;'>
+    <h2 style='color: white;'>{page_name}</h2>
     </div>
     </a>
     """, unsafe_allow_html=True)
