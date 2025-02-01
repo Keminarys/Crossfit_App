@@ -44,7 +44,7 @@ bergerModified = get_df("bergerModified")
 
 list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
-list_rm = [i for i in range (1,11)]
+list_rm = [i for i in range (1,21)]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercice').to_dict()['Units']
 
