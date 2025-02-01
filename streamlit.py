@@ -1,8 +1,8 @@
 import streamlit as st
-from pages import profile_page, progress, ressource, scheduleResa
+from pages import profiles_page, progress, ressource, scheduleResa
 
 PAGES = {
-    "Profile": profile_page,
+    "Profile": profiles_page,
     "Progession": progress,
     "Ressources Technique": ressource,
     "Prog de la semaine": scheduleResa
