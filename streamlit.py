@@ -42,6 +42,7 @@ def main():
     # df_name = df_name[['Name']].dropna()
     
     st.title('Crossfit83 Le Beausset')
+    st.logo("LogoCrossfit.jpg")
     st.divider()
     st.header("Pages")
     pages = list(PAGES.keys())
