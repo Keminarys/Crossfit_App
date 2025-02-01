@@ -20,10 +20,15 @@ from bs4 import BeautifulSoup
 def get_conn() :
     conn = st.connection("gsheets", type=GSheetsConnection)
     return conn
+    
 def get_df(sheet_name) :
     datas = conn.read(worksheet=sheet_name)
     return datas
-  
+    
+def data_perso(df) :
+    athl = str(st.session_state.athl)
+    temp = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
+    return temp
 conn = get_conn()
 all_mvmt = get_df("All_mvmt")
 all_mvmt = all_mvmt[['Category','Exercice','Units']].dropna()
@@ -64,40 +69,49 @@ def SelectProfile() :
         st.cache_data.clear()
         st.rerun()
     return athl
+    
 if "athl" not in st.session_state : 
     athl = SelectProfile()
-st.title(f"Bienvenue sur ton profil {st.session_state.athl} :muscle:")
-athl = str(st.session_state.athl)
-
-st.divider()
-st.write("Cette page te permet de tracker tes PR.")
-st.write("Pour ajouter un nouveau PR à ton profil, utilise le formulaire ci dessous :arrow_down:")
-
-cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()))
-ex = st.selectbox('Choix de l"exercice', dico_ex[cat])
-if cat == 'WEIGHTLIFTING' : 
-    rm = st.selectbox('Choix du RM', list_rm)
-else : rm = 1
-if dico_units[ex] == 'HH:MM:SS' :
-   nb = st.text_input('Temps au format HH\:MM\:SS', "00:00:00")
-else : nb = st.number_input('Max reps/charge', step=1)
-date = st.date_input('Date de réalisation', value = "today")
-unit = dico_units[ex]
-if cat == "WOD":
-    commentary = st.text_input('Commentaire sur la réalisation', 'Rien')
-else : commentary = 'Rien'
-new_entry = {'Profil' : athl,
-            'Category' : cat,
-            'Exercice' : ex,
-            'Date' : date,
-            'Perf' : nb,
-            'Unité' : unit,
-            'RM' : rm, 
-            'Commentaire' : commentary}
-if st.button('Ajouter un nouveau record à mon profil :muscle:') :
-    df_record = pd.concat([df, pd.DataFrame(new_entry, index=[len(df)])], ignore_index=True)
-    df_record = conn.update(worksheet="Progression",data=df_record)
-    st.write('Ajouté avec succès, vous pouvez retrouver toutes vos performances dans l\'onglet Data ✅')
-    st.cache_data.clear()
-    st.rerun()
-
+if "athl" in st.session_state :
+    st.title(f"Bienvenue sur ton profil {st.session_state.athl} :muscle:")
+    athl = str(st.session_state.athl)
+    
+    st.divider()
+    st.write("Cette page te permet de tracker tes PR.")
+    st.write("Pour ajouter un nouveau PR à ton profil, utilise le formulaire ci-dessous ! :arrow_down:")
+    st.divider()
+    
+    cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()))
+    ex = st.selectbox('Choix de l"exercice', dico_ex[cat])
+    if cat == 'WEIGHTLIFTING' : 
+        rm = st.selectbox('Choix du RM', list_rm)
+    else : rm = 1
+    if dico_units[ex] == 'HH:MM:SS' :
+       nb = st.text_input('Temps au format HH\:MM\:SS', "00:00:00")
+    else : nb = st.number_input('Max reps/charge', step=1)
+    date = st.date_input('Date de réalisation', value = "today")
+    unit = dico_units[ex]
+    if cat == "WOD":
+        commentary = st.text_input('Commentaire sur la réalisation', 'Rien')
+    else : commentary = 'Rien'
+    new_entry = {'Profil' : athl,
+                'Category' : cat,
+                'Exercice' : ex,
+                'Date' : date,
+                'Perf' : nb,
+                'Unité' : unit,
+                'RM' : rm, 
+                'Commentaire' : commentary}
+    if st.button('Ajouter un nouveau record à mon profil :muscle:') :
+        df_record = pd.concat([df, pd.DataFrame(new_entry, index=[len(df)])], ignore_index=True)
+        df_record = conn.update(worksheet="Progression",data=df_record)
+        st.write('Ajouté avec succès, vous pouvez retrouver toutes vos performances dans l\'onglet Data ✅')
+        st.cache_data.clear()
+        st.rerun()
+    
+    st.divider()
+    st.write("Tu peux visualiser toutes tes performances dans le tableau ci-dessous !")
+    st.divider()
+    
+    data_perso = data_perso()
+    st.dataframe(data_perso)
