@@ -1,15 +1,23 @@
 import streamlit as st
-from pages import profile_page, page1, page2, page3
+from pages import profile_page, progress, ressource, scheduleResa
 
 PAGES = {
     "Profile": profile_page,
-    "Page 1": page1,
-    "Page 2": page2,
-    "Page 3": page3
+    "Progession": progress,
+    "Ressources Technique": ressource,
+    "Prog de la semaine": scheduleResa
 }
 
-def load_profil(profil_name):
-    st.sidebar.write(f"Profile {profil_name} loaded!")
+### Setting up the page 
+
+st.set_page_config(layout="wide")
+### Function 
+def get_conn() :
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    return conn
+def get_df(sheet_name) :
+    datas = conn.read(worksheet=sheet_name)
+    return datas
 
 def display_card(page_name):
     st.markdown(f"""
@@ -21,17 +29,16 @@ def display_card(page_name):
     """, unsafe_allow_html=True)
 
 def main():
-    st.sidebar.title("Crossfit App Hub")
 
-    profil_options = ["Profil 1", "Profil 2", "Profil 3"]
-    selected_profil = st.sidebar.selectbox("Select a Profil", profil_options)
-    load_profil(selected_profil)
-
-    st.sidebar.title("Pages")
-    selection = st.sidebar.selectbox("Choose Page", list(PAGES.keys()))
-
-    page = PAGES[selection]
-    page.show()
+    df_name = get_df("Profils")
+    df_name = df_name[['Name']].dropna()
+    
+    st.title('Crossfit83 Le Beausset')
+    st.divider()
+    st.header("Pages")
+    pages = PAGES.keys()
+    for page in pages:
+        display_card(page)
 
 if __name__ == "__main__":
     main()
