@@ -40,7 +40,7 @@ def main():
     # conn = get_conn()
     # df_name = get_df("Profils")
     # df_name = df_name[['Name']].dropna()
-    title, logo = st.columns(3,1)
+    title, logo = st.columns([3,1])
     with title :
         st.title('Crossfit83 Le Beausset')
     with logo :
