@@ -119,7 +119,7 @@ with col2 :
     st.write("Votre charge en kg est de :", lbs*0.453592)
 st.divider()
 expanderWODToday = st.expander(":red[WOD du jour Crossfit.com ©️")
-expanderWODToday.components.iframe(WOD(), height=700, height = 400, scrolling = True)
+expanderWODToday.components.iframe(WOD(), height=400, scrolling = True)
 st.divider()
 st.write("Vous trouverez ci dessous les WODs HERO")
 expanderWODHero = st.expander(":red[Tous les WOD Hero]")
