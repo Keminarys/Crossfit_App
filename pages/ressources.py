@@ -131,7 +131,8 @@ with col1:
 with col2 : 
     st.write("Votre charge en kg est de :", lbs*0.453592)
 st.divider()
-with st.expander("Vous trouverez des WOD Crossfit.com ©️ ci dessous") :
+st.write("Vous trouverez des WOD Crossfit.com ©️ ci dessous")
+with st.expander(":red[Choississez entre le WOD du jour ou un Random]") :
     random_on = st.toggle("Voulez vous voir un WOD random ?")
     if random_on :
         components.iframe(random_date_url(), height=400, scrolling = True)
