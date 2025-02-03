@@ -24,7 +24,20 @@ def WOD() :
     formatted_date = today.strftime('%y%m%d')
     url_today = url+formatted_date
     return url_today
-    
+
+def random_date_url():
+    start_date = datetime.datetime.strptime("2001-10-02", "%Y-%m-%d")
+    end_date = datetime.datetime.now()
+    delta = end_date - start_date
+    random_days = random.randrange(delta.days)
+    random_date = start_date + datetime.timedelta(days=random_days)
+    new_format = random_date.strftime("%y%m%d")
+    old_format = random_date.strftime("%Y/%m/%d")
+    url = "https://www.crossfit.com/workout/"
+    url_random_old = url+old_format+"#/comments"
+    #url_random_new = "https://www.crossfit.com/"+new_format
+    return url_random_old#, url_random_new 
+
 def get_all_heroes() : 
     url = 'https://www.crossfit.com/heroes'
     response = requests.get(url)
@@ -118,7 +131,12 @@ with col1:
 with col2 : 
     st.write("Votre charge en kg est de :", lbs*0.453592)
 st.divider()
-components.iframe(WOD(), height=400, scrolling = True)
+with st.expander("Vous trouverez des WOD Crossfit.com ©️ ci dessous") :
+    random_on = st.toggle("Voulez vous voir un WOD random ?")
+    if random_on :
+        components.iframe(random_date_url(), height=400, scrolling = True)
+    else :
+        components.iframe(WOD(), height=400, scrolling = True)
 st.divider()
 st.write("Vous trouverez ci dessous les WODs HERO")
 expanderWODHero = st.expander(":red[Tous les WOD Hero]")
