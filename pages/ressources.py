@@ -133,8 +133,8 @@ with col2 :
 st.divider()
 with st.expander("Vous trouverez des WOD Crossfit.com ©️ ci dessous") :
     random_on = st.toggle("Voulez vous voir un WOD random ?")
-    # if random_on :
-    #     components.iframe(random_date_url(), height=400, scrolling = True)
+    if random_on :
+        components.iframe(random_date_url(), height=400, scrolling = True)
     # else :
     #     components.iframe(WOD(), height=400, scrolling = True)
         
