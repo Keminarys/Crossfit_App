@@ -10,7 +10,7 @@ previous_monday = current_date - timedelta(days=current_date.weekday())
 
 # Find the next Sunday
 next_sunday = previous_monday + timedelta(days=6)
-st.title("WORK IN PROGRESS // Only a sketch at the moment")
+
 st.write(previous_monday, current_date, next_sunday)
 
 
@@ -32,7 +32,7 @@ st.session_state['dates'] = pd.DataFrame({'Day': week_days, 'Date': current_week
 
 # Display the title of the app
 st.title('Weekly Sports Scheduler')
-
+st.subheader("WORK IN PROGRESS // Only a sketch at the moment")
 # Function to update the schedule
 def update_schedule(day, activity):
     st.session_state['schedule'].loc[st.session_state['schedule']['Day'] == day, 'Activity'] = activity
