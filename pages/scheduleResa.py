@@ -15,7 +15,8 @@ calendar_options = {
     "selectable": True,
     "headerToolbar": {
         "left": "prev,next today",
-        "center": "title"
+        "center": "title",
+        "right": "weekly"
     },
     "initialView": "dayGrid",
     "events": [
