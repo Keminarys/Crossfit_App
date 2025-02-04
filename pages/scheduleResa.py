@@ -6,44 +6,39 @@ import pandas as pd
 # Get the current date and time
 current_date = datetime.now()
 current_date = current_date.date()
-# Initialize session state to hold tasks
-if 'tasks' not in st.session_state:
-    st.session_state['tasks'] = {
-        "Monday": "",
-        "Tuesday": "",
-        "Wednesday": "",
-        "Thursday": "",
-        "Friday": "",
-        "Saturday": "",
-        "Sunday": ""
-    }
-
-# Function to display and edit tasks for a specific day
-def edit_task(day):
-    task = st.text_input(f"Tasks for {day}", st.session_state['tasks'][day], key=day)
-    st.session_state['tasks'][day] = task
-
 # Title of the app
 st.title("Weekly Schedule")
 
-# Display buttons for each day
-for day in st.session_state['tasks'].keys():
-    if st.button(day):
-        edit_task(day)
+# Calendar options
+calendar_options = {
+    "editable": True,
+    "selectable": True,
+    "headerToolbar": {
+        "left": "prev,next today",
+        "center": "title",
+        "right": "dayGridMonth"
+    },
+    "initialView": "dayGridMonth",
+    "events": [
+        {
+            "title": "Event 1",
+            "start": "2023-02-04",
+            "end": "2023-02-05"
+        }
+    ]
+}
 
-# Display the schedule
-st.write("### Your Weekly Schedule")
-for day, task in st.session_state['tasks'].items():
-    st.write(f"**{day}**: {task}")
+# Display the calendar
+calendar(events=calendar_options['events'], options=calendar_options, key='calendar')
 
 # Download the updated schedule
 @st.cache_data
-def convert_to_csv(tasks):
+def convert_to_csv(events):
     import pandas as pd
-    df = pd.DataFrame(list(tasks.items()), columns=['Day', 'Tasks'])
+    df = pd.DataFrame(events)
     return df.to_csv(index=False).encode('utf-8')
 
-csv = convert_to_csv(st.session_state['tasks'])
+csv = convert_to_csv(calendar_options['events'])
 
 st.download_button(
     label="Download Schedule as CSV",
