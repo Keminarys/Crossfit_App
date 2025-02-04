@@ -30,11 +30,12 @@ st.title('Weekly Sports Scheduler')
 def update_schedule(day, activity):
     st.session_state['schedule'].loc[st.session_state['schedule']['Day'] == day, 'Activity'] = activity
 
-# Display the editable schedule
+# Display the editable schedule in cards
 for index, row in st.session_state['schedule'].iterrows():
-    activity = st.text_input(f"Activity for {row['Day']}", row['Activity'], key=row['Day'])
-    update_schedule(row['Day'], activity)
+    with st.beta_expander(f"{row['Day']}"):
+        activity = st.text_input(f"Activity for {row['Day']}", row['Activity'], key=row['Day'])
+        update_schedule(row['Day'], activity)
 
 # Display the final schedule
 st.subheader('Your Schedule')
-st.table(st.session_state['schedule'])
+st.table(st.session_state[
