@@ -41,12 +41,14 @@ def update_schedule(day, activity):
 if 'selected_day' not in st.session_state:
     st.session_state['selected_day'] = st.session_state['dates'].iloc[0]
 
-# Display buttons for each day of the week
+# Create a row for the day buttons
+columns = st.columns(7)
 for index, row in st.session_state['dates'].iterrows():
-    day_name = row['Day']
-    date_str = row['Date']
-    if st.button(f"{day_name} ({date_str})"):
-        st.session_state['selected_day'] = row
+    with columns[index]:
+        day_name = row['Day']
+        date_str = row['Date']
+        if st.button(f"{day_name} ({date_str})"):
+            st.session_state['selected_day'] = row
 
 # Get the selected day and date
 selected_day = st.session_state['selected_day']
