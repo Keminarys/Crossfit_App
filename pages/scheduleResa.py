@@ -5,7 +5,28 @@ from datetime import datetime
 # Get the current date and time
 current_date = datetime.now()
 current_date = current_date.date()
-
+events = [
+    {
+        "title": "Event 1",
+        "color": "#FF6C6C",
+        "start": "2025-03-03",
+        "end": "2025-03-05",
+        "resourceId": "a",
+    },
+    {
+        "title": "Event 2",
+        "color": "#FFBD45",
+        "start": "2025-03-03",
+        "end": "2025-03-10",
+        "resourceId": "b",
+    },
+    {
+        "title": "Event 3",
+        "color": "#FF4B4B",
+        "start": "2025-03-06",
+        "end": "2025-03-07",
+        "resourceId": "c",
+    }]
 
 calendar_options = {"editable": "true", "navLinks": "true","selectable": "true"}
 calendar_options = {**calendar_options, "headerToolbar": {"left": "today prev,next", "center": "title"}, "initialDate": current_date}
