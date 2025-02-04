@@ -37,13 +37,28 @@ st.title('Weekly Sports Scheduler')
 def update_schedule(day, activity):
     st.session_state['schedule'].loc[st.session_state['schedule']['Day'] == day, 'Activity'] = activity
 
-# Display the headers with dates
-selected_day = st.selectbox('Select a day to view or edit:', current_week_dates)
+# Initialize the selected day index
+if 'selected_day_index' not in st.session_state:
+    st.session_state['selected_day_index'] = 0
 
-# Get the corresponding day name
-day_name = st.session_state['dates'].loc[st.session_state['dates']['Date'] == selected_day, 'Day'].values[0]
+# Functions to navigate through the days
+def prev_day():
+    st.session_state['selected_day_index'] = (st.session_state['selected_day_index'] - 1) % 7
+
+def next_day():
+    st.session_state['selected_day_index'] = (st.session_state['selected_day_index'] + 1) % 7
+
+# Display the previous and next buttons
+st.button('Previous Day', on_click=prev_day)
+st.button('Next Day', on_click=next_day)
+
+# Get the selected day and date
+selected_day_index = st.session_state['selected_day_index']
+selected_day = st.session_state['dates'].iloc[selected_day_index]
 
 # Display the editable schedule for the selected day
+day_name = selected_day['Day']
+date_str = selected_day['Date']
 row = st.session_state['schedule'][st.session_state['schedule']['Day'] == day_name].iloc[0]
 activity = st.text_input(f"Activity for {day_name}", row['Activity'], key=day_name)
 update_schedule(day_name, activity)
@@ -51,7 +66,7 @@ update_schedule(day_name, activity)
 # Display the card for the selected day
 st.markdown(f"""
 <div style='background-color: #4CAF50; padding: 20px; margin: 10px; border-radius: 5px; text-align: center;'>
-    <h2 style='color: white;'>{selected_day}</h2>
+    <h2 style='color: white;'>{date_str}</h2>
     <p style='color: white;'>{activity}</p>
 </div>
 """, unsafe_allow_html=True)
