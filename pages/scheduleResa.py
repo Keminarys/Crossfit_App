@@ -13,6 +13,7 @@ next_sunday = previous_monday + timedelta(days=6)
 
 st.write(previous_monday, current_date, next_sunday)
 
+
 # Initialize the dataframe for the schedule
 if 'schedule' not in st.session_state:
     week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
@@ -26,18 +27,21 @@ st.title('Weekly Sports Scheduler')
 def update_schedule(day, activity):
     st.session_state['schedule'].loc[st.session_state['schedule']['Day'] == day, 'Activity'] = activity
 
-# Display the editable schedule in cards
-for index, row in st.session_state['schedule'].iterrows():
-    day = row['Day']
-    activity = st.text_input(f"Activity for {day}", row['Activity'], key=day)
-    update_schedule(day, activity)
-    
-    st.markdown(f"""
-    <div style='background-color: #4CAF50; padding: 20px; margin: 10px; border-radius: 5px; text-align: center;'>
-        <h2 style='color: white;'>{day}</h2>
-        <p style='color: white;'>{activity}</p>
-    </div>
-    """, unsafe_allow_html=True)
+# Create a select box for choosing the day
+selected_day = st.selectbox('Select a day to view or edit:', st.session_state['schedule']['Day'])
+
+# Display the editable schedule for the selected day
+row = st.session_state['schedule'][st.session_state['schedule']['Day'] == selected_day].iloc[0]
+activity = st.text_input(f"Activity for {selected_day}", row['Activity'], key=selected_day)
+update_schedule(selected_day, activity)
+
+# Display the card for the selected day
+st.markdown(f"""
+<div style='background-color: #4CAF50; padding: 20px; margin: 10px; border-radius: 5px; text-align: center;'>
+    <h2 style='color: white;'>{selected_day}</h2>
+    <p style='color: white;'>{activity}</p>
+</div>
+""", unsafe_allow_html=True)
 
 # Display the final schedule
 st.subheader('Your Schedule')
