@@ -17,7 +17,7 @@ calendar_options = {
         "left": "prev,next today",
         "center": "title",
     },
-    "initialView": "dayGridWeek",
+    "initialView": "dayGridMonth",
     "events": [
         {
             "title": "Event 1",
