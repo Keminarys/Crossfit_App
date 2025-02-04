@@ -16,9 +16,8 @@ calendar_options = {
     "headerToolbar": {
         "left": "prev,next today",
         "center": "title",
-        "right": "weekly"
     },
-    "initialView": "dayGrid",
+    "initialView": "dayGridWeek",
     "events": [
         {
             "title": "Event 1",
