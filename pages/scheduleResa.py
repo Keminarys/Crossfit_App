@@ -20,6 +20,16 @@ if 'schedule' not in st.session_state:
     initial_schedule = pd.DataFrame({'Day': week_days, 'Activity': [''] * 7})
     st.session_state['schedule'] = initial_schedule
 
+# Get the current date
+current_date = datetime.now().date()
+
+# Find the previous Monday
+start_of_week = current_date - timedelta(days=current_date.weekday())
+
+# Create a dataframe with the dates for the current week
+current_week_dates = [(start_of_week + timedelta(days=i)).strftime('%A, %d %B') for i in range(7)]
+st.session_state['dates'] = pd.DataFrame({'Day': week_days, 'Date': current_week_dates})
+
 # Display the title of the app
 st.title('Weekly Sports Scheduler')
 
@@ -27,13 +37,16 @@ st.title('Weekly Sports Scheduler')
 def update_schedule(day, activity):
     st.session_state['schedule'].loc[st.session_state['schedule']['Day'] == day, 'Activity'] = activity
 
-# Create a select box for choosing the day
-selected_day = st.selectbox('Select a day to view or edit:', st.session_state['schedule']['Day'])
+# Display the headers with dates
+selected_day = st.selectbox('Select a day to view or edit:', current_week_dates)
+
+# Get the corresponding day name
+day_name = st.session_state['dates'].loc[st.session_state['dates']['Date'] == selected_day, 'Day'].values[0]
 
 # Display the editable schedule for the selected day
-row = st.session_state['schedule'][st.session_state['schedule']['Day'] == selected_day].iloc[0]
-activity = st.text_input(f"Activity for {selected_day}", row['Activity'], key=selected_day)
-update_schedule(selected_day, activity)
+row = st.session_state['schedule'][st.session_state['schedule']['Day'] == day_name].iloc[0]
+activity = st.text_input(f"Activity for {day_name}", row['Activity'], key=day_name)
+update_schedule(day_name, activity)
 
 # Display the card for the selected day
 st.markdown(f"""
