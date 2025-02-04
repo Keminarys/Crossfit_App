@@ -9,6 +9,7 @@ matplotlib
 seaborn
 yt_dlp
 streamlit-authenticator 
+streamlit-calendar
 pyyaml
 bs4
 requests
