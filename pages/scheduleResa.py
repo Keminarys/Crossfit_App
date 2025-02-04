@@ -29,7 +29,7 @@ calendar_options = {
 }
 
 # Display the calendar
-calendar(events=calendar_options['events'], options=calendar_options, key='calendar')
+calendar(events=calendar_options['events'], options=calendar_options, key='daygrid')
 
 # Download the updated schedule
 @st.cache_data
