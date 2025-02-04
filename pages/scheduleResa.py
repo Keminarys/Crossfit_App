@@ -8,8 +8,7 @@ initial_events = [
 ]
 
 # Render the calendar
-selected_dates = calendar(
-    initial_view="timeGridWeek",  # Set initial view to weekly
+selected_dates = calendar(  # Set initial view to weekly
     editable=True,  # Enable event editing
     selectable=True,  # Allow date selection
     events=initial_events,  # Pass initial events
