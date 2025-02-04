@@ -1,21 +1,5 @@
 import streamlit as st
-
 from streamlit_calendar import calendar
-
-
-mode = st.selectbox(
-    "Calendar Mode:",
-    (
-        "daygrid",
-        "timegrid",
-        "timeline",
-        "resource-daygrid",
-        "resource-timegrid",
-        "resource-timeline",
-        "list",
-        "multimonth",
-    ),
-)
 
 events = [
     {
@@ -183,7 +167,7 @@ state = calendar(
         font-size: 2rem;
     }
     """,
-    key=mode,
+    key="daygrid",
 )
 
 if state.get("eventsSet") is not None:
