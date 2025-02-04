@@ -37,24 +37,19 @@ st.title('Weekly Sports Scheduler')
 def update_schedule(day, activity):
     st.session_state['schedule'].loc[st.session_state['schedule']['Day'] == day, 'Activity'] = activity
 
-# Initialize the selected day index
-if 'selected_day_index' not in st.session_state:
-    st.session_state['selected_day_index'] = 0
+# Initialize the selected day
+if 'selected_day' not in st.session_state:
+    st.session_state['selected_day'] = st.session_state['dates'].iloc[0]
 
-# Functions to navigate through the days
-def prev_day():
-    st.session_state['selected_day_index'] = (st.session_state['selected_day_index'] - 1) % 7
-
-def next_day():
-    st.session_state['selected_day_index'] = (st.session_state['selected_day_index'] + 1) % 7
-
-# Display the previous and next buttons
-st.button('Previous Day', on_click=prev_day)
-st.button('Next Day', on_click=next_day)
+# Display buttons for each day of the week
+for index, row in st.session_state['dates'].iterrows():
+    day_name = row['Day']
+    date_str = row['Date']
+    if st.button(f"{day_name} ({date_str})"):
+        st.session_state['selected_day'] = row
 
 # Get the selected day and date
-selected_day_index = st.session_state['selected_day_index']
-selected_day = st.session_state['dates'].iloc[selected_day_index]
+selected_day = st.session_state['selected_day']
 
 # Display the editable schedule for the selected day
 day_name = selected_day['Day']
