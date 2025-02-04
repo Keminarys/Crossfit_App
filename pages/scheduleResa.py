@@ -16,7 +16,7 @@ st.write(previous_monday, current_date, next_sunday)
 
 # Initialize the dataframe for the schedule
 if 'schedule' not in st.session_state:
-    week_days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    week_days = ['Lundi', 'Mardi', 'Mercredi', 'Jeudi', 'Vendredi', 'Samedi', 'Dimanche']
     initial_schedule = pd.DataFrame({'Day': week_days, 'Activity': [''] * 7})
     st.session_state['schedule'] = initial_schedule
 
@@ -27,7 +27,7 @@ current_date = datetime.now().date()
 start_of_week = current_date - timedelta(days=current_date.weekday())
 
 # Create a dataframe with the dates for the current week
-current_week_dates = [(start_of_week + timedelta(days=i)).strftime('%A, %d %B') for i in range(7)]
+current_week_dates = [(start_of_week + timedelta(days=i)).strftime('%d/%m/%y') for i in range(7)]
 st.session_state['dates'] = pd.DataFrame({'Day': week_days, 'Date': current_week_dates})
 
 # Display the title of the app
