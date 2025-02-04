@@ -1,5 +1,5 @@
 import streamlit as st
-from streamlit_calendar import FullCalendar
+from streamlit-calendar import FullCalendar
 
 # Initialize FullCalendar
 calendar = FullCalendar(
