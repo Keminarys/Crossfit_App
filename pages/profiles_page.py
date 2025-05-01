@@ -88,14 +88,13 @@ button_style = """
     <style>
         .fixed-button {
             position: fixed;
-            top: 15px;
-            right: 15px;
+            top: 100px;
+            right: 30px;
             background-color: #E63946; /* Strong red */
             color: white;
-            font-size: 18px;
+            font-size: 12px;
             font-weight: bold;
             font-family: 'Arial', sans-serif;
-            padding: 12px 24px;
             border-radius: 8px;
             border: none;
             box-shadow: 0px 3px 6px rgba(0,0,0,0.2);
