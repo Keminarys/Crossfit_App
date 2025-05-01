@@ -120,7 +120,8 @@ home_button_html = """
     </div>
 """
 
-st.markdown(home_button_html, unsafe_allow_html=True)
+if st.button("Home", key="home_button"):
+    st.switch_page("WIP.py") 
 
 @st.dialog("Choisis ton profil")
 def SelectProfile() :
