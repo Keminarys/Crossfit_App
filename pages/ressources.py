@@ -75,8 +75,8 @@ def get_all_heroes() :
     return wods
 
 def wodGirls() :
-        conn = get_conn()
-        wodGirlsPage = get_df("benchmarks")
+    conn = get_conn()
+    wodGirlsPage = get_df("benchmarks")
         #wodGirlsPage = wodGirlsPage
         #data_list = ast.literal_eval(data_str)
     return wodGirlsPage
