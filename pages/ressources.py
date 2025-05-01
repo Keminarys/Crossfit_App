@@ -76,9 +76,9 @@ def get_all_heroes() :
 
 def wodGirls() :
     wodGirlsPage = get_df("benchmarks")
-        #wodGirlsPage = wodGirlsPage
-        #data_list = ast.literal_eval(data_str)
-    return wodGirlsPage
+    wodGirlsPage = wodGirlsPage[0]["Description"]
+    wodGirls = ast.literal_eval(wodGirlsPage)
+    return wodGirls
 conn = get_conn()
 st.title("Cette page vous sera utile lors de vos sessions open gym ou bien si vous souhaitez vous challenger sur des WODs références !")
 st.divider()
@@ -139,9 +139,8 @@ st.divider()
 st.write("Vous trouverez ci dessous les WODs GIRL")
 expanderWODGirl = st.expander(":red[Tous les WOD Girl]")
 wodGirls = wodGirls()
-st.dataframe(wodGirls)
-# chosen_wod = expanderWODGirl.selectbox("Quel WOD Girl voulez vous voir", [i["title"] for i in wodGirls])
-# if len(chosen_wod) > 0 : 
-#     wodgirlchosen = next((wod for wod in wodGirls if wod['title'] == chosen_wod), None)
-#     expanderWODGirl.markdown(wodgirlchosen['description'].replace('\n', '<br>'), unsafe_allow_html=True)
-#     expanderWODGirl.markdown(wodgirlchosen['mvmt'].replace('\n', '<br>'), unsafe_allow_html=True)
+chosen_wod = expanderWODGirl.selectbox("Quel WOD Girl voulez vous voir", [i["title"] for i in wodGirls])
+if len(chosen_wod) > 0 : 
+    wodgirlchosen = next((wod for wod in wodGirls if wod['title'] == chosen_wod), None)
+    expanderWODGirl.markdown(wodgirlchosen['description'].replace('\n', '<br>'), unsafe_allow_html=True)
+    expanderWODGirl.markdown(wodgirlchosen['mvmt'].replace('\n', '<br>'), unsafe_allow_html=True)
