@@ -84,16 +84,13 @@ dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercic
 
 ### Main
 ### Home Button 
+import streamlit as st
 
-# Initialize session state
-if "button_clicked" not in st.session_state:
-    st.session_state.button_clicked = False
-
-# Inject CSS for styling
+# Inject custom CSS & JavaScript for positioning
 st.markdown("""
     <style>
         .button-container {
-            position: absolute;
+            position: fixed;
             top: 10px;
             right: 10px;
             z-index: 1000;
@@ -111,12 +108,11 @@ st.markdown("""
             background-color: #005F73;
         }
     </style>
+    <div class="button-container">
+        <button class="styled-button" onclick="window.location.href='WIP.py'">Return Home</button>
+    </div>
 """, unsafe_allow_html=True)
 
-# Create button that updates session state
-if st.button("Return Home"):
-    st.session_state.button_clicked = True
-    st.switch_page("WIP.py")  # Navigate to another page
 
 
 
