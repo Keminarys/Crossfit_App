@@ -83,6 +83,46 @@ dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict(
 dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercice').to_dict()['Units']
 
 ### Main
+### Home button
+button_style = """
+    <style>
+        .fixed-button {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            background-color: #E63946; /* Strong red */
+            color: white;
+            font-size: 18px;
+            font-weight: bold;
+            font-family: 'Arial', sans-serif;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0px 3px 6px rgba(0,0,0,0.2);
+            transition: 0.3s;
+            z-index: 1000;
+        }
+        .fixed-button:hover {
+            background-color: #C70039; /* Slightly darker red on hover */
+            box-shadow: 0px 5px 10px rgba(0,0,0,0.3);
+            transform: scale(1.03);
+        }
+    </style>
+"""
+
+st.markdown(button_style, unsafe_allow_html=True)
+
+# Create button with HTML to ensure it stays fixed
+home_button_html = """
+    <div class="fixed-button">
+        <form action="/WIP.py">
+            <input type="submit" value="Home">
+        </form>
+    </div>
+"""
+
+st.markdown(home_button_html, unsafe_allow_html=True)
+
 @st.dialog("Choisis ton profil")
 def SelectProfile() :
     athl = st.selectbox('Choix du profil', list_name)
@@ -104,49 +144,6 @@ if "athl" not in st.session_state :
 if "athl" in st.session_state :
     st.title(f"Bienvenue sur ton profil {st.session_state.athl} :muscle:")
     athl = str(st.session_state.athl)
-
-    ### Custom CSS for positioning and HomeButton
-    button_style = """
-        <style>
-            .fixed-button {
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: linear-gradient(45deg, #D62828, #E63946); /* Fiery gradient */
-                color: white;
-                font-size: 20px;
-                font-weight: bold;
-                font-family: 'Bebas Neue', sans-serif; /* Athletic font */
-                padding: 15px 30px;
-                border-radius: 12px;
-                border: 2px solid black;
-                text-transform: uppercase;
-                letter-spacing: 2px;
-                box-shadow: 0px 5px 10px rgba(0,0,0,0.4);
-                transition: 0.3s;
-                z-index: 1000;
-            }
-            .fixed-button:hover {
-                background: linear-gradient(45deg, #C70039, #900D0D); /* Darker shade on hover */
-                box-shadow: 0px 8px 16px rgba(0,0,0,0.5);
-                transform: scale(1.05);
-            }
-        </style>
-    """
-    
-    st.markdown(button_style, unsafe_allow_html=True)
-    
-    # Create the button using HTML & JavaScript to maintain fixed positioning
-    home_button_html = """
-        <div class="fixed-button">
-            <form action="/WIP.py">
-                <input type="submit" value="🏋️‍♂️ Home">
-            </form>
-        </div>
-    """
-    
-    st.markdown(home_button_html, unsafe_allow_html=True)
-
     
     st.divider()
     st.write("Cette page te permet de tracker tes PR.")
