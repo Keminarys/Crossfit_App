@@ -76,7 +76,7 @@ def get_all_heroes() :
 
 def wodGirls() :
     wodGirlsPage = get_df("benchmarks")
-    wodGirlsPage = wodGirlsPage[["Benchmark"] == "wodGirls"]["Description"]
+    wodGirlsPage = wodGirlsPage.loc[["Benchmark"] == "wodGirls"]["Description"]
     wodGirls = ast.literal_eval(wodGirlsPage)
     return wodGirls
 conn = get_conn()
