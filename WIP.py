@@ -67,6 +67,7 @@ def main():
     st.header("Menu")
     pages = list(PAGES.keys())
     page_key = list(PAGES.values())
+    page_key = ["/" + item for item in page_key]
     col1, col2 = st.columns(2) 
     with col1 :
         display_card(pages[0], page_key[0])
