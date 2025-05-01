@@ -83,51 +83,40 @@ dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict(
 dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercice').to_dict()['Units']
 
 ### Main
-### Home button
-import streamlit as st
+### Home Button 
 
-# Custom CSS for anchoring and styling the button
-button_style = """
+# Initialize session state
+if "button_clicked" not in st.session_state:
+    st.session_state.button_clicked = False
+
+# Inject CSS for styling
+st.markdown("""
     <style>
-        .fixed-button {
-            position: fixed;
-            top: 60px;
-            right: 15px;
-            background-color: #E63946; /* Strong red */
-            color: white;
-            font-size: 18px;
-            font-weight: bold;
-            font-family: 'Arial', sans-serif;
-            padding: 12px 24px;
-            border-radius: 8px;
-            border: none;
-            box-shadow: 0px 3px 6px rgba(0,0,0,0.2);
-            transition: 0.3s;
-            cursor: pointer;
+        .button-container {
+            position: absolute;
+            top: 10px;
+            right: 10px;
             z-index: 1000;
         }
-        .fixed-button:hover {
-            background-color: #C70039; /* Slightly darker red on hover */
-            box-shadow: 0px 5px 10px rgba(0,0,0,0.3);
-            transform: scale(1.03);
+        .styled-button {
+            background-color: #008CBA;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .styled-button:hover {
+            background-color: #005F73;
         }
     </style>
-"""
+""", unsafe_allow_html=True)
 
-st.markdown(button_style, unsafe_allow_html=True)
-
-# JavaScript-based redirect button
-home_button_html = """
-    <script>
-        function goHome() {
-            window.location.href = "WIP.py";
-        }
-    </script>
-    
-    <button class="fixed-button" onclick="goHome()">Home</button>
-"""
-
-st.markdown(home_button_html, unsafe_allow_html=True)
+# Create button that updates session state
+if st.button("Return Home"):
+    st.session_state.button_clicked = True
+    st.switch_page("WIP.py")  # Navigate to another page
 
 
 
