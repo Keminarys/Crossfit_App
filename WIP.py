@@ -59,7 +59,6 @@ def main():
         st.image("LogoCrossfit.jpg")
     st.divider()
     st.header("Menu")
-    st.subheade("Cliquez sur une ")
     pages = list(PAGES.keys())
 
     col1, col2 = st.columns(2) 
