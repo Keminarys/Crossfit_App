@@ -9,10 +9,10 @@ from datetime import date
 
 
 PAGES = {
-    "Votre Profil": profiles_page,
-    "Votre Progession": progress,
-    "Ressources Technique Crossfit": ressources,
-    "Prog de la semaine": scheduleResa
+    "Votre Profil": "pages/profiles_page.py",
+    "Votre Progession": "pages/progress.py",
+    "Ressources Technique Crossfit": "pages/ressources.py",
+    "Prog de la semaine": "pages/scheduleResa.py"
 }
 
 ### Setting up the page 
@@ -67,7 +67,6 @@ def main():
     st.header("Menu")
     pages = list(PAGES.keys())
     page_key = list(PAGES.values())
-    page_key = ["/" + item for item in page_key]
     col1, col2 = st.columns(2) 
     with col1 :
         display_card(pages[0], page_key[0])
