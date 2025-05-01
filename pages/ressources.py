@@ -1,11 +1,13 @@
 ### Librairies
 
 import pandas as pd
+import ast
 import numpy as np
 import datetime
 import random
 import re
 import streamlit as st
+from streamlit_gsheets import GSheetsConnection
 import streamlit_authenticator as stauth
 from streamlit_gsheets import GSheetsConnection
 from datetime import date
@@ -17,6 +19,14 @@ import yt_dlp
 import requests
 from bs4 import BeautifulSoup
 import streamlit.components.v1 as components
+
+
+def get_conn() :
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    return conn
+def get_df(sheet_name) :
+    datas = conn.read(worksheet=sheet_name)
+    return datas
 
 def WOD() :
     url = "https://www.crossfit.com/"
@@ -65,33 +75,11 @@ def get_all_heroes() :
     return wods
 
 def wodGirls() :
-    
-    response = requests.get("https://www.nocsy.fr/wod/wod-girl/")
-    wodGirlsName = []
-    wodGirls = []
-    
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.content, 'html.parser')
-        h3_tags = soup.find_all('h3')
-        for i, h3 in enumerate(h3_tags):
-          span_tags = h3.find_all('span')
-          for span in span_tags:
-            span_id = span.get('id')
-            wodGirlsName.append(span_id)
-   
-    for wod in wodGirlsName:
-      soup = BeautifulSoup(response.content, 'html.parser')
-      title = soup.find('span', id=wod).text
-      description = soup.find('span', id=wod).find_next('p').text
-      mouvements = "".join([li.text for li in soup.find('span', id=wod).find_next('ul')])
-      workout_dict = {
-          "title": title,
-          "description": description,
-          "mvmt": mouvements
-      }
-      wodGirls.append(workout_dict)
-        
-    return wodGirls
+        conn = get_conn()
+        wodGirlsPage = get_df("benchmarks")
+        #wodGirlsPage = wodGirlsPage
+        #data_list = ast.literal_eval(data_str)
+    return wodGirlsPage
 
 st.title("Cette page vous sera utile lors de vos sessions open gym ou bien si vous souhaitez vous challenger sur des WODs références !")
 st.divider()
@@ -152,8 +140,9 @@ st.divider()
 st.write("Vous trouverez ci dessous les WODs GIRL")
 expanderWODGirl = st.expander(":red[Tous les WOD Girl]")
 wodGirls = wodGirls()
-chosen_wod = expanderWODGirl.selectbox("Quel WOD Girl voulez vous voir", [i["title"] for i in wodGirls])
-if len(chosen_wod) > 0 : 
-    wodgirlchosen = next((wod for wod in wodGirls if wod['title'] == chosen_wod), None)
-    expanderWODGirl.markdown(wodgirlchosen['description'].replace('\n', '<br>'), unsafe_allow_html=True)
-    expanderWODGirl.markdown(wodgirlchosen['mvmt'].replace('\n', '<br>'), unsafe_allow_html=True)
+st.dataframe(wodGirls)
+# chosen_wod = expanderWODGirl.selectbox("Quel WOD Girl voulez vous voir", [i["title"] for i in wodGirls])
+# if len(chosen_wod) > 0 : 
+#     wodgirlchosen = next((wod for wod in wodGirls if wod['title'] == chosen_wod), None)
+#     expanderWODGirl.markdown(wodgirlchosen['description'].replace('\n', '<br>'), unsafe_allow_html=True)
+#     expanderWODGirl.markdown(wodgirlchosen['mvmt'].replace('\n', '<br>'), unsafe_allow_html=True)
