@@ -114,7 +114,7 @@ st.markdown(button_style, unsafe_allow_html=True)
 # Create button with HTML to ensure it stays fixed
 home_button_html = """
     <div class="fixed-button">
-        <form action="/WIP.py">
+        <form action="WIP.py">
             <input type="submit" value="Home">
         </form>
     </div>
