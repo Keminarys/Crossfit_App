@@ -34,15 +34,15 @@ def display_card(page_name, page_key):
                 color: white;
                 font-size: 22px;
                 font-weight: bold;
-                padding: 15px;
-                border-radius: 10px;
+                padding: 30px;
+                border-radius: 20px;
                 border: none;
-                box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+                box-shadow: 6px 6px 12px rgba(0,0,0,0.3);
                 transition: 0.3s;
             }
             div.stButton > button:hover {
                 background-color: #D62828;
-                box-shadow: 6px 6px 12px rgba(0,0,0,0.4);
+                box-shadow: 8px 8px 16px rgba(0,0,0,0.4);
             }
         </style>
     """
@@ -66,17 +66,17 @@ def main():
     st.divider()
     st.header("Menu")
     pages = list(PAGES.keys())
-
+    page_key = list(PAGES.values())
     col1, col2 = st.columns(2) 
     with col1 :
-        display_card(pages[0], pages[0].value)
+        display_card(pages[0], page_key[0])
     with col2 :
-        display_card(pages[1], f"/{pages[1]}")
+        display_card(pages[1], page_key[1])
     col3, col4 = st.columns(2)    
     with col3 :
-        display_card(pages[2], f"/{pages[2]}")
+        display_card(pages[2], page_key[2])
     with col4 :
-        display_card(pages[3], f"/{pages[3]}")
+        display_card(pages[3], page_key[3])
 if __name__ == "__main__":
     main()
 
