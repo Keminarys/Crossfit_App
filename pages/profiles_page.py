@@ -84,44 +84,37 @@ dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercic
 
 ### Main
 ### Home button
-button_style = """
-    <style>
-        .fixed-button {
-            position: fixed;
-            top: 100px;
-            right: 30px;
-            background-color: #E63946; /* Strong red */
-            color: white;
-            font-size: 12px;
-            font-weight: bold;
-            font-family: 'Arial', sans-serif;
-            border-radius: 8px;
-            border: none;
-            box-shadow: 0px 3px 6px rgba(0,0,0,0.2);
-            transition: 0.3s;
-            z-index: 1000;
-        }
-        .fixed-button:hover {
-            background-color: #C70039; /* Slightly darker red on hover */
-            box-shadow: 0px 5px 10px rgba(0,0,0,0.3);
-            transform: scale(1.03);
-        }
-    </style>
-"""
+    button_style = """
+        <style>
+            .fixed-button {
+                position: fixed;
+                top: 60px; /* Lowered position */
+                right: 15px;
+                background-color: #E63946; /* Strong red */
+                color: white;
+                font-size: 18px;
+                font-weight: bold;
+                font-family: 'Arial', sans-serif;
+                padding: 12px 24px;
+                border-radius: 8px;
+                border: none;
+                box-shadow: 0px 3px 6px rgba(0,0,0,0.2);
+                transition: 0.3s;
+                z-index: 1000;
+            }
+            .fixed-button:hover {
+                background-color: #C70039; /* Slightly darker red on hover */
+                box-shadow: 0px 5px 10px rgba(0,0,0,0.3);
+                transform: scale(1.03);
+            }
+        </style>
+    """
+    
+    st.markdown(button_style, unsafe_allow_html=True)
+    
+    if st.button("Home", key="home_button"):
+        st.switch_page("WIP.py")  
 
-st.markdown(button_style, unsafe_allow_html=True)
-
-# Create button with HTML to ensure it stays fixed
-home_button_html = """
-    <div class="fixed-button">
-        <form action="WIP.py">
-            <input type="submit" value="Home">
-        </form>
-    </div>
-"""
-
-if st.button("Home", key="home_button"):
-    st.switch_page("WIP.py") 
 
 @st.dialog("Choisis ton profil")
 def SelectProfile() :
