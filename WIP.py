@@ -26,25 +26,31 @@ def get_df(sheet_name) :
     datas = conn.read(worksheet=sheet_name)
     return datas
 
-def display_card(page_name, page_link):
-    st.markdown(f"""
-        <a href='{page_link}' style="text-decoration: none;'>
-            <div style='
-                background-color: #E63946; 
-                padding: 20px; 
-                margin: 10px; 
-                border-radius: 10px; 
-                text-align: center;
-                font-size: 24px;
-                font-weight: bold;
+def display_card(page_name, page_key):
+    button_style = """
+        <style>
+            div.stButton > button {
+                background-color: #E63946;
                 color: white;
-                box-shadow: 5px 5px 10px rgba(0,0,0,0.3);
-                transition: 0.3s ease-in-out;
-                '>
-                {page_name}
-            </div>
-        </a>
-    """, unsafe_allow_html=True)
+                font-size: 22px;
+                font-weight: bold;
+                padding: 15px;
+                border-radius: 10px;
+                border: none;
+                box-shadow: 4px 4px 8px rgba(0,0,0,0.3);
+                transition: 0.3s;
+            }
+            div.stButton > button:hover {
+                background-color: #D62828;
+                box-shadow: 6px 6px 12px rgba(0,0,0,0.4);
+            }
+        </style>
+    """
+    st.markdown(button_style, unsafe_allow_html=True)
+    
+    if st.button(page_name, key=page_key):
+        st.switch_page(page_key)
+
 
 
 def main():
