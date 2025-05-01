@@ -69,7 +69,7 @@ def main():
 
     col1, col2 = st.columns(2) 
     with col1 :
-        display_card(pages[0], f"/{pages[0]}")
+        display_card(pages[0], pages[0].value)
     with col2 :
         display_card(pages[1], f"/{pages[1]}")
     col3, col4 = st.columns(2)    
