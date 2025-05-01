@@ -75,12 +75,11 @@ def get_all_heroes() :
     return wods
 
 def wodGirls() :
-    conn = get_conn()
     wodGirlsPage = get_df("benchmarks")
         #wodGirlsPage = wodGirlsPage
         #data_list = ast.literal_eval(data_str)
     return wodGirlsPage
-
+conn = get_conn()
 st.title("Cette page vous sera utile lors de vos sessions open gym ou bien si vous souhaitez vous challenger sur des WODs références !")
 st.divider()
 
