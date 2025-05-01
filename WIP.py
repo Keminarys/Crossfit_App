@@ -1,5 +1,5 @@
 import streamlit as st
-from pages import profiles_page, progress, ressources, scheduleResa
+from pages import profiles_page, progress, scheduleResa
 import pandas as pd
 import numpy as np
 import datetime
