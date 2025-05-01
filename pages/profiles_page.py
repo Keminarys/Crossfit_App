@@ -84,11 +84,14 @@ dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercic
 
 ### Main
 ### Home button
+import streamlit as st
+
+# Custom CSS for anchoring and styling the button
 button_style = """
     <style>
         .fixed-button {
             position: fixed;
-            top: 60px; /* Lowered position */
+            top: 60px;
             right: 15px;
             background-color: #E63946; /* Strong red */
             color: white;
@@ -100,6 +103,7 @@ button_style = """
             border: none;
             box-shadow: 0px 3px 6px rgba(0,0,0,0.2);
             transition: 0.3s;
+            cursor: pointer;
             z-index: 1000;
         }
         .fixed-button:hover {
@@ -112,8 +116,19 @@ button_style = """
 
 st.markdown(button_style, unsafe_allow_html=True)
 
-if st.button("Home", key="home_button"):
-    st.switch_page("WIP.py")  
+# JavaScript-based redirect button
+home_button_html = """
+    <script>
+        function goHome() {
+            window.location.href = "WIP.py";
+        }
+    </script>
+    
+    <button class="fixed-button" onclick="goHome()">Home</button>
+"""
+
+st.markdown(home_button_html, unsafe_allow_html=True)
+
 
 
 @st.dialog("Choisis ton profil")
