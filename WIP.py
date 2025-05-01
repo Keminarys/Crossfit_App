@@ -27,25 +27,29 @@ def get_df(sheet_name) :
     return datas
 
 def display_card(page_name, page_key):
-    button_style = """
-        <style>
-            div.stButton > button {
-                background-color: #E63946;
-                color: white;
-                font-size: 22px;
-                font-weight: bold;
-                padding: 30px;
-                border-radius: 20px;
-                border: none;
-                box-shadow: 6px 6px 12px rgba(0,0,0,0.3);
-                transition: 0.3s;
-            }
-            div.stButton > button:hover {
-                background-color: #D62828;
-                box-shadow: 8px 8px 16px rgba(0,0,0,0.4);
-            }
-        </style>
-    """
+   button_style = """
+    <style>
+        div.stButton > button {
+            background-color: #FF5733; /* Fiery red-orange for energy */
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            padding: 35px;
+            border-radius: 15px;
+            border: 2px solid black;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            box-shadow: 0px 5px 10px rgba(0,0,0,0.4);
+            transition: 0.3s;
+        }
+        div.stButton > button:hover {
+            background-color: #C70039; /* Darker red for a punch effect */
+            box-shadow: 0px 8px 16px rgba(0,0,0,0.5);
+            transform: scale(1.05);
+        }
+    </style>
+"""
+
     st.markdown(button_style, unsafe_allow_html=True)
     
     if st.button(page_name, key=page_key):
