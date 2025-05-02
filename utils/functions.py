@@ -1,30 +1,36 @@
 import streamlit as st
 
 def go_home():
-    """Creates a top-right anchored button that links to WIP.py"""
-    st.markdown("""
-        <style>
-            .top-right-container {
-                position: fixed;
-                top: 100px;
-                right: 30px;
-                z-index: 1000;
-            }
-            .top-right-button {
-                background-color: #4CAF50;
-                color: white;
-                padding: 10px 20px;
-                border: none;
-                cursor: pointer;
-                border-radius: 5px;
-                text-align: center;
-                font-size: 16px;
-            }
-        </style>
-        <div class="top-right-container">
-            <a href="WIP.py">
-                <button class="top-right-button">Retour au Menu Principal</button>
-            </a>
-        </div>
-    """, unsafe_allow_html=True)
+    """Creates a high-energy CrossFit-styled button for navigation."""
+    col1, col2, col3 = st.columns([1, 6, 1])
+
+    with col3:  # Anchoring the button to the right
+        st.markdown("""
+            <style>
+                .crossfit-button {
+                    background-color: #d90429; /* Bold Red */
+                    color: white;
+                    font-size: 18px;
+                    font-weight: bold;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    text-transform: uppercase;
+                    letter-spacing: 1.5px;
+                    border: 3px solid #ffcc00; /* Yellow Border for a strong vibe */
+                    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                    transition: transform 0.2s, box-shadow 0.2s;
+                }
+
+                .crossfit-button:hover {
+                    transform: scale(1.05);
+                    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
+                    background-color: #a50021; /* Slightly darker on hover */
+                }
+            </style>
+            """,
+            unsafe_allow_html=True,
+        )
+
+        if st.button("🔥 Retour au Menu Principal 🏋️"):
+            st.switch_page("WIP.py")
 
