@@ -1,14 +1,16 @@
 import streamlit as st
-import streamlit.components.v1 as components
 
 def go_home():
     """Creates a top-right anchored button that links to WIP.py"""
-    html_code = """
+    st.markdown("""
         <style>
-            .top-right-button {
+            .top-right-container {
                 position: fixed;
                 top: 100px;
                 right: 30px;
+                z-index: 1000;
+            }
+            .top-right-button {
                 background-color: #4CAF50;
                 color: white;
                 padding: 10px 20px;
@@ -16,11 +18,13 @@ def go_home():
                 cursor: pointer;
                 border-radius: 5px;
                 text-align: center;
+                font-size: 16px;
             }
         </style>
-        <a href="WIP.py">
-            <button class="top-right-button">🏠 Retour à l'accueil</button>
-        </a>
-    """
-    components.html(html_code, height=50)
+        <div class="top-right-container">
+            <a href="WIP.py">
+                <button class="top-right-button">Retour au Menu Principal</button>
+            </a>
+        </div>
+    """, unsafe_allow_html=True)
 
