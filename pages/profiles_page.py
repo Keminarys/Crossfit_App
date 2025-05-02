@@ -85,7 +85,11 @@ dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercic
 
 ### Main
 ### Home Button 
-go_home()
+col1, col2, col3 = st.columns([1, 6, 1])
+with col3:  # Anchoring the button towards the right
+    if st.button("Retour au Menu Principal"):
+        st.switch_page("WIP.py")
+
 
 @st.dialog("Choisis ton profil")
 def SelectProfile() :
