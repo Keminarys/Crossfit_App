@@ -79,6 +79,8 @@ def wodGirls() :
     wodGirlsPage = wodGirlsPage.iloc[0]["Description"]
     wodGirls = ast.literal_eval(wodGirlsPage)
     return wodGirls
+    
+st.set_page_config(layout="wide")
 conn = get_conn()
 st.title("Cette page vous sera utile lors de vos sessions open gym ou bien si vous souhaitez vous challenger sur des WODs références !")
 st.divider()
