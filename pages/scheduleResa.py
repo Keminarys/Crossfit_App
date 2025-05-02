@@ -27,7 +27,7 @@ go_home()
 
 conn = get_conn()
 planning = get_df("WODSemaine")
-url = planning.iloc[0, 25]
+url = planning.iloc[0, 8]
 planning = planning[['WOD', 'Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']].dropna()
 
 # Get current date and determine Monday of the current week
