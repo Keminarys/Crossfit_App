@@ -1,18 +1,28 @@
 import streamlit as st
+import streamlit.components.v1 as components
 
 def go_home():
-    button_html = """
-        <div style="position: fixed; top: 100px; right: 30px; z-index: 1000;">
-            <st.switch_page("WIP.py")>
-                <button type="submit"
-                    style="background: linear-gradient(45deg, #D62828, #E63946);
-                    color: white; font-size: 18px; font-weight: bold;
-                    padding: 10px 20px; border-radius: 10px; border: none;
-                    cursor: pointer; box-shadow: 0px 5px 10px rgba(0,0,0,0.3);">
-                    🏠 Retour à l'accueil
-                </button>
-            </form>
-        </div>
+    """Creates a top-right anchored button that links to WIP.py"""
+    html_code = """
+        <style>
+            .top-right-button {
+                position: fixed;
+                top: 100px;
+                right: 30px;
+                background-color: #4CAF50;
+                color: white;
+                padding: 10px 20px;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+                text-align: center;
+            }
+        </style>
+        <a href="WIP.py">
+            <button class="top-right-button">🏠 Retour à l'accueil</button>
+        </a>
     """
-    st.markdown(button_html, unsafe_allow_html=True)
+    components.html(html_code, height=50)
 
+# Call the function in your Streamlit app
+go_home()
