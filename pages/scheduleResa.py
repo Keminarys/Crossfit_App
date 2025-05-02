@@ -113,7 +113,7 @@ st.title("Planning de la semaine :calendar: ")
 # Create seven columns for the buttons
 cols = st.columns(7)
 selected_day = None
-locale.setlocale(locale.LC_TIME, "fr_FR")
+locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
 # Generate buttons in respective columns
 for i, day in enumerate(days):
     button_label = f"{day.strftime('%A %d')}"  # Example: "Monday 28"
