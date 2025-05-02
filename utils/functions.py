@@ -34,9 +34,8 @@ def go_home_():
         if st.button("🔥 Retour au Menu Principal 🏋️"):
             st.switch_page("WIP.py")
 
-
 def go_home():
-    """Creates a high-energy CrossFit-styled button for navigation."""
+    """Creates a high-energy CrossFit-styled button that redirects to an external app."""
     col1, col2, col3 = st.columns([1, 6, 1])
 
     with col3:  # Anchoring the button to the right
@@ -65,8 +64,12 @@ def go_home():
                     background-color: #a50021; /* Slightly darker on hover */
                 }
             </style>
+            
+            <script>
+                function redirectHome() {
+                    window.location.href = "https://crossfitapp-5pz3rvpmqbp5nfmo6pkuaq.streamlit.app/";
+                }
+            </script>
 
-            <a href="">
-                <button class="crossfit-button">🔥 Retour au Menu Principal 🏋️</button>
-            </a>
+            <button class="crossfit-button" onclick="redirectHome()">🔥 Retour au Menu Principal 🏋️</button>
         """, unsafe_allow_html=True)
