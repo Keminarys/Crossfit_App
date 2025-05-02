@@ -1,3 +1,5 @@
+import streamlit as st
+
 def go_home():
     button_html = """
         <div style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
