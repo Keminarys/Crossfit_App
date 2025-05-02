@@ -16,7 +16,7 @@ def go_home_old():
     """
     st.markdown(button_html, unsafe_allow_html=True)
 
-def go_home(page_name, page_key):
+def go_home():
     button_html = f"""
         <div style="position: fixed; top: 100px; right: 30px; z-index: 1000;">
             <form action="#" method="post">
