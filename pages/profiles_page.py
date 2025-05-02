@@ -16,7 +16,7 @@ import seaborn as sns
 import yt_dlp
 import requests
 from bs4 import BeautifulSoup
-
+from utils.functions import go_home
 def get_conn() :
     conn = st.connection("gsheets", type=GSheetsConnection)
     return conn
@@ -84,37 +84,7 @@ dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercic
 
 ### Main
 ### Home Button 
-import streamlit as st
-
-# Inject custom CSS & JavaScript for positioning
-st.markdown("""
-    <style>
-        .button-container {
-            position: fixed;
-            top: 100px;
-            right: 30px;
-            z-index: 1000;
-        }
-        .styled-button {
-            background-color: #008CBA;
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            border: none;
-            cursor: pointer;
-            font-size: 16px;
-        }
-        .styled-button:hover {
-            background-color: #005F73;
-        }
-    </style>
-    <div class="button-container">
-        <button class="styled-button" onclick="window.location.href='WIP.py'">Return Home</button>
-    </div>
-""", unsafe_allow_html=True)
-
-
-
+go_home()
 
 @st.dialog("Choisis ton profil")
 def SelectProfile() :
