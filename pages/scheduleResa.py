@@ -1,10 +1,34 @@
-import streamlit as st
 from datetime import datetime, timedelta, date
 import pandas as pd
 from utils.functions import go_home
+import numpy as np
+import datetime
+import random
+import re
+import streamlit as st
+from streamlit_gsheets import GSheetsConnection
+import streamlit_authenticator as stauth
+import plotly.express as px
+import plotly.graph_objects as go
+import matplotlib.pyplot as plt
+import seaborn as sns
+from utils.functions import go_home
+import locale
 
+def get_conn() :
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    return conn
+def get_df(sheet_name) :
+    datas = conn.read(worksheet=sheet_name)
+    return datas
+    
 st.set_page_config(layout="wide")
 go_home()
+
+conn = get_conn()
+planning = get_df("WODSemaine")
+planning = planning[['WOD', 'Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']].dropna()
+
 # # Get the current date and time
 # current_date = datetime.now()
 # current_date = current_date.date()
@@ -83,23 +107,13 @@ monday = today - timedelta(days=today.weekday())
 days = [monday + timedelta(days=i) for i in range(7)]
 
 # Define example workout details for each day
-workout_data = {
-    "Monday": "Squat 5x5 & Core Training",
-    "Tuesday": "Bench Press & HIIT Cardio",
-    "Wednesday": "Deadlifts & Mobility",
-    "Thursday": "Pull-ups & Conditioning",
-    "Friday": "Power Cleans & Speed Work",
-    "Saturday": "Full-body Circuit",
-    "Sunday": "Rest & Recovery"
-}
-
 # Streamlit UI
-st.title("Weekly Workout Plan")
+st.title("Planning de la semaine :calendar: ")
 
 # Create seven columns for the buttons
 cols = st.columns(7)
 selected_day = None
-
+locale.setlocale(locale.LC_TIME, "fr_FR")
 # Generate buttons in respective columns
 for i, day in enumerate(days):
     button_label = f"{day.strftime('%A %d')}"  # Example: "Monday 28"
@@ -108,6 +122,8 @@ for i, day in enumerate(days):
 
 # Display workout details for the selected day
 if selected_day:
-    st.subheader(f"Workout for {selected_day}")
-    st.info(workout_data[selected_day])
+    st.subheader("Workout of the Day")
+    selected_planning = planning[['WOD', selected_day]]
+    st.dataframe(selected_planning)
+
 
