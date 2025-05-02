@@ -74,3 +74,36 @@ st.markdown(f"""
 # Display the final schedule
 st.subheader('Your Schedule')
 st.table(st.session_state['schedule'])
+
+
+
+# Get current date and determine Monday of the current week
+today = datetime.date.today()
+monday = today - datetime.timedelta(days=today.weekday())
+days = [monday + datetime.timedelta(days=i) for i in range(7)]
+
+# Define example workout details for each day
+workout_data = {
+    "Monday": "Squat 5x5 & Core Training",
+    "Tuesday": "Bench Press & HIIT Cardio",
+    "Wednesday": "Deadlifts & Mobility",
+    "Thursday": "Pull-ups & Conditioning",
+    "Friday": "Power Cleans & Speed Work",
+    "Saturday": "Full-body Circuit",
+    "Sunday": "Rest & Recovery"
+}
+
+# Streamlit UI
+st.title("Weekly Workout Plan")
+
+# Display buttons for each day
+selected_day = None
+for day in days:
+    if st.button(day.strftime("%A")):
+        selected_day = day.strftime("%A")
+
+# Display workout details for the selected day
+if selected_day:
+    st.subheader(f"Workout for {selected_day}")
+    st.info(workout_data[selected_day])
+
