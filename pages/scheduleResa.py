@@ -96,10 +96,14 @@ workout_data = {
 # Streamlit UI
 st.title("Weekly Workout Plan")
 
-# Display buttons for each day
+# Create seven columns for the buttons
+cols = st.columns(7)
 selected_day = None
-for day in days:
-    if st.button(day.strftime('%A %d')):
+
+# Generate buttons in respective columns
+for i, day in enumerate(days):
+    button_label = f"{day.strftime('%A %d')}"  # Example: "Monday 28"
+    if cols[i].button(button_label):
         selected_day = day.strftime("%A")
 
 # Display workout details for the selected day
