@@ -2,6 +2,7 @@ import streamlit as st
 from datetime import datetime, timedelta
 import pandas as pd
 
+st.set_page_config(layout="wide")
 # Get the current date and time
 current_date = datetime.now()
 current_date = current_date.date()
