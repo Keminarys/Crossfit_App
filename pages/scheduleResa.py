@@ -89,4 +89,4 @@ if selected_day:
 st.divider()
 
 st.subheader("Inscription au cours via PollForAll :calendar: ")
-components.iframe(url, height=400, scrolling = True)
+components.iframe(url, height=800, scrolling = True)
