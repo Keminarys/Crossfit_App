@@ -66,7 +66,7 @@ def go_home():
                 }
             </style>
 
-            <a href="/WIP">
+            <a href="">
                 <button class="crossfit-button">🔥 Retour au Menu Principal 🏋️</button>
             </a>
         """, unsafe_allow_html=True)
