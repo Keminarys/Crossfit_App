@@ -57,7 +57,8 @@ def ChartDataFS(df) :
                 width=500,
                 height=300)
     return fig
-    
+
+st.set_page_config(layout="wide")
 conn = get_conn()
 all_mvmt = get_df("All_mvmt")
 all_mvmt = all_mvmt[['Category','Exercice','Units']].dropna()
