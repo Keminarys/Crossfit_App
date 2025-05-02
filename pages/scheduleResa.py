@@ -99,7 +99,7 @@ st.title("Weekly Workout Plan")
 # Display buttons for each day
 selected_day = None
 for day in days:
-    if st.button(day.strftime("%A")):
+    if st.button(day.strftime('%A %d')):
         selected_day = day.strftime("%A")
 
 # Display workout details for the selected day
