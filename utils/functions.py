@@ -3,7 +3,7 @@ import streamlit as st
 def go_home():
     button_html = """
         <div style="position: fixed; top: 10px; right: 10px; z-index: 1000;">
-            <form action="?page=WIP.py" method="get">
+            <st.switch_page("WIP.py")>
                 <button type="submit"
                     style="background: linear-gradient(45deg, #D62828, #E63946);
                     color: white; font-size: 18px; font-weight: bold;
