@@ -9,7 +9,6 @@ import re
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import streamlit_authenticator as stauth
-from streamlit_gsheets import GSheetsConnection
 from datetime import date
 import plotly.express as px
 import plotly.graph_objects as go
