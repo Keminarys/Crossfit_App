@@ -15,11 +15,11 @@ def go_home():
                 display: inline-block;
                 background: linear-gradient(45deg, #D62828, #E63946); /* Fiery gradient */
                 color: white;
-                font-size: 18px; /* Made it smaller */
+                font-size: 12px; /* Made it smaller */
                 font-weight: bold;
                 font-family: 'Bebas Neue', sans-serif; /* Strong athletic font */
-                padding: 15px 30px; /* Adjusted padding */
-                border-radius: 10px;
+                padding: 7px 16px; /* Adjusted padding */
+                border-radius: 5px;
                 border: 2px solid black;
                 text-transform: uppercase;
                 letter-spacing: 1.5px;
