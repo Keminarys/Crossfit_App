@@ -19,7 +19,7 @@ import yt_dlp
 import requests
 from bs4 import BeautifulSoup
 import streamlit.components.v1 as components
-
+from utils.functions import go_home
 
 def get_conn() :
     conn = st.connection("gsheets", type=GSheetsConnection)
@@ -81,6 +81,7 @@ def wodGirls() :
     return wodGirls
     
 st.set_page_config(layout="wide")
+go_home()
 conn = get_conn()
 st.title("Cette page vous sera utile lors de vos sessions open gym ou bien si vous souhaitez vous challenger sur des WODs références !")
 st.divider()
