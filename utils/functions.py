@@ -1,7 +1,7 @@
 import streamlit as st
 
 def go_home():
-    """Creates a high-energy CrossFit-styled button that redirects to an external app."""
+    """Creates an anchored, high-energy CrossFit-styled button for navigation."""
     st.markdown("""
         <style>
             .fixed-container {
@@ -13,16 +13,17 @@ def go_home():
 
             .crossfit-button {
                 display: inline-block;
-                background-color: #d90429; /* Bold Red */
+                background: linear-gradient(45deg, #D62828, #E63946); /* Fiery gradient */
                 color: white;
-                font-size: 18px;
+                font-size: 18px; /* Made it smaller */
                 font-weight: bold;
-                padding: 12px 24px;
-                border-radius: 8px;
+                font-family: 'Bebas Neue', sans-serif; /* Strong athletic font */
+                padding: 15px 30px; /* Adjusted padding */
+                border-radius: 10px;
+                border: 2px solid black;
                 text-transform: uppercase;
                 letter-spacing: 1.5px;
-                border: 3px solid #ffcc00; /* Yellow Border for a strong vibe */
-                box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+                box-shadow: 0px 4px 8px rgba(0,0,0,0.4);
                 transition: transform 0.2s, box-shadow 0.2s;
                 cursor: pointer;
                 text-align: center;
@@ -30,9 +31,9 @@ def go_home():
             }
 
             .crossfit-button:hover {
+                background: linear-gradient(45deg, #C70039, #900D0D); /* Darker punch effect */
+                box-shadow: 0px 6px 12px rgba(0,0,0,0.5);
                 transform: scale(1.05);
-                box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.3);
-                background-color: #a50021; /* Slightly darker on hover */
             }
         </style>
 
