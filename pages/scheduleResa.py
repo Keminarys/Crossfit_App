@@ -13,7 +13,6 @@ import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.functions import go_home
-import locale
 
 def get_conn() :
     conn = st.connection("gsheets", type=GSheetsConnection)
@@ -106,6 +105,13 @@ today = date.today()
 monday = today - timedelta(days=today.weekday())
 days = [monday + timedelta(days=i) for i in range(7)]
 
+
+daysConvert = {
+    "Monday": "Lundi", "Tuesday": "Mardi", "Wednesday": "Mercredi",
+    "Thursday": "Jeudi", "Friday": "Vendredi", "Saturday": "Samedi",
+    "Sunday": "Dimanche"
+}
+
 # Define example workout details for each day
 # Streamlit UI
 st.title("Planning de la semaine :calendar: ")
@@ -113,12 +119,12 @@ st.title("Planning de la semaine :calendar: ")
 # Create seven columns for the buttons
 cols = st.columns(7)
 selected_day = None
-locale.setlocale(locale.LC_TIME, "fr_FR.UTF-8")
+
 # Generate buttons in respective columns
 for i, day in enumerate(days):
-    button_label = f"{day.strftime('%A %d')}"  # Example: "Monday 28"
+    button_label = f"{daysConvert[day.strftime('%A %d')]}"  # Example: "Monday 28"
     if cols[i].button(button_label):
-        selected_day = day.strftime("%A")
+        selected_day = daysConvert[day.strftime('%A')]
 
 # Display workout details for the selected day
 if selected_day:
