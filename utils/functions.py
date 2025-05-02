@@ -24,5 +24,3 @@ def go_home():
     """
     components.html(html_code, height=50)
 
-# Call the function in your Streamlit app
-go_home()
