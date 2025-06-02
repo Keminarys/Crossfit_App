@@ -122,7 +122,7 @@ if "athl" in st.session_state :
         newCat = st.selectbox('Choix de la catégorie', sorted(list(dico_ex.keys())))
         ex = st.text_input('Ajouter votre exercice', 'ici')
         if newCat == 'WEIGHTLIFTING' : 
-        rm = st.selectbox('Choix du RM', list_rm)
+            rm = st.selectbox('Choix du RM', list_rm)
         else : rm = 1  
         if dico_units[ex] == 'HH:MM:SS' :
            nb = st.text_input('Temps au format HH\:MM\:SS', "00:00:00")
