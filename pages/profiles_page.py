@@ -123,28 +123,28 @@ if "athl" in st.session_state :
     if cat == 'AJOUTER UN EXERCICE' : 
         st.divider()
         newCat = st.selectbox('Catégorie de l\'exercice à ajouter', [key for key in sorted_dico_ex if key != "AJOUTER UN EXERCICE"])
-        ex = st.text_input('Ajouter votre exercice', 'ici')
+        newex = st.text_input('Ajouter votre exercice', 'ici')
         if newCat == 'WEIGHTLIFTING' : 
-            rm = st.selectbox('Choix du RM', list_rm)
-        else : rm = 1  
-        unit = newCat = st.selectbox('Unité de l\'exercice', all_units)
-        if unit == 'HH:MM:SS' :
-           nb = st.text_input('Temps au format HH\:MM\:SS', "00:00:00")
-        else : nb = st.number_input('Max reps/charge', step=1)
-        date = st.date_input('Date de réalisation', value = "today")
-        commentary = st.text_input('Commentaire sur la réalisation', 'Rien')
+            newrm = st.selectbox('Choix du RM', list_rm)
+        else : newrm = 1  
+        newunit = st.selectbox('Unité de l\'exercice', all_units)
+        if newunit == 'HH:MM:SS' :
+           newnb = st.text_input('Temps au format HH\:MM\:SS', "00:00:00")
+        else : newnb = st.number_input('Max reps/charge', step=1)
+        newdate = st.date_input('Date de réalisation', value = "today")
+        newcommentary = st.text_input('Commentaire sur la réalisation', 'Rien')
         new_entry = {'Profil' : athl,
                     'Category' : newCat,
-                    'Exercice' : ex,
-                    'Date' : date,
-                    'Perf' : nb,
-                    'Unité' : unit,
-                    'RM' : rm, 
-                    'Commentaire' : commentary}
+                    'Exercice' : newex,
+                    'Date' : newdate,
+                    'Perf' : newnb,
+                    'Unité' : newunit,
+                    'RM' : newrm, 
+                    'Commentaire' : newcommentary}
         new_WOD = {
             'Category' : newCat,
-            'Exercice' : ex,
-            'Units' : unit
+            'Exercice' : newex,
+            'Units' : newunit
         }
     else :
     
