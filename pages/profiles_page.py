@@ -81,6 +81,7 @@ list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
 list_rm = [i for i in range (1,21)]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
+sorted_dico_ex = sorted(list(dico_ex.keys()), key=lambda x: (x != 'WEIGHTLIFTING', x))
 dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercice').to_dict()['Units']
 all_units = list(all_mvmt["Units"].unique())
 
@@ -116,12 +117,12 @@ if "athl" in st.session_state :
     st.write("Pour ajouter un nouveau PR à ton profil, utilise le formulaire ci-dessous ! :arrow_down:")
     st.divider()
     
-    cat = st.selectbox('Choix de la catégorie', sorted(list(dico_ex.keys())))
+    cat = st.selectbox('Choix de la catégorie', sorted_dico_ex)
     ex = st.selectbox('Choix de l"exercice', sorted(dico_ex[cat]))
 
     if cat == 'AJOUTER UN EXERCICE' : 
         st.divider()
-        newCat = st.selectbox('Catégorie de l\'exercice à ajouter', sorted([key for key in dico_ex.keys() if key != "AJOUTER UN EXERCICE"]))
+        newCat = st.selectbox('Catégorie de l\'exercice à ajouter', [key for key in sorted_dico_ex if key != "AJOUTER UN EXERCICE"])
         ex = st.text_input('Ajouter votre exercice', 'ici')
         if newCat == 'WEIGHTLIFTING' : 
             rm = st.selectbox('Choix du RM', list_rm)
@@ -140,6 +141,11 @@ if "athl" in st.session_state :
                     'Unité' : unit,
                     'RM' : rm, 
                     'Commentaire' : commentary}
+        new_WOD = {
+            'Category' : newCat,
+            'Exercice' : ex,
+            'Units' : unit
+        }
     else :
     
         if cat == 'WEIGHTLIFTING' : 
@@ -164,6 +170,9 @@ if "athl" in st.session_state :
     if st.button('Ajouter un nouveau record à mon profil :muscle:') :
         df_record = pd.concat([df, pd.DataFrame(new_entry, index=[len(df)])], ignore_index=True)
         df_record = conn.update(worksheet="Progression",data=df_record)
+        if cat == 'AJOUTER UN EXERCICE' : 
+            df_wod = pd.concat([all_mvt, pd.DataFrame(new_WOD, index=[len(all_mvt)])], ignore_index=True)
+            df_wod = conn.update(worksheet="All_mvmt",data=df_wod)
         st.write('Ajouté avec succès, vous pouvez retrouver toutes vos performances dans l\'onglet Data ✅')
         st.cache_data.clear()
         st.rerun()
