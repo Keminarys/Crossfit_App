@@ -116,7 +116,7 @@ if "athl" in st.session_state :
     st.write("Pour ajouter un nouveau PR à ton profil, utilise le formulaire ci-dessous ! :arrow_down:")
     st.divider()
     
-    cat = st.selectbox('Choix de la catégorie', sorted(list(dico_ex.keys()))
+    cat = st.selectbox('Choix de la catégorie', sorted(list(dico_ex.keys())))
     ex = st.selectbox('Choix de l"exercice', sorted(dico_ex[cat]))
 
     if cat == 'AJOUTER UN EXERCICE' : 
