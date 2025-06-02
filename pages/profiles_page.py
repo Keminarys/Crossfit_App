@@ -121,7 +121,7 @@ if "athl" in st.session_state :
 
     if cat == 'AJOUTER UN EXERCICE' : 
         st.divider()
-        newCat = st.selectbox('Catégorie de l\'exercice à ajouter', sorted(list(dico_ex.keys()).remove('AJOUTER UN EXERCICE')))
+        newCat = st.selectbox('Catégorie de l\'exercice à ajouter', sorted([key for key in dico_ex.keys() if key != "AJOUTER UN EXERCICE"]))
         ex = st.text_input('Ajouter votre exercice', 'ici')
         if newCat == 'WEIGHTLIFTING' : 
             rm = st.selectbox('Choix du RM', list_rm)
