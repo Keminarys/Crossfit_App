@@ -115,11 +115,31 @@ if "athl" in st.session_state :
     st.write("Pour ajouter un nouveau PR à ton profil, utilise le formulaire ci-dessous ! :arrow_down:")
     st.divider()
     
-    cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()))
+    cat = st.selectbox('Choix de la catégorie', sorted(list(dico_ex.keys())))
+    ex = st.selectbox('Choix de l"exercice', sorted(dico_ex[cat]))
+
     if cat == 'AJOUTER UN EXERCICE' : 
-        cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()))
-        ex = st.text_input('Nom du mouvement', 'ici')
-    else : ex = st.selectbox('Choix de l"exercice', dico_ex[cat])
+        newCat = st.selectbox('Choix de la catégorie', sorted(list(dico_ex.keys())))
+        ex = st.text_input('Ajouter votre exercice', 'ici')
+        if newCat == 'WEIGHTLIFTING' : 
+        rm = st.selectbox('Choix du RM', list_rm)
+        else : rm = 1  
+        if dico_units[ex] == 'HH:MM:SS' :
+           nb = st.text_input('Temps au format HH\:MM\:SS', "00:00:00")
+        else : nb = st.number_input('Max reps/charge', step=1)
+        date = st.date_input('Date de réalisation', value = "today")
+        unit = dico_units[ex]
+        commentary = st.text_input('Commentaire sur la réalisation', 'Rien')
+        new_entry = {'Profil' : athl,
+                    'Category' : newCat,
+                    'Exercice' : ex,
+                    'Date' : date,
+                    'Perf' : nb,
+                    'Unité' : unit,
+                    'RM' : rm, 
+                    'Commentaire' : commentary}
+    
+    
     if cat == 'WEIGHTLIFTING' : 
         rm = st.selectbox('Choix du RM', list_rm)
     else : rm = 1
