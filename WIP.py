@@ -10,7 +10,7 @@ from datetime import date
 
 PAGES = {
     "Votre Profil": "pages/profiles_page.py",
-    "Votre Progession": "pages/progress.py",
+    "Votre Progression": "pages/progress.py",
     "Ressources Technique Crossfit": "pages/ressources.py",
     "Prog de la semaine": "pages/scheduleResa.py"
 }
