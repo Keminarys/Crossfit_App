@@ -140,27 +140,27 @@ if "athl" in st.session_state :
                     'Unité' : unit,
                     'RM' : rm, 
                     'Commentaire' : commentary}
+    else :
     
-    
-    if cat == 'WEIGHTLIFTING' : 
-        rm = st.selectbox('Choix du RM', list_rm)
-    else : rm = 1
-    if dico_units[ex] == 'HH:MM:SS' :
-       nb = st.text_input('Temps au format HH\:MM\:SS', "00:00:00")
-    else : nb = st.number_input('Max reps/charge', step=1)
-    date = st.date_input('Date de réalisation', value = "today")
-    unit = dico_units[ex]
-    if cat == "WOD":
-        commentary = st.text_input('Commentaire sur la réalisation', 'Rien')
-    else : commentary = 'Rien'
-    new_entry = {'Profil' : athl,
-                'Category' : cat,
-                'Exercice' : ex,
-                'Date' : date,
-                'Perf' : nb,
-                'Unité' : unit,
-                'RM' : rm, 
-                'Commentaire' : commentary}
+        if cat == 'WEIGHTLIFTING' : 
+            rm = st.selectbox('Choix du RM', list_rm)
+        else : rm = 1
+        if dico_units[ex] == 'HH:MM:SS' :
+           nb = st.text_input('Temps au format HH\:MM\:SS', "00:00:00")
+        else : nb = st.number_input('Max reps/charge', step=1)
+        date = st.date_input('Date de réalisation', value = "today")
+        unit = dico_units[ex]
+        if cat == "WOD":
+            commentary = st.text_input('Commentaire sur la réalisation', 'Rien')
+        else : commentary = 'Rien'
+        new_entry = {'Profil' : athl,
+                    'Category' : cat,
+                    'Exercice' : ex,
+                    'Date' : date,
+                    'Perf' : nb,
+                    'Unité' : unit,
+                    'RM' : rm, 
+                    'Commentaire' : commentary}
     if st.button('Ajouter un nouveau record à mon profil :muscle:') :
         df_record = pd.concat([df, pd.DataFrame(new_entry, index=[len(df)])], ignore_index=True)
         df_record = conn.update(worksheet="Progression",data=df_record)
