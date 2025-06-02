@@ -115,9 +115,9 @@ if "athl" in st.session_state :
     st.write("Pour ajouter un nouveau PR à ton profil, utilise le formulaire ci-dessous ! :arrow_down:")
     st.divider()
     
-    cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()).sort())
+    cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()))
     if cat == 'AJOUTER UN EXERCICE' : 
-        cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()).sort())
+        cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()))
         ex = st.text_input('Nom du mouvement', 'ici')
     else : ex = st.selectbox('Choix de l"exercice', dico_ex[cat])
     if cat == 'WEIGHTLIFTING' : 
