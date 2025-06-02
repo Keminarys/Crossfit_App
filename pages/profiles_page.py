@@ -82,6 +82,7 @@ list_name = [x for x in list_name if str(x) != "nan"]
 list_rm = [i for i in range (1,21)]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercice').to_dict()['Units']
+all_units = list(all_mvmt["Units"].unique())
 
 ### Main
 ### Home Button 
@@ -124,11 +125,11 @@ if "athl" in st.session_state :
         if newCat == 'WEIGHTLIFTING' : 
             rm = st.selectbox('Choix du RM', list_rm)
         else : rm = 1  
-        if dico_units[ex] == 'HH:MM:SS' :
+        unit = newCat = st.selectbox('Unité de l\'exercice', all_units)
+        if unit == 'HH:MM:SS' :
            nb = st.text_input('Temps au format HH\:MM\:SS', "00:00:00")
         else : nb = st.number_input('Max reps/charge', step=1)
         date = st.date_input('Date de réalisation', value = "today")
-        unit = dico_units[ex]
         commentary = st.text_input('Commentaire sur la réalisation', 'Rien')
         new_entry = {'Profil' : athl,
                     'Category' : newCat,
