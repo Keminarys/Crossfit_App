@@ -116,10 +116,10 @@ if "athl" in st.session_state :
     st.divider()
     
     cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()).sort())
-    ex = st.selectbox('Choix de l"exercice', list(dico_ex[cat]).sort())
     if cat == 'AJOUTER UN EXERCICE' : 
         cat = st.selectbox('Choix de la catégorie', list(dico_ex.keys()).sort())
         ex = st.text_input('Nom du mouvement', 'ici')
+    ex = st.selectbox('Choix de l"exercice', list(dico_ex[cat]).sort())
     if cat == 'WEIGHTLIFTING' : 
         rm = st.selectbox('Choix du RM', list_rm)
     else : rm = 1
