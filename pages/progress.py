@@ -117,8 +117,8 @@ with st.expander("Table de Berger pour plusieurs séries"):
     st.dataframe(code, hide_index=True, use_container_width=True)
 
     st.divider()
-    repMaxMulti = st.number_input('Votre RM max pour la session de travail', step=1)
-    chargeMaxMulti = st.number_input('Votre Charge max pour la session de travail', step=1)
+    repMaxMulti = st.number_input('Votre RM max recherché', step=1)
+    chargeMaxMulti = st.number_input('Votre Charge max correspondante au RM', step=1)
     Serie_nb = st.selectbox('Nb de séries', (1, 2, 3, 4, 5, 6, 7, 8, 10))
 
     if repMaxMulti and chargeMaxMulti != 0:
