@@ -17,6 +17,10 @@ from bs4 import BeautifulSoup
 from utils.functions import go_home
 
 
+def get_conn() :
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    return conn
+    
 def get_df(sheet_name) :
     datas = conn.read(worksheet=sheet_name)
     return datas
