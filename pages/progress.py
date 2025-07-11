@@ -47,31 +47,31 @@ st.subheader("💪 Travail de Force")
 #         st.cache_data.clear()
 #         st.rerun()
 #     return athl    
-conn = get_conn()
+# conn = get_conn()
 
-df = get_df("Progression")
-df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
+# df = get_df("Progression")
+# df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
 
-berger = get_df("berger")
-bergerModified = get_df("bergerModified")
+# berger = get_df("berger")
+# bergerModified = get_df("bergerModified")
 
-data_perso = df.loc[df['Profil'] == "DylL"].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
-st.write("Si vous souhaitez faire du travail de force, vous pouvez vous aider des onglets ci-dessous suivant le but de votre séance.")
+# data_perso = df.loc[df['Profil'] == "DylL"].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
+# st.write("Si vous souhaitez faire du travail de force, vous pouvez vous aider des onglets ci-dessous suivant le but de votre séance.")
 
-@st.dialog("Consulter mes RM",  width="large")
-def get_best_rm(df, athl) :
-    st.write("Voici vos meilleurs performances pour chaque exercice")
-    st.divider()
-    temp = df.loc[(df.Category == "WEIGHTLIFTING") & (df['Profil'] == athl)]
-    temp = temp.groupby(["Exercice", "RM"]).agg({"Perf" : "max"}).reset_index()
-    selection = st.pills("Exercice", temp["Exercice"].unique().tolist(), selection_mode="single")
-    temp = temp.loc[temp.Exercice == selection]
-    return st.dataframe(temp, use_container_width=True, hide_index = True)
+# @st.dialog("Consulter mes RM",  width="large")
+# def get_best_rm(df, athl) :
+#     st.write("Voici vos meilleurs performances pour chaque exercice")
+#     st.divider()
+#     temp = df.loc[(df.Category == "WEIGHTLIFTING") & (df['Profil'] == athl)]
+#     temp = temp.groupby(["Exercice", "RM"]).agg({"Perf" : "max"}).reset_index()
+#     selection = st.pills("Exercice", temp["Exercice"].unique().tolist(), selection_mode="single")
+#     temp = temp.loc[temp.Exercice == selection]
+#     return st.dataframe(temp, use_container_width=True, hide_index = True)
     
-# --- RM Consultation ---
-if "get_best_rm" not in st.session_state:
-    if st.button("Consulter mes RM"):
-        get_best_rm(df, "DylL")
+# # --- RM Consultation ---
+# if "get_best_rm" not in st.session_state:
+#     if st.button("Consulter mes RM"):
+#         get_best_rm(df, "DylL")
 
 # --- Expander: Berger Table for One Set ---
 with st.expander("Table de Berger pour une seule série"):
