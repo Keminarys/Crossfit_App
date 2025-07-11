@@ -25,11 +25,14 @@ def get_df(sheet_name) :
     datas = conn.read(worksheet=sheet_name)
     return datas
     
-def data_perso(df) :
-    athl = str(st.session_state.athl)
-    temp = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
+# def data_perso(df) :
+#     athl = str(st.session_state.athl)
+#     temp = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
+#     return temp
+
+def data_perso(df, str) :
+    temp = df.loc[df['Profil'] == str].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
     return temp
-  
 st.subheader("💪 Travail de Force")
 
 @st.dialog("Choisis ton profil")
@@ -61,7 +64,7 @@ st.write("Si vous souhaitez faire du travail de force, vous pouvez vous aider de
 # --- RM Consultation ---
 if "get_best_rm" not in st.session_state:
     if st.button("Consulter mes RM"):
-        get_best_rm(data_perso, athl)
+        get_best_rm(data_perso, "DylL")
 
 # --- Expander: Berger Table for One Set ---
 with st.expander("Table de Berger pour une seule série"):
