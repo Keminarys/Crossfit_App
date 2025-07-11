@@ -35,21 +35,31 @@ def data_perso(df, str) :
     return temp
 st.subheader("💪 Travail de Force")
 
-@st.dialog("Choisis ton profil")
-def SelectProfile() :
-    athl = st.selectbox('Choix du profil', list_name)
-    if st.button("Valider"):
-        st.session_state.athl = athl
-        st.rerun()
+# @st.dialog("Choisis ton profil")
+# def SelectProfile() :
+#     athl = st.selectbox('Choix du profil', list_name)
+#     if st.button("Valider"):
+#         st.session_state.athl = athl
+#         st.rerun()
+#     st.divider()
+#     st.write('Si c\'est votre première visite merci d\'ajouter votre profil. \n _Par soucis de RGPD merci de ne renseigner que les 3 premières lettre de votre prénom et la première de votre nom de famille_')
+#     new_ppl = st.text_input('Ecrire votre nom ici')
+#     if st.button('Ajouter mon profil') :
+#         df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, index=[len(df_name)])], ignore_index=True)
+#         df_newname = conn.update(worksheet="Profils",data=df_newname)
+#         st.cache_data.clear()
+#         st.rerun()
+#     return athl
+
+@st.dialog("Consulter mes RM",  width="large")
+def get_best_rm(df, athl) :
+    st.write("Voici vos meilleurs performances pour chaque exercice")
     st.divider()
-    st.write('Si c\'est votre première visite merci d\'ajouter votre profil. \n _Par soucis de RGPD merci de ne renseigner que les 3 premières lettre de votre prénom et la première de votre nom de famille_')
-    new_ppl = st.text_input('Ecrire votre nom ici')
-    if st.button('Ajouter mon profil') :
-        df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, index=[len(df_name)])], ignore_index=True)
-        df_newname = conn.update(worksheet="Profils",data=df_newname)
-        st.cache_data.clear()
-        st.rerun()
-    return athl
+    temp = df.loc[(df.Category == "WEIGHTLIFTING") & (df['Profil'] == athl)]
+    temp = temp.groupby(["Exercice", "RM"]).agg({"Perf" : "max"}).reset_index()
+    selection = st.pills("Exercice", temp["Exercice"].unique().tolist(), selection_mode="single")
+    temp = temp.loc[temp.Exercice == selection]
+    return st.dataframe(temp, use_container_width=True, hide_index = True)
     
 conn = get_conn()
 
