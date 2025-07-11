@@ -128,3 +128,20 @@ with st.expander("Table de Berger pour plusieurs séries"):
         updatedbergerModified = updatedbergerModified[updatedbergerModified["Charge"] > 0].astype({"Charge": int})
         updatedbergerModified = updatedbergerModified.rename(columns={Serie_nb: f"Pourcentage pour {Serie_nb} séries"})
         st.dataframe(updatedbergerModified, use_container_width=True, hide_index=True)
+
+
+
+
+
+
+# st.write('Vous pouvez alimenter le tableau ci dessous pour définir un programme pour atteindre un objectif')
+# edited_obj = st.data_editor(df_obj, num_rows='dynamic', hide_index=True)
+# if st.button('Mettre à jour mes objectifs') :
+#     df_obj_edit = conn.update(worksheet="Objectif",data=edited_obj)
+#     st.cache_data.clear()
+#     st.rerun()
+# st.divider()
+# st.write('Ici vous retrouverez la visualisation graphique !')
+# fig_gantt = px.timeline(df_obj[df_obj['Name'] == athl], x_start="Start", x_end="Finish", y="Description", color="Task")
+# fig_gantt.update_yaxes(autorange="reversed")
+# st.plotly_chart(fig_gantt,use_container_width=True)
