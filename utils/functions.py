@@ -38,7 +38,7 @@ def go_home():
         </style>
 
         <div class="fixed-container">
-            <a href="https://https://cflebeausset83.streamlit.app//" target="_self">
+            <a href="https://cflebeausset83.streamlit.app//" target="_self">
                 <button class="crossfit-button">🔥 Retour au Menu Principal 🏋️</button>
             </a>
         </div>
