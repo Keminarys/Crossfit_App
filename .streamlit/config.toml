@@ -1,3 +1,13 @@
-[client]
-toolbarMode = "auto"
-showSidebarNavigation = false
+[theme]
+primaryColor = "#FF4B4B"
+backgroundColor = "#F9F9F9"
+secondaryBackgroundColor = "#EFEFEF"
+textColor = "#31333F"
+font = "sans serif"
+
+[server]
+headless = true
+enableCORS = false
+
+[browser]
+gatherUsageStats = false
