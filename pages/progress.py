@@ -49,7 +49,16 @@ st.subheader("💪 Travail de Force")
 #         df_newname = conn.update(worksheet="Profils",data=df_newname)
 #         st.cache_data.clear()
 #         st.rerun()
-#     return athl
+#     return athl    
+conn = get_conn()
+
+df = get_df("Progression")
+df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
+
+berger = get_df("berger")
+bergerModified = get_df("bergerModified")
+
+st.write("Si vous souhaitez faire du travail de force, vous pouvez vous aider des onglets ci-dessous suivant le but de votre séance.")
 
 @st.dialog("Consulter mes RM",  width="large")
 def get_best_rm(df, athl) :
@@ -61,16 +70,6 @@ def get_best_rm(df, athl) :
     temp = temp.loc[temp.Exercice == selection]
     return st.dataframe(temp, use_container_width=True, hide_index = True)
     
-conn = get_conn()
-
-df = get_df("Progression")
-df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
-
-berger = get_df("berger")
-bergerModified = get_df("bergerModified")
-
-st.write("Si vous souhaitez faire du travail de force, vous pouvez vous aider des onglets ci-dessous suivant le but de votre séance.")
-
 # --- RM Consultation ---
 if "get_best_rm" not in st.session_state:
     if st.button("Consulter mes RM"):
