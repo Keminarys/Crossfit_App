@@ -49,14 +49,14 @@ st.subheader("💪 Travail de Force")
 #     return athl    
 # conn = get_conn()
 
-# df = get_df("Progression")
-# df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
+df = get_df("Progression")
+df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
 
-# berger = get_df("berger")
-# bergerModified = get_df("bergerModified")
+berger = get_df("berger")
+bergerModified = get_df("bergerModified")
 
-# data_perso = df.loc[df['Profil'] == "DylL"].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
-# st.write("Si vous souhaitez faire du travail de force, vous pouvez vous aider des onglets ci-dessous suivant le but de votre séance.")
+data_perso = df.loc[df['Profil'] == "DylL"].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
+st.write("Si vous souhaitez faire du travail de force, vous pouvez vous aider des onglets ci-dessous suivant le but de votre séance.")
 
 # @st.dialog("Consulter mes RM",  width="large")
 # def get_best_rm(df, athl) :
