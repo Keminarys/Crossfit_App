@@ -20,8 +20,6 @@ def resaPage():
         login_ui()
         
     st.set_page_config(layout="wide")
-    render_nav_bar()
-    
     
     planning = get_conn_and_df("WODSemaine")
     url = planning.iloc[0, 8]
