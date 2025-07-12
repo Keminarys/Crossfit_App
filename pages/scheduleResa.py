@@ -15,7 +15,6 @@ from utils.auth import login_ui
 from utils.ui_helpers import render_page_links    
 
 if not st.session_state.get("authenticated"):
-    st.warning("Please log in")
     login_ui()
    
 
