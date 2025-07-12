@@ -14,6 +14,7 @@ from bs4 import BeautifulSoup
 import streamlit.components.v1 as components
 from utils.functions import go_home, get_conn_and_df, WOD_crossfit, random_date_url, get_all_heroes, wodGirls
 from utils.auth import login_ui
+from utils.ui_helpers import render_nav_bar
 
 if not st.session_state.get("authenticated"):
     st.warning("Please log in")
@@ -21,7 +22,7 @@ if not st.session_state.get("authenticated"):
 
 
 st.set_page_config(layout="wide")
-go_home()
+render_nav_bar()
 
 st.title("Cette page vous sera utile lors de vos sessions open gym ou bien si vous souhaitez vous challenger sur des WODs références !")
 st.divider()
