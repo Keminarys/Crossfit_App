@@ -10,8 +10,6 @@ import re
 from streamlit_gsheets import GSheetsConnection
 from datetime import date
 
-render_nav_bar()
-
 PAGES = {
     "Votre Profil": "pages/profiles_page.py",
     "Votre Progression": "pages/progress.py",
@@ -24,7 +22,7 @@ st.set_page_config(layout="wide")
 def main():
     
     login_ui()  
-    fab_selector()
+    render_nav_bar()
     title, logo = st.columns([3,1])
     with title :
         st.title('Crossfit83 Le Beausset')
