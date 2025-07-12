@@ -34,7 +34,7 @@ def _auth_dialog():
         pw   = st.text_input("Password", "Password")
         if st.button("Login", type="primary"):
             db = load_user_db()
-            if user in db and db[user] == hash_password(pw):
+            if user in list(db.username) and db.loc[db["username"] == user, "password"][0] == hash_password(pw):
                 st.session_state.authenticated = True
                 st.session_state.athl = user
                 st.experimental_rerun()
@@ -54,7 +54,8 @@ def _auth_dialog():
             elif pw1 != pw2:
                 st.error("Passwords do not match")
             else:
-                new_entry = {'username' : new_user, 'password' : hash_password(pw1)}
+                password_hashed = hash_password(pw1)
+                new_entry = {'username' : new_user, 'password' : password_hashed}
                 df = load_user_db()
                 UpdateDB(df, new_entry, "Credentials")
                 st.session_state.authenticated = True
