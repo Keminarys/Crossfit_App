@@ -12,13 +12,14 @@ import seaborn as sns
 from utils.functions import go_home, get_conn_and_df
 import streamlit.components.v1 as components
 from utils.auth import login_ui
+from utils.ui_helpers import render_nav_bar
 
 if not st.session_state.get("authenticated"):
     st.warning("Please log in")
     login_ui()
     
 st.set_page_config(layout="wide")
-go_home()
+render_nav_bar()
 
 
 planning = get_conn_and_df("WODSemaine")
