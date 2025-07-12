@@ -1,85 +1,44 @@
 import streamlit as st
-from typing import List, Tuple
 
-def render_nav_bar(
-    tabs: List[Tuple[str, str]],
-    default_key: str = None,
-    *,
-    radio_key: str = "nav_radio"
-) -> str:
+def render_page_links(pages: list[tuple[str, str]], *, container_style: str = ""):
     """
-    Renders a styled horizontal nav bar as red pills using st.radio,
-    persists selection in st.session_state.current_tab, and returns it.
-    
+    Renders stylish red pill-style page navigation using HTML <a> links.
+
     Args:
-      tabs: list of (label, key)
-      default_key: initial key on first load
-      radio_key: streamlit widget key
+      pages: List of (label, page_path) tuples.
+      container_style: Optional CSS for layout container.
     """
-    # 1) Inject CSS to style the radio into red pills
     st.markdown(
-        """
+        f"""
         <style>
-        /* Container tweaks */
-        div[data-baseweb="radio"] {
-          padding: 0;
-          margin-bottom: 1rem;
-        }
-        /* Hide the actual circle, only keep the label text */
-        div[data-baseweb="radio"] label > span:first-child {
-          display: none !important;
-        }
-        /* Unselected pills */
-        div[data-baseweb="radio"] > label {
-          display: inline-block !important;
-          margin-right: 8px !important;
-          background-color: #fedcdc !important;
-          color: #9b2226 !important;
-          padding: 8px 20px !important;
-          border-radius: 4px !important;
-          font-weight: 500 !important;
-          cursor: pointer;
-          transition: background-color .2s, color .2s;
-        }
-        /* Active pill */
-        div[data-baseweb="radio"] > label[data-state="active"] {
-          background-color: #9b2226 !important;
-          color: #ffffff !important;
-        }
-        /* Remove focus outline */
-        div[data-baseweb="radio"] > label:focus {
-          box-shadow: none !important;
-        }
+        .pill-container {{
+            {container_style}
+            margin-bottom: 1rem;
+        }}
+        .pill-button {{
+            display: inline-block;
+            margin-right: 8px;
+            background-color: #fedcdc;
+            color: #9b2226;
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color .2s, color .2s;
+        }}
+        .pill-button:hover {{
+            background-color: #9b2226;
+            color: white;
+        }}
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-    # 2) Initialize session state
-    valid_keys = [k for _, k in tabs]
-    if "current_tab" not in st.session_state:
-        st.session_state.current_tab = (
-            default_key if default_key in valid_keys else valid_keys[0]
+    st.markdown('<div class="pill-container">', unsafe_allow_html=True)
+    for label, page_path in pages:
+        st.markdown(
+            f'<a class="pill-button" href="/{page_path}" target="_self">{label}</a>',
+            unsafe_allow_html=True,
         )
-
-    # 3) Helpers to map between labels & keys
-    label_to_key = {lbl: key for lbl, key in tabs}
-    key_to_label = {key: lbl for lbl, key in tabs}
-    labels = [lbl for lbl, _ in tabs]
-
-    # 4) Compute the default index
-    current_label = key_to_label.get(st.session_state.current_tab, labels[0])
-    start_idx = labels.index(current_label)
-
-    # 5) Render horizontal radio and capture selection
-    selected_label = st.radio(
-        label="",
-        options=labels,
-        index=start_idx,
-        horizontal=True,
-        key=radio_key,
-    )
-
-    # 6) Update session state & return
-    st.session_state.current_tab = label_to_key[selected_label]
-    return st.session_state.current_tab
+    st.markdown('</div>', unsafe_allow_html=True)
