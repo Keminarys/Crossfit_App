@@ -6,7 +6,7 @@ import re
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 from datetime import date
-from utils.functions import go_home, get_conn_and_df
+from utils.functions import get_conn_and_df
 from utils.auth import login_ui
 from utils.ui_helpers import render_nav_bar
 
