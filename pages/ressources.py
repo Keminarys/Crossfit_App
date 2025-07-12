@@ -7,7 +7,6 @@ import datetime
 import random
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
-import streamlit_authenticator as stauth
 from datetime import date
 import yt_dlp
 import requests
