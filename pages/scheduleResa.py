@@ -12,13 +12,13 @@ import seaborn as sns
 from utils.functions import get_conn_and_df
 import streamlit.components.v1 as components
 from utils.auth import login_ui
-from utils.ui_helpers import render_page_links    
+from utils.ui_helpers import render_navbar    
 
 if not st.session_state.get("authenticated"):
     login_ui()
    
 
-render_page_links([
+render_navbar([
         ("Votre Profil", "profiles_page"),
         ("Votre Progression", "progress"),
         ("Ressources Crossfit", "ressources"),
