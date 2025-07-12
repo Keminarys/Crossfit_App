@@ -11,10 +11,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.functions import go_home, get_conn_and_df
 import streamlit.components.v1 as components
+from utils.auth import login_ui
 
 if not st.session_state.get("authenticated"):
-    st.warning("Please log in via the Home page.")
-    st.stop()
+    st.warning("Please log in")
+    login_ui()
     
 st.set_page_config(layout="wide")
 go_home()
