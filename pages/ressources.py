@@ -23,7 +23,6 @@ def RessourcesPage():
     
     
     st.set_page_config(layout="wide")
-    render_nav_bar()
     
     st.title("Cette page vous sera utile lors de vos sessions open gym ou bien si vous souhaitez vous challenger sur des WODs références !")
     st.divider()
