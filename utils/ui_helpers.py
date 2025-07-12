@@ -2,7 +2,7 @@ import streamlit as st
 from urllib.parse import urlencode
 
 def render_nav_bar():
-    # 1) Wide layout + hide default menu/header/footer
+
     st.set_page_config(layout="wide")
     st.markdown("""
     <style>
@@ -33,7 +33,7 @@ def render_nav_bar():
     </style>
     """, unsafe_allow_html=True)
 
-    # 2) Your pages (label, script-filename)
+
     pages = [
         ("Votre Profil",  "pages/profiles_page.py"),
         ("Votre Progression",  "pages/progress.py"),
@@ -41,12 +41,14 @@ def render_nav_bar():
         ("Programmation",  "pages/scheduleResa.py"),
     ]
 
-    # 3) Grab existing query params & current _script (default to first)
-    params = st.query_params.copy()
+
+    raw_qp = st.query_params
+    params = {k: v[:] for k, v in raw_qp.items()}
+    
     default_script = pages[0][1]
     current_script = params.get("_script", [default_script])[0]
 
-    # 4) Build nav links, preserving all params but swapping _script
+
     links = []
     for label, script in pages:
         new_params = params.copy()
@@ -57,10 +59,10 @@ def render_nav_bar():
         href = f"./?{qs}"
         links.append(f"<a class='{cls}' href='{href}' target='_self'>{label}</a>")
 
-    # 5) Render the nav bar
+
     st.markdown(f"<div class='nav-bar'>{''.join(links)}</div>", unsafe_allow_html=True)
 
-    # 6) If _script changed, trigger a rerun
+
     if st.query_params.get("_script", [None])[0] != current_script:
         st.experimental_rerun()
 
