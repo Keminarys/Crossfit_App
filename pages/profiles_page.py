@@ -12,7 +12,7 @@ import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.functions import get_conn_and_df, highlight_rows, ChartDataFS, UpdateDB
-from utils.ui_helpers import render_page_links
+from utils.ui_helpers import render_navbar
 from utils.auth import login_ui
     
 
@@ -25,7 +25,7 @@ def data_perso(df) :
 if not st.session_state.get("authenticated"):
     login_ui()
 
-render_page_links([
+render_navbar([
         ("Votre Profil", "profiles_page"),
         ("Votre Progression", "progress"),
         ("Ressources Crossfit", "ressources"),
