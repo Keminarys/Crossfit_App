@@ -104,8 +104,10 @@ edited = st.data_editor(
 )
 
 if st.button("Submit Attendance"):
-
-    UpdateDB(poll, new_row, "Inscription")
+    for col in edited.columns:
+        if edited[col].dtype == "bool":
+            edited[col] = edited[col].astype(str)
+    UpdateDB(poll, edited, "Inscription")
     st.rerun() 
 
 st.subheader("📊 Personnes présentes cette semaine")
