@@ -7,10 +7,12 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 from datetime import date
 from utils.functions import go_home, get_conn_and_df
+from utils.auth import login_ui
 
 if not st.session_state.get("authenticated"):
-    st.warning("Please log in via the Home page.")
-    st.stop()
+    st.warning("Please log in")
+    login_ui()
+
 
 st.set_page_config(layout="wide")
 go_home()
