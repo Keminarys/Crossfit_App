@@ -10,3 +10,4 @@ streamlit-calendar
 pyyaml
 bs4
 requests
+streamlit-cookies-manager
