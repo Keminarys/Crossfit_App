@@ -4,15 +4,15 @@ from streamlit_gsheets import GSheetsConnection
 from streamlit_cookies_manager import EncryptedCookieManager
 from utils.functions import get_conn_and_df, UpdateDB
 
-# x = get_conn_and_df("Credentials")
-# x_pass = x.loc[x["username"] == "COOKIES_SECRET", "password"][0]
-# cookies = EncryptedCookieManager(
-#     prefix="crossfit83/",
-#     password=x_pass
-# )
+x = get_conn_and_df("Credentials")
+x_pass = x.at[x['username'].eq('COOKIES_SECRET').idxmax(), 'password']
+cookies = EncryptedCookieManager(
+    prefix="crossfit83/",
+    password=x_pass
+)
 
-# if not cookies.ready():
-#     st.stop()
+if not cookies.ready():
+    st.stop()
     
 # ---------------------------------------------------------------------------- #
 # 1. Load user database from Google Sheets (cached once per session)
@@ -42,17 +42,15 @@ def _auth_dialog():
     mode = st.radio("Choose action", ["Log In", "Sign Up"], horizontal=True)
 
     if mode == "Log In":
-        test = load_user_db()
-        st.write(test.at[test['username'].eq('COOKIES_SECRET').idxmax(), 'password'])
         user = st.text_input("Username", "Username")
         pw   = st.text_input("Password", "Password")
         if st.button("Login", type="primary"):
             db = load_user_db()
-            if user in list(db.username) and db.loc[db["username"] == user, "password"][0] == hash_password(pw):
+            if user in list(db.username) and db.at[db['username'].eq('COOKIES_SECRET').idxmax(), 'password'] == hash_password(pw):
                 st.session_state.authenticated = True
                 st.session_state.athl = user
-                #cookies["athl"] = user 
-                #cookies.save()
+                cookies["athl"] = user 
+                cookies.save()
                 st.rerun()
             else:
                 st.error("Invalid username or password")
@@ -76,17 +74,17 @@ def _auth_dialog():
                 UpdateDB(df, new_entry, "Credentials")
                 st.session_state.authenticated = True
                 st.session_state.athl = new_user
-                #cookies["athl"] = user 
-                #cookies.save()
+                cookies["athl"] = user 
+                cookies.save()
                 st.rerun()
 
 
 def login_ui():
     if "authenticated" not in st.session_state:
-        #if cookies.get("athl"):
-            #st.session_state.authenticated = True
-            #st.session_state.athl = cookies.get("athl")
-        #else:
+        if cookies.get("athl"):
+            st.session_state.authenticated = True
+            st.session_state.athl = cookies.get("athl")
+        else:
             st.session_state.authenticated = False
             
     if not st.session_state.authenticated:
