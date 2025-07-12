@@ -1,51 +1,5 @@
 import streamlit as st
 
-def fab_selector():
-    st.markdown("""
-        <style>
-            .fab-container {
-                position: fixed;
-                bottom: 30px;
-                right: 30px;
-                z-index: 1000;
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            }
-            .fab-button {
-                width: 55px;
-                height: 55px;
-                border-radius: 50%;
-                background: linear-gradient(135deg, #FF6B6B, #F06543);
-                color: white;
-                font-size: 24px;
-                font-weight: bold;
-                border: none;
-                box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
-                transition: transform 0.2s, box-shadow 0.2s;
-            }
-            .fab-button:hover {
-                transform: scale(1.1);
-                box-shadow: 0px 6px 12px rgba(0,0,0,0.4);
-            }
-        </style>
-    """, unsafe_allow_html=True)
-
-    fab_area = st.container()
-    with fab_area:
-        st.markdown('<div class="fab-container">', unsafe_allow_html=True)
-        if st.button("👤", key="fab_profile"):
-            st.switch_page(page_key[0])
-        if st.button("📊", key="fab_progress"):
-            st.switch_page(page_key[1])
-        if st.button("📚", key="fab_ressources"):
-            st.switch_page(page_key[2])
-        if st.button("📅", key="fab_schedule"):
-            st.switch_page(page_key[3])
-        st.markdown("</div>", unsafe_allow_html=True)
-
-
-
 def display_card(page_name, page_key):
     button_style = """
         <style>
@@ -74,3 +28,69 @@ def display_card(page_name, page_key):
     
     if st.button(page_name, key=page_key):
         st.switch_page(page_key)
+
+import streamlit as st
+
+def render_nav_bar():
+    # 1. Wide layout & hide default Streamlit chrome
+    st.set_page_config(layout="wide")
+    st.markdown(
+        """
+        <style>
+            #MainMenu, header, footer { visibility: hidden; }
+            .nav-bar {
+              display: flex;
+              justify-content: center;
+              gap: 1.5rem;
+              background: #f8f9fc;
+              padding: 0.75rem 0;
+              margin-bottom: 1.5rem;
+            }
+            .nav-bar a {
+              color: #333;
+              font-weight: 500;
+              text-decoration: none;
+              padding: 0.5rem 1rem;
+              border-radius: 0.5rem;
+              transition: background 0.15s, color 0.15s;
+            }
+            .nav-bar a:hover {
+              background: #e2e6ea;
+            }
+            .nav-bar a.active {
+              background: #1f77b4;
+              color: white !important;
+            }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # 2. Define your pages (label, script-filename)
+    pages = [
+        ("Votre Profil",  "pages/profiles_page.py"),
+        ("Votre Progression",  "pages/progress.py"),
+        ("Ressources Technique Crossfit", "pages/ressources.py"),
+        ("Programmation",  "pages/scheduleResa.py"),
+    ]
+
+    # 3. Read current _script from URL (defaults to first page)
+    params = st.query_params
+    default_script = pages[0][1]
+    current_script = params.get("_script", default_script)
+
+    # 4. Build nav links
+    links = []
+    for label, script in pages:
+        cls = "active" if script == current_script else ""
+        # Clicking this link reloads the app with ?_script=that_script
+        href = f"?_script={script}"
+        links.append(f"<a class='{cls}' href='{href}'>{label}</a>")
+
+    # 5. Render the bar
+    st.markdown(f"<div class='nav-bar'>{''.join(links)}</div>", unsafe_allow_html=True)
+
+    # 6. Detect a change in ?_script and rerun
+    new_script = st.query_params.get("_script")
+    if new_script and new_script != current_script:
+        st.experimental_rerun()
