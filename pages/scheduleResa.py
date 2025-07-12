@@ -106,7 +106,7 @@ edited = st.data_editor(
 if st.button("Submit Attendance"):
     for col in edited.columns:
         if edited[col].dtype == "bool":
-            edited[col] = edited[col].astype(str)
+            edited[col] = edited[col].map({False: "", True: "x"})
     UpdateDB(poll, edited, "Inscription")
     st.rerun() 
 
