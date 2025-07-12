@@ -12,6 +12,9 @@ import seaborn as sns
 from utils.functions import go_home, get_conn_and_df
 import streamlit.components.v1 as components
 
+if not st.session_state.get("authenticated"):
+    st.warning("Please log in via the Home page.")
+    st.stop()
     
 st.set_page_config(layout="wide")
 go_home()
