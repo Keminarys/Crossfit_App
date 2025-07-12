@@ -4,12 +4,12 @@ from streamlit_gsheets import GSheetsConnection
 from streamlit_cookies_manager import EncryptedCookieManager
 from utils.functions import get_conn_and_df, UpdateDB
 
-x = get_conn_and_df("Credentials")
-x_pass = x.loc[x["username"] == "COOKIES_SECRET", "password"][0]
-cookies = EncryptedCookieManager(
-    prefix="crossfit83/",
-    password=x_pass
-)
+# x = get_conn_and_df("Credentials")
+# x_pass = x.loc[x["username"] == "COOKIES_SECRET", "password"][0]
+# cookies = EncryptedCookieManager(
+#     prefix="crossfit83/",
+#     password=x_pass
+# )
 
 if not cookies.ready():
     st.stop()
@@ -42,6 +42,7 @@ def _auth_dialog():
     mode = st.radio("Choose action", ["Log In", "Sign Up"], horizontal=True)
 
     if mode == "Log In":
+        st.dataframe(load_user_db())
         user = st.text_input("Username", "Username")
         pw   = st.text_input("Password", "Password")
         if st.button("Login", type="primary"):
