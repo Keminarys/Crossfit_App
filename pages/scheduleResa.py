@@ -106,12 +106,71 @@ edited = st.data_editor(
 if st.button("Submit Attendance"):
     for col in edited.columns:
         if edited[col].dtype == "bool":
-            edited[col] = edited[col].map({False: "", True: "x"})
+            edited[col].replace({False: "", True: "x"}, inplace=True)
     UpdateDB(poll, edited, "Inscription")
     st.rerun() 
 
 st.subheader("📊 Personnes présentes cette semaine")
+
 st.dataframe(
     poll,
     use_container_width=True
 )
+
+
+if not poll.empty:
+
+    days = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+    attendance_cols = [
+        col for col in poll.columns
+        if any(col.startswith(f"{day} ") for day in days)
+    ]
+
+    id_vars = [c for c in poll.columns if c not in attendance_cols]
+    long = poll.melt(
+        id_vars=id_vars,
+        value_vars=attendance_cols,
+        var_name="DayTime",
+        value_name="Present"
+    )
+
+    long = long[long["Present"].astype(bool)]
+
+    long[["Day", "Time"]] = long["DayTime"].str.split(" ", 1, expand=True)
+
+    counts = (
+        long
+        .groupby(["Day", "Time"])
+        .size()
+        .reset_index(name="Count")
+    )
+
+    time_order = sorted(
+        counts["Time"].unique(),
+        key=lambda t: datetime.strptime(t.split(" - ")[0], "%H:%M")
+    )
+    heatmap_df = (
+        counts
+        .pivot(index="Time", columns="Day", values="Count")
+        .reindex(index=time_order, columns=days)
+        .fillna(0)
+    )
+
+    st.subheader("📈 Attendance Heatmap")
+    fig, ax = plt.subplots(
+        figsize=(len(days) * 1.2, len(time_order) * 0.6)
+    )
+    sns.heatmap(
+        heatmap_df,
+        annot=True,
+        fmt="g",
+        cmap="YlOrRd",
+        cbar_kws={"label": "Nombre de présents"},
+        linewidths=0.5,
+        linecolor="lightgray",
+        ax=ax
+    )
+    ax.set_xlabel("")
+    ax.set_ylabel("")
+    st.pyplot(fig)
+
