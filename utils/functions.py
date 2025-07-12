@@ -144,3 +144,9 @@ def wodGirls() :
     wodGirlsPage = wodGirlsPage.iloc[0]["Description"]
     wodGirls = ast.literal_eval(wodGirlsPage)
     return wodGirls
+
+def UpdateDB(df, new_entry, sheet_name):
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    updatedDB = pd.concat([df, pd.DataFrame(new_entry, index=[len(df)])], ignore_index=True)
+    updatedDB = conn.update(worksheet=sheet_name,data=updatedDB)
+
