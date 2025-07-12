@@ -91,25 +91,26 @@ st.divider()
 st.subheader("Inscription au WOD de la semaine :calendar: ")
 poll = get_conn_and_df("Inscription")
 
-new_row = {col: False for col in poll.columns}
-new_row["Nom"] = str(st.session_state.athl)
+if str(st.session_state.athl) not in poll["Nom"].unique() : 
+    new_row = {col: False for col in poll.columns}
+    new_row["Nom"] = str(st.session_state.athl)
+    
+    edited = st.data_editor(
+        pd.DataFrame([new_row]),
+        column_config={
+            "Nom": {"disabled": True}, 
+        },
+        hide_index=True,
+        key="attendance_editor"
+    )
 
-edited = st.data_editor(
-    pd.DataFrame([new_row]),
-    column_config={
-        "Nom": {"disabled": True}, 
-    },
-    hide_index=True,
-    key="attendance_editor"
-)
-
-if st.button("Submit Attendance"):
-    for col in edited.columns:
-        if edited[col].dtype == "bool":
-            edited[col].replace({False: "", True: "x"}, inplace=True)
-    UpdateDB(poll, edited, "Inscription")
-    st.cache_data.clear()
-    st.rerun() 
+    if st.button("Submit Attendance"):
+        for col in edited.columns:
+            if edited[col].dtype == "bool":
+                edited[col].replace({False: "", True: "x"}, inplace=True)
+        UpdateDB(poll, edited, "Inscription")
+        st.cache_data.clear()
+        st.rerun() 
 
 st.subheader("📊 Personnes présentes cette semaine")
 
