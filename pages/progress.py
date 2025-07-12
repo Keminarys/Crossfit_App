@@ -4,56 +4,18 @@ import datetime
 import random
 import re
 import streamlit as st
-import streamlit_authenticator as stauth
 from streamlit_gsheets import GSheetsConnection
 from datetime import date
-import plotly.express as px
-import plotly.graph_objects as go
-import matplotlib.pyplot as plt
-import seaborn as sns
-import yt_dlp
-import requests
-from bs4 import BeautifulSoup
-from utils.functions import go_home
-
-
-def get_conn() :
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    return conn
-    
-def get_df(sheet_name) :
-    datas = conn.read(worksheet=sheet_name)
-    return datas
-    
-# def data_perso(df) :
-#     athl = str(st.session_state.athl)
-#     temp = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
-#     return temp
+from utils.functions import go_home, get_conn_and_df
 
 st.subheader("💪 Travail de Force")
 
-# @st.dialog("Choisis ton profil")
-# def SelectProfile() :
-#     athl = st.selectbox('Choix du profil', list_name)
-#     if st.button("Valider"):
-#         st.session_state.athl = athl
-#         st.rerun()
-#     st.divider()
-#     st.write('Si c\'est votre première visite merci d\'ajouter votre profil. \n _Par soucis de RGPD merci de ne renseigner que les 3 premières lettre de votre prénom et la première de votre nom de famille_')
-#     new_ppl = st.text_input('Ecrire votre nom ici')
-#     if st.button('Ajouter mon profil') :
-#         df_newname = pd.concat([df_name, pd.DataFrame({'Name' : new_ppl}, index=[len(df_name)])], ignore_index=True)
-#         df_newname = conn.update(worksheet="Profils",data=df_newname)
-#         st.cache_data.clear()
-#         st.rerun()
-#     return athl    
-conn = get_conn()
 
-df = get_df("Progression")
+df = get_conn_and_df("Progression")
 df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
 
-berger = get_df("berger")
-bergerModified = get_df("bergerModified")
+berger = get_conn_and_df("berger")
+bergerModified = get_conn_and_df("bergerModified")
 
 data_perso = df.loc[df['Profil'] == "DylL"].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
 st.write("Si vous souhaitez faire du travail de force, vous pouvez vous aider des onglets ci-dessous suivant le but de votre séance.")
