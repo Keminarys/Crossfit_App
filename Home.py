@@ -51,13 +51,13 @@ def fab_selector():
     with fab_area:
         st.markdown('<div class="fab-container">', unsafe_allow_html=True)
         if st.button("👤", key="fab_profile"):
-            switch_page("Votre Profil")
+            st.switch_page("Votre Profil")
         if st.button("📊", key="fab_progress"):
-            switch_page("Votre Progression")
+            st.switch_page("Votre Progression")
         if st.button("📚", key="fab_ressources"):
-            switch_page("Ressources Technique Crossfit")
+            st.switch_page("Ressources Technique Crossfit")
         if st.button("📅", key="fab_schedule"):
-            switch_page("Prog de la semaine")
+            st.switch_page("Prog de la semaine")
         st.markdown("</div>", unsafe_allow_html=True)
 
     
