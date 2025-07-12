@@ -2,13 +2,10 @@ plotly
 pandas
 numpy == 1.26.4
 streamlit
-gspread
-oauth2client
 st-gsheets-connection
 matplotlib
 seaborn
 yt_dlp
-streamlit-authenticator 
 streamlit-calendar
 pyyaml
 bs4
