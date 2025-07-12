@@ -47,7 +47,7 @@ st.subheader("💪 Travail de Force")
 #         st.cache_data.clear()
 #         st.rerun()
 #     return athl    
-# conn = get_conn()
+conn = get_conn()
 
 df = get_df("Progression")
 df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
