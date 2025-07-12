@@ -28,8 +28,7 @@ st.set_page_config(layout="wide")
 def main():
     
     login_ui()  
-    render_nav_bar()
-    
+
     TABS = [
         ("Menu Principal", "home"),
         ("Votre Profil", "profiles"),
