@@ -5,7 +5,6 @@ import numpy as np
 import datetime
 import random
 import streamlit as st
-import streamlit_authenticator as stauth
 from streamlit_gsheets import GSheetsConnection
 from datetime import date
 import plotly.express as px
