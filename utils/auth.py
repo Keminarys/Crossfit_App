@@ -61,7 +61,7 @@ def _auth_dialog():
                 UpdateDB(df, new_entry, "Credentials")
                 st.session_state.authenticated = True
                 st.session_state.athl = new_user
-                st.experimental_rerun()
+                st.rerun()
 
 
 def login_ui():
