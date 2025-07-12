@@ -37,7 +37,7 @@ def _auth_dialog():
             if user in list(db.username) and db.loc[db["username"] == user, "password"][0] == hash_password(pw):
                 st.session_state.authenticated = True
                 st.session_state.athl = user
-                st.experimental_rerun()
+                st.rerun()
             else:
                 st.error("Invalid username or password")
 
