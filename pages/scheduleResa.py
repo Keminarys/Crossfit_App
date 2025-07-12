@@ -150,6 +150,7 @@ if not poll.empty:
         counts["Time"].unique(),
         key=lambda t: datetime.strptime(t.split(" - ")[0], "%H:%M")
     )
+
     heatmap_df = (
         counts
         .pivot(index="Time", columns="Day", values="Count")
