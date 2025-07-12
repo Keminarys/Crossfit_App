@@ -35,7 +35,7 @@ def render_navbar(pages: list[tuple[str, str]]):
 
         /* Logo styling */
         .navbar-logo {{
-            height: 80px;
+            height: 110px;
             object-fit: contain;
             margin-bottom: 0.5rem;
         }}
