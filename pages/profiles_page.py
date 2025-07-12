@@ -52,8 +52,6 @@ def profilPage():
     all_units = list(all_mvmt["Units"].unique())
     
     ### Main
-    ### Home Button 
-    go_home()
     
     if "athl" in st.session_state :
         st.title(f"Bienvenue sur ton profil {st.session_state.athl} :muscle:")
