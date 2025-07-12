@@ -106,7 +106,6 @@ edited = st.data_editor(
 if st.button("Submit Attendance"):
 
     UpdateDB(poll, new_row, "Inscription")
-    st.success(f"Attendance recorded for {athlete_name}.")
     st.rerun() 
 
 st.subheader("📊 Personnes présentes cette semaine")
