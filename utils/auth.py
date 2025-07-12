@@ -5,10 +5,10 @@ from streamlit_cookies_manager import EncryptedCookieManager
 from utils.functions import get_conn_and_df, UpdateDB
 
 x = get_conn_and_df("Credentials")
-x = x.loc[x["username"] == "COOKIES_SECRET", "password"][0]
+x_pass = x.loc[x["username"] == "COOKIES_SECRET", "password"][0]
 cookies = EncryptedCookieManager(
     prefix="crossfit83/",
-    password=x
+    password=x_pass
 )
 
 if not cookies.ready():
