@@ -28,7 +28,6 @@ render_navbar([
 st.set_page_config(layout="wide")
 
 planning = get_conn_and_df("WODSemaine")
-url = planning.iloc[0, 8]
 planning = planning[['WOD', 'Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']].dropna()
 
 # Get current date and determine Monday of the current week
@@ -89,5 +88,4 @@ if selected_day:
 
 st.divider()
 
-st.subheader("Inscription au cours via PollForAll :calendar: ")
-components.iframe(url, height=800, scrolling = True)
+st.subheader("Inscription au cours de la semaine :calendar: ")
