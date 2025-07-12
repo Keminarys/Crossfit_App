@@ -23,7 +23,6 @@ def data_perso(df) :
     return temp
 
 if not st.session_state.get("authenticated"):
-    st.warning("Please log in")
     login_ui()
 
 render_page_links([
