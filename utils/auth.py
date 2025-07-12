@@ -5,7 +5,6 @@ from utils.functions import get_conn_and_df, UpdateDB
 # ---------------------------------------------------------------------------- #
 # 1. Load user database from Google Sheets (cached once per session)
 # ---------------------------------------------------------------------------- #
-@st.experimental_singleton(show_spinner=False)
 def load_user_db():
     """
     Connects to a private GSheet and returns a dict mapping
