@@ -9,7 +9,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils.functions import go_home, get_conn_and_df
+from utils.functions import get_conn_and_df
 import streamlit.components.v1 as components
 from utils.auth import login_ui
 from utils.ui_helpers import render_nav_bar
