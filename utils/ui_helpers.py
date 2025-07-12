@@ -64,5 +64,5 @@ def render_nav_bar():
 
 
     if st.query_params.get("_script", [None])[0] != current_script:
-        st.experimental_rerun()
+        st.rerun()
 
