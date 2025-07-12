@@ -82,9 +82,9 @@ def RessourcesPage():
     
     st.write("Vous trouverez ci dessous les WODs GIRL")
     expanderWODGirl = st.expander(":red[Tous les WOD Girl]")
-    wodGirls = wodGirls()
-    chosen_wod = expanderWODGirl.selectbox("Quel WOD Girl voulez vous voir", [i["title"] for i in wodGirls])
+    wodGirlsData = wodGirls()
+    chosen_wod = expanderWODGirl.selectbox("Quel WOD Girl voulez vous voir", [i["title"] for i in wodGirlsData])
     if len(chosen_wod) > 0 : 
-        wodgirlchosen = next((wod for wod in wodGirls if wod['title'] == chosen_wod), None)
+        wodgirlchosen = next((wod for wod in wodGirlsData if wod['title'] == chosen_wod), None)
         expanderWODGirl.markdown(wodgirlchosen['description'].replace('\n', '<br>'), unsafe_allow_html=True)
         expanderWODGirl.markdown(wodgirlchosen['mvmt'].replace('\n', '<br>'), unsafe_allow_html=True)
