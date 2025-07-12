@@ -1,3 +1,5 @@
+# utils/ui_helpers.py
+
 import streamlit as st
 from typing import List, Tuple
 
@@ -8,35 +10,63 @@ def render_nav_bar(
     radio_key: str = "nav_radio"
 ) -> str:
     """
-    Display a horizontal navigation bar using st.radio and
-    store the current tab in session_state['current_tab'].
+    Display a styled horizontal navigation bar using st.radio,
+    store the current tab in session_state['current_tab'],
+    and return the selected key.
     
     Args:
-        tabs: List of tuples (label, key).
-        default_key: key to select on first run.
-        radio_key: unique key for the radio widget.
-        
-    Returns:
-        The key of the currently selected tab.
+      tabs: list of (label, key)
+      default_key: initial key on first load
+      radio_key: unique widget key
     """
-    # Initialize session state
+    # 1) Inject CSS for pill-style tabs
+    st.markdown(
+        """
+        <style>
+          /* Container tweaks */
+          div[data-baseweb="radio"] {
+            padding: 0;
+            margin-bottom: 1rem;
+          }
+          /* Unselected tab */
+          div[data-baseweb="radio"] > label {
+            display: inline-block !important;
+            margin-right: 12px !important;
+            background-color: #f4f1de !important;
+            color: #3d405b !important;
+            padding: 6px 16px !important;
+            border-radius: 20px !important;
+            font-weight: 500 !important;
+            cursor: pointer;
+            transition: background-color .2s, color .2s;
+          }
+          /* Selected tab */
+          div[data-baseweb="radio"] > label[data-state="active"] {
+            background-color: #e07a5f !important;
+            color: white !important;
+          }
+        </style>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # 2) Initialize session_state
     if "current_tab" not in st.session_state:
-        # fall back to first tab if default_key is not provided or invalid
         valid_keys = [k for _, k in tabs]
-        st.session_state.current_tab = default_key if default_key in valid_keys else valid_keys[0]
+        st.session_state.current_tab = (
+            default_key if default_key in valid_keys else valid_keys[0]
+        )
 
-    # Build mappings
-    label_to_key = {label: key for label, key in tabs}
-    key_to_label = {key: label for label, key in tabs}
+    # 3) Build quick lookup
+    label_to_key = {lbl: key for lbl, key in tabs}
+    key_to_label = {key: lbl for lbl, key in tabs}
+    labels = [lbl for lbl, _ in tabs]
 
-    # Build list of labels in order
-    labels = [label for label, _ in tabs]
-
-    # Determine initial index
-    current_label = key_to_label[st.session_state.current_tab]
+    # 4) Compute starting index
+    current_label = key_to_label.get(st.session_state.current_tab, labels[0])
     start_index = labels.index(current_label)
 
-    # Render the horizontal radio bar
+    # 5) Render the radio and capture selection
     selected_label = st.radio(
         label="",
         options=labels,
@@ -45,7 +75,6 @@ def render_nav_bar(
         key=radio_key,
     )
 
-    # Update session state
+    # 6) Update state & return
     st.session_state.current_tab = label_to_key[selected_label]
-
     return st.session_state.current_tab
