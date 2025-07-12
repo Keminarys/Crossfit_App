@@ -1,34 +1,28 @@
 import streamlit as st
 
 def render_page_links(pages: list[tuple[str, str]], *, container_style: str = ""):
-    """
-    Renders stylish red pill-style page navigation using HTML <a> links.
-
-    Args:
-      pages: List of (label, page_path) tuples.
-      container_style: Optional CSS for layout container.
-    """
     st.markdown(
         f"""
         <style>
         .pill-container {{
             {container_style}
             margin-bottom: 1rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
         }}
         .pill-button {{
-            display: inline-block;
-            margin-right: 8px;
-            background-color: #fedcdc;
-            color: #9b2226;
-            padding: 8px 20px;
+            background-color: #8B0000; /* Dark red */
+            color: white;
+            padding: 10px 22px;
             border-radius: 20px;
-            font-weight: 500;
+            font-weight: 600;
             text-decoration: none;
-            transition: background-color .2s, color .2s;
+            transition: background-color .2s, transform .2s;
         }}
         .pill-button:hover {{
-            background-color: #9b2226;
-            color: white;
+            background-color: #a30000;
+            transform: scale(1.05);
         }}
         </style>
         """,
