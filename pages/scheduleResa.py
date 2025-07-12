@@ -1,32 +1,23 @@
 from datetime import datetime, timedelta, date
 import pandas as pd
-from utils.functions import go_home
 import numpy as np
 import datetime
 import random
-import re
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
-import streamlit_authenticator as stauth
 import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils.functions import go_home
+from utils.functions import go_home, get_conn_and_df
 import streamlit.components.v1 as components
 
-def get_conn() :
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    return conn
-def get_df(sheet_name) :
-    datas = conn.read(worksheet=sheet_name)
-    return datas
     
 st.set_page_config(layout="wide")
 go_home()
 
-conn = get_conn()
-planning = get_df("WODSemaine")
+
+planning = get_conn_and_df("WODSemaine")
 url = planning.iloc[0, 8]
 planning = planning[['WOD', 'Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']].dropna()
 
