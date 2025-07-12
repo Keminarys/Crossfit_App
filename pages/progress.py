@@ -8,6 +8,10 @@ from streamlit_gsheets import GSheetsConnection
 from datetime import date
 from utils.functions import go_home, get_conn_and_df
 
+if not st.session_state.get("authenticated"):
+    st.warning("Please log in via the Home page.")
+    st.stop()
+
 st.set_page_config(layout="wide")
 go_home()
 athl = str(st.session_state.athl)
