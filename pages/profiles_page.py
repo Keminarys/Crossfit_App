@@ -128,11 +128,9 @@ if "athl" in st.session_state :
                     'RM' : rm, 
                     'Commentaire' : commentary}
     if st.button('Ajouter un nouveau record à mon profil :muscle:') :
-        df_record = pd.concat([df, pd.DataFrame(new_entry, index=[len(df)])], ignore_index=True)
-        df_record = conn.update(worksheet="Progression",data=df_record)
+        UpdateDB(df, new_entry, "Progression")
         if cat == 'AJOUTER UN EXERCICE' : 
-            df_wod = pd.concat([all_mvmt, pd.DataFrame(new_WOD, index=[len(all_mvmt)])], ignore_index=True)
-            df_wod = conn.update(worksheet="All_mvmt",data=df_wod)
+            UpdateDB(all_mvmt, new_WOD, "All_mvmt")
         st.write('Ajouté avec succès, vous pouvez retrouver toutes vos performances dans l\'onglet Data ✅')
         st.cache_data.clear()
         st.rerun()
