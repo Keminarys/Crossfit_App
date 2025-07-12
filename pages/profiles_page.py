@@ -20,7 +20,7 @@ def profilPage():
     def data_perso(df) :
         athl = str(st.session_state.athl)
         temp = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
-    return temp
+        return temp
     
     if not st.session_state.get("authenticated"):
         st.warning("Please log in")
