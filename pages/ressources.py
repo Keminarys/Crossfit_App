@@ -13,7 +13,7 @@ import yt_dlp
 import requests
 from bs4 import BeautifulSoup
 import streamlit.components.v1 as components
-from utils.functions import go_home, get_conn_and_df, WOD, random_date_url, get_all_heroes, wodGirls
+from utils.functions import go_home, get_conn_and_df, WOD_crossfit, random_date_url, get_all_heroes, wodGirls
 
 st.set_page_config(layout="wide")
 go_home()
@@ -62,7 +62,7 @@ with st.expander(":red[Choississez entre le WOD du jour ou un Random]") :
     if random_on :
         components.iframe(random_date_url(), height=400, scrolling = True)
     else :
-        components.iframe(WOD(), height=400, scrolling = True)
+        components.iframe(WOD_crossfit(), height=400, scrolling = True)
         
 st.divider()
 st.write("Vous trouverez ci dessous les WODs HERO")
