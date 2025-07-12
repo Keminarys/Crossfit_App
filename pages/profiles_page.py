@@ -4,7 +4,6 @@ import pandas as pd
 import numpy as np
 import datetime
 import random
-import re
 import streamlit as st
 import streamlit_authenticator as stauth
 from streamlit_gsheets import GSheetsConnection
@@ -13,69 +12,30 @@ import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-import yt_dlp
-import requests
-from bs4 import BeautifulSoup
-from utils.functions import go_home
-def get_conn() :
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    return conn
-    
-def get_df(sheet_name) :
-    datas = conn.read(worksheet=sheet_name)
-    return datas
+from utils.functions import go_home, get_conn_and_df, highlight_rows, ChartDataFS
     
 def data_perso(df) :
     athl = str(st.session_state.athl)
     temp = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
     return temp
 
-def highlight_rows(row):
-    styles = {
-        'GYMNASTIC': 'background-color: darkgray;',
-        'BODYWEIGHT': 'background-color: darkseagreen;',
-        'WEIGHTLIFTING': 'background-color: cadetblue;', 
-        'DB_KB_WB': 'background-color: sandybrown;', 
-        'ROPE': 'background-color: chocolate;', 
-        'ERGO': 'background-color: darksalmon;', 
-        'WOD': 'background-color: tan;', 
-        'RUN': 'background-color: slategray;'
-    }
-    return [styles.get(row.Category, '')] * len(row)
-
-def ChartDataFS(df) :
-    athl = str(st.session_state.athl)
-    data_full_scoped = df.loc[df['Profil'] == athl]
-    data_grouped =  data_full_scoped.groupby(['Category', 'Exercice']).count().reset_index()
- 
-    fig = px.bar(data_grouped, x="Category", y="Perf", color="Exercice")
-    fig.update_layout(
-            title="Répartitions des performances",
-                xaxis_title="Categories",
-                yaxis_title="Nombre d\'entrées",
-                autosize=False,
-                width=500,
-                height=300)
-    return fig
 
 st.set_page_config(layout="wide")
-conn = get_conn()
-all_mvmt = get_df("All_mvmt")
+
+all_mvmt = get_conn_and_df("All_mvmt")
 all_mvmt = all_mvmt[['Category','Exercice','Units']].dropna()
 
-df = get_df("Progression")
+df = get_conn_and_df("Progression")
 df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
     
-df_name = get_df("Profils")
+df_name = get_conn_and_df("Profils")
 df_name = df_name[['Name']].dropna()
 
-df_obj = get_df("Objectif")
+df_obj = get_conn_and_df("Objectif")
 df_obj = df_obj[['Name','Task','Description','Start','Finish','Completed']].dropna()
 df_obj['Start'] = pd.to_datetime(df_obj['Start'], format='%d/%m/%Y')
 df_obj['Finish'] = pd.to_datetime(df_obj['Finish'], format='%d/%m/%Y')
 
-berger = get_df("berger")
-bergerModified = get_df("bergerModified")
 
 list_name = list(df_name["Name"].unique())
 list_name = [x for x in list_name if str(x) != "nan"]
