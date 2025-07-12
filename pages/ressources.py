@@ -27,10 +27,6 @@ render_page_links([
         ("Ressources Crossfit", "ressources"),
         ("Programmation", "scheduleResa"),
     ])
-if not st.session_state.get("authenticated"):
-    st.warning("Please log in")
-    login_ui()
-
 
 st.set_page_config(layout="wide")
 
