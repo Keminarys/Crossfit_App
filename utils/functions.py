@@ -93,7 +93,7 @@ def ChartDataFS(df) :
     return fig
 
 
-def WOD() :
+def WOD_crossfit() :
     url = "https://www.crossfit.com/"
     today = date.today()
     formatted_date = today.strftime('%y%m%d')
