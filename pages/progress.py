@@ -8,6 +8,7 @@ from streamlit_gsheets import GSheetsConnection
 from datetime import date
 from utils.functions import go_home, get_conn_and_df
 from utils.auth import login_ui
+from utils.ui_helpers import render_nav_bar
 
 if not st.session_state.get("authenticated"):
     st.warning("Please log in")
@@ -15,7 +16,7 @@ if not st.session_state.get("authenticated"):
 
 
 st.set_page_config(layout="wide")
-go_home()
+render_nav_bar()
 athl = str(st.session_state.athl)
 
 st.title(f"{athl}, cette page peut t'aider lors de session open gym")
