@@ -33,14 +33,14 @@ def login_ui():
         st.session_state.authenticated = False
 
     if not st.session_state.authenticated:
-        with st.dialog("🔐 Authentication", key="auth_dialog"):
+        with st.dialog("🔐 Authentication"):
             mode = st.radio("Choose action", ["Log In", "Sign Up"], horizontal=True)
 
             # —————————————————— LOGIN ——————————————————
             if mode == "Log In":
-                user = st.text_input("Username", key="login_user")
-                pw   = st.text_input("Password", type="password", key="login_pw")
-                if st.button("Login", type="primary", key="login_btn"):
+                user = st.text_input("Username", "Username")
+                pw   = st.text_input("Password","password")
+                if st.button("Login", type="primary"):
                     db = load_user_db()
                     if user in db and db[user] == hash_password(pw):
                         st.session_state.authenticated = True
@@ -51,10 +51,10 @@ def login_ui():
 
             # ————————————————— SIGN UP —————————————————
             else:
-                new_user = st.text_input("New Username", key="signup_user")
-                pw1      = st.text_input("Password", type="password", key="signup_pw1")
-                pw2      = st.text_input("Repeat Password", type="password", key="signup_pw2")
-                if st.button("Sign Up", type="primary", key="signup_btn"):
+                new_user = st.text_input("New Username", "New Username")
+                pw1      = st.text_input("Password", "Password")
+                pw2      = st.text_input("Repeat Password", "Repeat Password")
+                if st.button("Sign Up", type="primary"):
                     db = load_user_db()
                     if not new_user or not pw1:
                         st.error("All fields are required")
