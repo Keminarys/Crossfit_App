@@ -137,7 +137,7 @@ if not poll.empty:
 
     long = long[long["Present"].astype(bool)]
 
-    long[["Day", "Time"]] = long["DayTime"].str.split(" ", 1, expand=True)
+    long[["Day", "Time"]] = long["DayTime"].str.split(" ", n=1, expand=True)
 
     counts = (
         long
