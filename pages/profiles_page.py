@@ -19,7 +19,10 @@ def data_perso(df) :
     temp = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
     return temp
 
-
+if not st.session_state.get("authenticated"):
+    st.warning("Please log in via the Home page.")
+    st.stop()
+    
 st.set_page_config(layout="wide")
 
 all_mvmt = get_conn_and_df("All_mvmt")
