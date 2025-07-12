@@ -111,6 +111,7 @@ if str(st.session_state.athl) not in poll["Nom"].unique() :
         UpdateDB(poll, edited, "Inscription")
         st.cache_data.clear()
         st.rerun() 
+else : st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
 
 st.subheader("📊 Personnes présentes cette semaine")
 
@@ -147,10 +148,7 @@ if not poll.empty:
         .reset_index(name="Count")
     )
 
-    time_order = sorted(
-        counts["Time"].unique(),
-        key=lambda t: datetime.strptime(t.split(" - ")[0], "%H:%M")
-    )
+    time_order = counts["Time"].unique()
 
     heatmap_df = (
         counts
