@@ -46,7 +46,7 @@ def _auth_dialog():
         pw   = st.text_input("Password", "Password")
         if st.button("Login", type="primary"):
             db = load_user_db()
-            if user in list(db.username) and db.at[db['username'].eq('COOKIES_SECRET').idxmax(), 'password'] == hash_password(pw):
+            if user in list(db.username) and db.at[db['username'].eq(user).idxmax(), 'password'] == hash_password(pw):
                 st.session_state.authenticated = True
                 st.session_state.athl = user
                 cookies["athl"] = user 
