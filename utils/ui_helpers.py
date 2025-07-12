@@ -38,59 +38,65 @@
 #     st.markdown('</div>', unsafe_allow_html=True)
 import streamlit as st
 
-def render_page_links(pages: list[tuple[str, str]], *, container_style: str = ""):
+def render_page_links(pages: list[tuple[str, str]]):
     st.markdown(
-        f"""
+        """
         <style>
-        /* Navigation Bar Styling */
-        .navbar {{
-            background-color: #8B0000;
+        /* Reset default margins */
+        .topbar-wrapper {
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Navbar container */
+        .navbar {
+            background-color: #1f1f1f;
             padding: 10px 20px;
             display: flex;
-            justify-content: center;
-            align-items: center;
             flex-direction: column;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
             margin-bottom: 2rem;
-        }}
+            border-bottom: 2px solid #8B0000;
+        }
 
-        /* Logo Styling */
-        .navbar-logo {{
-            width: 100px;
-            height: auto;
+        /* Logo styling */
+        .navbar-logo {
+            max-height: 90px;
             margin-bottom: 10px;
-        }}
+        }
 
-        /* Pills Container */
-        .nav-links {{
+        /* Pills container in row */
+        .nav-links {
             display: flex;
+            gap: 18px;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 15px;
-        }}
+        }
 
-        /* Buttons Styling */
-        .nav-button {{
+        /* Stylish pill buttons */
+        .nav-button {
             background-color: #8B0000;
             color: white;
-            padding: 10px 22px;
-            border-radius: 20px;
-            font-weight: 600;
+            padding: 10px 24px;
+            border-radius: 999px;
+            font-weight: bold;
             text-decoration: none;
-            transition: background-color .2s, transform .2s;
-        }}
+            font-size: 16px;
+            transition: all 0.2s ease-in-out;
+        }
 
-        .nav-button:hover {{
-            background-color: #a30000;
+        .nav-button:hover {
+            background-color: #aa0000;
             transform: scale(1.05);
-        }}
+        }
         </style>
 
         <div class="navbar">
-            <img src="LogoCrossfit.jpg" class="navbar-logo" alt="Crossfit Logo">
+            <img src="https://raw.githubusercontent.com/Keminarys/Crossfit_App/main/LogoCrossfit.jpg" class="navbar-logo" alt="Crossfit Logo">
             <div class="nav-links">
-    """,
-        unsafe_allow_html=True
+        """,
+        unsafe_allow_html=True,
     )
 
     for label, page_path in pages:
