@@ -1,60 +1,73 @@
-# utils/ui_helpers.py
-
 import streamlit as st
 from typing import List, Tuple
 
 def render_nav_bar(
     tabs: List[Tuple[str, str]],
-    default_key: str = None
+    default_key: str = None,
+    *,
+    param_name: str = "tab"
 ) -> str:
     """
-    Renders a horizontal nav bar as red rectangles using st.tabs,
-    keeps selection in `st.session_state.current_tab`, and returns it.
-    
+    Renders a horizontal nav bar of red pills via HTML <a> links,
+    tracks selection through ?tab=<key> in the URL, and returns
+    the current key.
+
     Args:
-      tabs: list of (label, key) for each tab
-      default_key: which key to pick on first load
+      tabs: list of (label, key)
+      default_key: which key to pick if none in session or URL
+      param_name: query‐string parameter name
     """
-    # 1) Initialize session state
-    if "current_tab" not in st.session_state:
-        valid_keys = [k for _, k in tabs]
+    # 1) Parse incoming query‐params
+    qp = st.experimental_get_query_params()
+    requested = qp.get(param_name, [None])[0]
+
+    # 2) Validate keys
+    valid_keys = [key for _, key in tabs]
+    if requested in valid_keys:
+        st.session_state.current_tab = requested
+    elif "current_tab" not in st.session_state:
         st.session_state.current_tab = (
             default_key if default_key in valid_keys else valid_keys[0]
         )
 
-    # 2) Inject CSS to turn the default tabs into red pills
+    current = st.session_state.current_tab
+
+    # 3) CSS for our pills
     st.markdown(
-        """
+        f"""
         <style>
-        /* Make all tabs red pills */
-        [data-baseweb="tab-list"] button {
-          border-radius: 4px !important;
-          background-color: #e63946 !important;
-          color: white !important;
-          padding: 8px 16px !important;
-          margin-right: 4px !important;
-          font-weight: 500 !important;
-        }
-        /* Darken the active tab slightly */
-        [data-baseweb="tab-list"] button[aria-selected="true"] {
-          background-color: #d62828 !important;
-        }
-        /* Remove that little outline on focus */
-        [data-baseweb="tab-list"] button:focus {
-          box-shadow: none !important;
-        }
+          .navlink {{
+            display: inline-block;
+            margin-right: 8px;
+            padding: 8px 20px;
+            border-radius: 4px;
+            font-weight: 500;
+            text-decoration: none;
+            transition: background-color .2s, color .2s;
+          }}
+          .navlink.inactive {{
+            background-color: #fedcdc;
+            color: #9b2226;
+          }}
+          .navlink.active {{
+            background-color: #9b2226;
+            color: #ffffff;
+          }}
+          .navlink:hover {{
+            opacity: 0.9;
+          }}
         </style>
         """,
         unsafe_allow_html=True,
     )
 
-    # 3) Build labels list and render tabs
-    labels = [label for label, _ in tabs]
-    tab_containers = st.tabs(labels)
+    # 4) Build the HTML links
+    links = []
+    for label, key in tabs:
+        cls = "navlink active" if key == current else "navlink inactive"
+        links.append(f'<a href="?{param_name}={key}" class="{cls}">{label}</a>')
 
-    # 4) Only the active tab's block will run—use that to set `current_tab`
-    for container, (_, key) in zip(tab_containers, tabs):
-        with container:
-            st.session_state.current_tab = key
+    # 5) Render them in one line
+    st.markdown("".join(links), unsafe_allow_html=True)
 
-    return st.session_state.current_tab
+    return current
