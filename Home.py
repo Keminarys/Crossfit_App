@@ -26,9 +26,6 @@ PAGES = {
 st.set_page_config(layout="wide")
 
 def main():
-    
-    login_ui()  
-
     TABS = [
         ("Menu Principal", "home"),
         ("Votre Profil", "profiles"),
@@ -40,6 +37,7 @@ def main():
     current_tab = render_nav_bar(TABS, default_key="home")
     
     if current_tab == "home":
+        login_ui()  
         title, logo = st.columns([3,1])
         with title :
             st.title('Crossfit83 Le Beausset')
