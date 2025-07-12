@@ -12,7 +12,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils.functions import go_home, get_conn_and_df, highlight_rows, ChartDataFS
+from utils.functions import go_home, get_conn_and_df, highlight_rows, ChartDataFS, UpdateDB
     
 def data_perso(df) :
     athl = str(st.session_state.athl)
