@@ -9,7 +9,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils.functions import get_conn_and_df
+from utils.functions import get_conn_and_df, UpdateDB
 import streamlit.components.v1 as components
 from utils.auth import login_ui
 from utils.ui_helpers import render_navbar    
@@ -88,4 +88,29 @@ if selected_day:
 
 st.divider()
 
-st.subheader("Inscription au cours de la semaine :calendar: ")
+st.subheader("Inscription au WOD de la semaine :calendar: ")
+poll = get_conn_and_df("Inscription")
+
+new_row = {col: False for col in poll.columns}
+new_row["Nom"] = str(st.session_state.athl)
+
+edited = st.data_editor(
+    pd.DataFrame([new_row]),
+    column_config={
+        "Nom": {"disabled": True}, 
+    },
+    hide_index=True,
+    key="attendance_editor"
+)
+
+if st.button("Submit Attendance"):
+
+    UpdateDB(poll, new_row, "Inscription")
+    st.success(f"Attendance recorded for {athlete_name}.")
+    st.rerun() 
+
+st.subheader("📊 Personnes présentes cette semaine")
+st.dataframe(
+    poll,
+    use_container_width=True
+)
