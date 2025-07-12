@@ -5,83 +5,19 @@ import ast
 import numpy as np
 import datetime
 import random
-import re
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 import streamlit_authenticator as stauth
 from datetime import date
-import plotly.express as px
-import plotly.graph_objects as go
-import matplotlib.pyplot as plt
-import seaborn as sns
 import yt_dlp
 import requests
 from bs4 import BeautifulSoup
 import streamlit.components.v1 as components
-from utils.functions import go_home
+from utils.functions import go_home, get_conn_and_df, WOD, random_date_url, get_all_heroes, wodGirls
 
-def get_conn() :
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    return conn
-def get_df(sheet_name) :
-    datas = conn.read(worksheet=sheet_name)
-    return datas
-
-def WOD() :
-    url = "https://www.crossfit.com/"
-    today = date.today()
-    formatted_date = today.strftime('%y%m%d')
-    url_today = url+formatted_date
-    return url_today
-
-def random_date_url():
-    start_date = datetime.datetime.strptime("2001-10-02", "%Y-%m-%d")
-    end_date = datetime.datetime.now()
-    delta = end_date - start_date
-    random_days = random.randrange(delta.days)
-    random_date = start_date + datetime.timedelta(days=random_days)
-    new_format = random_date.strftime("%y%m%d")
-    old_format = random_date.strftime("%Y/%m/%d")
-    url = "https://www.crossfit.com/workout/"
-    url_random_old = url+old_format+"#/comments"
-    #url_random_new = "https://www.crossfit.com/"+new_format
-    return url_random_old#, url_random_new 
-
-def get_all_heroes() : 
-    url = 'https://www.crossfit.com/heroes'
-    response = requests.get(url)
-    if response.status_code == 200:
-        soup = BeautifulSoup(response.content, 'html.parser')
-        wods = []
-        sections = soup.find_all('section', class_='_component_1ugao_79')
-      
-        for section in sections:
-            hr_tag = section.find('hr')
-            if hr_tag:
-                h3_tag = hr_tag.find_next('h3')
-                if h3_tag:
-                    wod_name = h3_tag.get_text(strip=True)
-                    wod_description = ''
-
-                    for sibling in h3_tag.find_next_siblings():
-                        if sibling.name == 'p':
-                            text = sibling.get_text(separator="<br/>", strip=True)
-                            wod_description += text + '<br/><br/>'
-                        else:
-                            break
-                    wod_description = wod_description.strip('<br/><br/>').replace('<br/><br/>', '\n\n').replace('<br/>', '\n')
-                    wods.append({"name": wod_name, "description": wod_description})
-    return wods
-
-def wodGirls() :
-    wodGirlsPage = get_df("benchmarks")
-    wodGirlsPage = wodGirlsPage.iloc[0]["Description"]
-    wodGirls = ast.literal_eval(wodGirlsPage)
-    return wodGirls
-    
 st.set_page_config(layout="wide")
 go_home()
-conn = get_conn()
+
 st.title("Cette page vous sera utile lors de vos sessions open gym ou bien si vous souhaitez vous challenger sur des WODs références !")
 st.divider()
 
