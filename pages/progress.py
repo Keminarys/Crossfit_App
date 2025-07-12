@@ -8,8 +8,10 @@ from streamlit_gsheets import GSheetsConnection
 from datetime import date
 from utils.functions import go_home, get_conn_and_df
 
-st.subheader("💪 Travail de Force")
+st.set_page_config(layout="wide")
 go_home()
+
+st.subheader("💪 Travail de Force")
 
 df = get_conn_and_df("Progression")
 df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
