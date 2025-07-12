@@ -23,8 +23,6 @@ def profilPage():
     if not st.session_state.get("authenticated"):
         st.warning("Please log in")
         login_ui()
-        
-    render_nav_bar()
     
     st.set_page_config(layout="wide")
     
