@@ -1,74 +1,51 @@
 import streamlit as st
-from urllib.parse import urlencode
+from typing import List, Tuple
 
-def render_nav_bar(tabs, default_key):
+def render_nav_bar(
+    tabs: List[Tuple[str, str]],
+    default_key: str = None,
+    *,
+    radio_key: str = "nav_radio"
+) -> str:
     """
-    Render a horizontal nav bar for your single‐script router.
-
-    tabs: list of tuples [(label, key), …]
-    default_key: the key to use if ?_page=… is missing
-    Returns the currently selected page key.
+    Display a horizontal navigation bar using st.radio and
+    store the current tab in session_state['current_tab'].
+    
+    Args:
+        tabs: List of tuples (label, key).
+        default_key: key to select on first run.
+        radio_key: unique key for the radio widget.
+        
+    Returns:
+        The key of the currently selected tab.
     """
+    # Initialize session state
+    if "current_tab" not in st.session_state:
+        # fall back to first tab if default_key is not provided or invalid
+        valid_keys = [k for _, k in tabs]
+        st.session_state.current_tab = default_key if default_key in valid_keys else valid_keys[0]
 
-    st.set_page_config(layout="wide")
-    st.markdown(
-        """
-        <style>
-          #MainMenu, header, footer { visibility: hidden; }
+    # Build mappings
+    label_to_key = {label: key for label, key in tabs}
+    key_to_label = {key: label for label, key in tabs}
 
-          .nav-bar {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            background: #121212;
-            padding: 0.75rem 0;
-            margin-bottom: 1.5rem;
-          }
+    # Build list of labels in order
+    labels = [label for label, _ in tabs]
 
-          .nav-bar a {
-            color: #ddd;
-            text-decoration: none;
-            font-weight: 500;
-            padding: 0.5rem 1rem;
-            border-radius: 0.5rem;
-            transition: background 0.15s, color 0.15s;
-          }
+    # Determine initial index
+    current_label = key_to_label[st.session_state.current_tab]
+    start_index = labels.index(current_label)
 
-          .nav-bar a:hover {
-            background: rgba(255,255,255,0.1);
-          }
-
-          .nav-bar a.active {
-            background: #D62828;
-            color: #fff !important;
-          }
-        </style>
-        """,
-        unsafe_allow_html=True,
+    # Render the horizontal radio bar
+    selected_label = st.radio(
+        label="",
+        options=labels,
+        index=start_index,
+        horizontal=True,
+        key=radio_key,
     )
 
+    # Update session state
+    st.session_state.current_tab = label_to_key[selected_label]
 
-    raw_qp = st.query_params
-    params = {k: v[:] for k, v in raw_qp.items()}
-
-
-    current = params.get("_page", [default_key])[0]
-
-    links = []
-    for label, key in tabs:
-        new_params = params.copy()
-        new_params["_page"] = [key]
-        href = f"./?{urlencode(new_params, doseq=True)}"
-        cls = "active" if key == current else ""
-      
-        links.append(f"<a class='{cls}' href='{href}' target='_self'>{label}</a>")
-
-
-    st.markdown(f"<div class='nav-bar'>{''.join(links)}</div>", unsafe_allow_html=True)
-
-
-    if st.query_params.get("_page", [None])[0] != current:
-        st.rerun()
-
-    return current
-
+    return st.session_state.current_tab
