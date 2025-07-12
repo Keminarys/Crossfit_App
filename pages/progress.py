@@ -17,7 +17,6 @@ def progressPage():
     
     
     st.set_page_config(layout="wide")
-    render_nav_bar()
     athl = str(st.session_state.athl)
     
     st.title(f"{athl}, cette page peut t'aider lors de session open gym")
