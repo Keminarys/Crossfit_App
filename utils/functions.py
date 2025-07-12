@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import datetime
 import random
+import ast
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 from datetime import date
