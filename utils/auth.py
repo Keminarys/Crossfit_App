@@ -14,9 +14,6 @@ def load_user_db():
     records = get_conn_and_df("Credentials")
     return records
 
-def clear_user_db_cache():
-    load_user_db.clear()
-
 # ---------------------------------------------------------------------------- #
 # 2. Simple SHA-256 hasher
 # ---------------------------------------------------------------------------- #
@@ -60,7 +57,6 @@ def _auth_dialog():
                 new_entry = {'username' : new_user, 'password' : hash_password(pw1)}
                 df = load_user_db()
                 UpdateDB(df, new_entry, "Credentials")
-                clear_user_db_cache()
                 st.session_state.authenticated = True
                 st.session_state.athl = new_user
                 st.experimental_rerun()
