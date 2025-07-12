@@ -16,8 +16,47 @@ PAGES = {
     "Prog de la semaine": "pages/scheduleResa.py"
 }
 
-### Setting up the page 
+def fab_selector():
+    st.markdown("""
+        <style>
+            .fab-container {
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+                z-index: 1000;
+            }
 
+            .fab-button {
+                width: 55px;
+                height: 55px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #FF6B6B, #F06543);
+                color: white;
+                font-size: 22px;
+                font-weight: bold;
+                border: none;
+                box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
+                cursor: pointer;
+                transition: transform 0.2s, box-shadow 0.2s;
+            }
+
+            .fab-button:hover {
+                transform: scale(1.1);
+                box-shadow: 0px 6px 12px rgba(0,0,0,0.4);
+            }
+        </style>
+
+        <div class="fab-container">
+            <button class="fab-button" onclick="window.location.href='/pages/profiles_page.py'">👤</button>
+            <button class="fab-button" onclick="window.location.href='/pages/progress.py'">📊</button>
+            <button class="fab-button" onclick="window.location.href='/pages/ressources.py'">📚</button>
+            <button class="fab-button" onclick="window.location.href='/pages/scheduleResa.py'">📅</button>
+        </div>
+    """, unsafe_allow_html=True)
+    
 st.set_page_config(layout="wide")
 ### Function 
 def display_card(page_name, page_key):
@@ -54,6 +93,7 @@ def display_card(page_name, page_key):
 def main():
     
     login_ui()  
+    fab_selector()
     title, logo = st.columns([3,1])
     with title :
         st.title('Crossfit83 Le Beausset')
