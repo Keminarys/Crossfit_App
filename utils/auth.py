@@ -43,7 +43,7 @@ def _auth_dialog():
 
     if mode == "Log In":
         test = load_user_db()
-        st.dataframe(test.loc[test["username"] == 'COOKIES_SECRET', "password"])
+        st.write(test.loc[test["username"] == 'COOKIES_SECRET', "password"].values[0])
         user = st.text_input("Username", "Username")
         pw   = st.text_input("Password", "Password")
         if st.button("Login", type="primary"):
