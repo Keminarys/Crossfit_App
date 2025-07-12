@@ -1,7 +1,14 @@
 import streamlit as st
+
 from utils.auth import login_ui
 from utils.functions import get_conn_and_df
 from utils.ui_helpers import render_nav_bar
+
+from pages.profiles_page import profilPage
+from pages.progress import progressPage
+from pages.ressources import RessourcesPage
+from pages.scheduleResa import resaPage
+
 import pandas as pd
 import numpy as np
 import datetime
@@ -22,12 +29,32 @@ def main():
     
     login_ui()  
     render_nav_bar()
-    title, logo = st.columns([3,1])
-    with title :
-        st.title('Crossfit83 Le Beausset')
-        st.write(f"Bienvenue, {st.session_state.athl}!")
-    with logo :
-        st.image("LogoCrossfit.jpg")
+    
+    TABS = [
+        ("Menu Principal", "home"),
+        ("Votre Profil", "profiles"),
+        ("Votre Progression", "progress"),
+        ("Ressources Crossfit", "resources"),
+        ("Programmation", "schedule"),
+    ]
+    
+    current_tab = render_nav_bar(TABS, default_key="home")
+    
+    if current_tab == "home":
+        title, logo = st.columns([3,1])
+        with title :
+            st.title('Crossfit83 Le Beausset')
+            st.write(f"Bienvenue, {st.session_state.athl}!")
+        with logo :
+            st.image("LogoCrossfit.jpg")
+    elif current_tab == "profiles":
+        profilPage()
+    elif current_tab == "progress":
+        progressPage()     
+    elif current_tab == "resources":
+        RessourcesPage()
+    elif current_tab == "schedule":
+        resaPage()
 if __name__ == "__main__":
     main()
 
