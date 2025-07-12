@@ -108,6 +108,7 @@ if st.button("Submit Attendance"):
         if edited[col].dtype == "bool":
             edited[col].replace({False: "", True: "x"}, inplace=True)
     UpdateDB(poll, edited, "Inscription")
+    st.cache_data.clear()
     st.rerun() 
 
 st.subheader("📊 Personnes présentes cette semaine")
