@@ -2,7 +2,7 @@ import streamlit as st
 
 from utils.auth import login_ui
 from utils.functions import get_conn_and_df
-from utils.ui_helpers import render_page_links
+from utils.ui_helpers import render_navbar
 
 import pandas as pd
 import numpy as np
@@ -15,7 +15,7 @@ st.set_page_config(layout="wide")
 
 def main():
     # Render red pill page links
-    render_page_links([
+    render_navbar([
         ("Menu Principal", "Home"),
         ("Votre Profil", "profiles_page"),
         ("Votre Progression", "progress"),
