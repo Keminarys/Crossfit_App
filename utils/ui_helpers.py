@@ -5,76 +5,56 @@ from typing import List, Tuple
 
 def render_nav_bar(
     tabs: List[Tuple[str, str]],
-    default_key: str = None,
-    *,
-    radio_key: str = "nav_radio"
+    default_key: str = None
 ) -> str:
     """
-    Display a styled horizontal navigation bar using st.radio,
-    store the current tab in session_state['current_tab'],
-    and return the selected key.
+    Renders a horizontal nav bar as red rectangles using st.tabs,
+    keeps selection in `st.session_state.current_tab`, and returns it.
     
     Args:
-      tabs: list of (label, key)
-      default_key: initial key on first load
-      radio_key: unique widget key
+      tabs: list of (label, key) for each tab
+      default_key: which key to pick on first load
     """
-    # 1) Inject CSS for pill-style tabs
-    st.markdown(
-        """
-        <style>
-          /* Container tweaks */
-          div[data-baseweb="radio"] {
-            padding: 0;
-            margin-bottom: 1rem;
-          }
-          /* Unselected tab */
-          div[data-baseweb="radio"] > label {
-            display: inline-block !important;
-            margin-right: 12px !important;
-            background-color: #f4f1de !important;
-            color: #3d405b !important;
-            padding: 6px 16px !important;
-            border-radius: 20px !important;
-            font-weight: 500 !important;
-            cursor: pointer;
-            transition: background-color .2s, color .2s;
-          }
-          /* Selected tab */
-          div[data-baseweb="radio"] > label[data-state="active"] {
-            background-color: #e07a5f !important;
-            color: white !important;
-          }
-        </style>
-        """,
-        unsafe_allow_html=True,
-    )
-
-    # 2) Initialize session_state
+    # 1) Initialize session state
     if "current_tab" not in st.session_state:
         valid_keys = [k for _, k in tabs]
         st.session_state.current_tab = (
             default_key if default_key in valid_keys else valid_keys[0]
         )
 
-    # 3) Build quick lookup
-    label_to_key = {lbl: key for lbl, key in tabs}
-    key_to_label = {key: lbl for lbl, key in tabs}
-    labels = [lbl for lbl, _ in tabs]
-
-    # 4) Compute starting index
-    current_label = key_to_label.get(st.session_state.current_tab, labels[0])
-    start_index = labels.index(current_label)
-
-    # 5) Render the radio and capture selection
-    selected_label = st.radio(
-        label="",
-        options=labels,
-        index=start_index,
-        horizontal=True,
-        key=radio_key,
+    # 2) Inject CSS to turn the default tabs into red pills
+    st.markdown(
+        """
+        <style>
+        /* Make all tabs red pills */
+        [data-baseweb="tab-list"] button {
+          border-radius: 4px !important;
+          background-color: #e63946 !important;
+          color: white !important;
+          padding: 8px 16px !important;
+          margin-right: 4px !important;
+          font-weight: 500 !important;
+        }
+        /* Darken the active tab slightly */
+        [data-baseweb="tab-list"] button[aria-selected="true"] {
+          background-color: #d62828 !important;
+        }
+        /* Remove that little outline on focus */
+        [data-baseweb="tab-list"] button:focus {
+          box-shadow: none !important;
+        }
+        </style>
+        """,
+        unsafe_allow_html=True,
     )
 
-    # 6) Update state & return
-    st.session_state.current_tab = label_to_key[selected_label]
+    # 3) Build labels list and render tabs
+    labels = [label for label, _ in tabs]
+    tab_containers = st.tabs(labels)
+
+    # 4) Only the active tab's block will run—use that to set `current_tab`
+    for container, (_, key) in zip(tab_containers, tabs):
+        with container:
+            st.session_state.current_tab = key
+
     return st.session_state.current_tab
