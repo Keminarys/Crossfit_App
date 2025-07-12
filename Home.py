@@ -2,13 +2,15 @@ import streamlit as st
 from pages import profiles_page, progress, ressources, scheduleResa
 from utils.auth import login_ui
 from utils.functions import get_conn_and_df
-from utils.ui_helpers import fab_selector, display_card
+from utils.ui_helpers import fab_selector, display_card, render_nav_bar
 import pandas as pd
 import numpy as np
 import datetime
 import re
 from streamlit_gsheets import GSheetsConnection
 from datetime import date
+
+render_nav_bar()
 
 PAGES = {
     "Votre Profil": "pages/profiles_page.py",
