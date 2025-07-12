@@ -57,7 +57,7 @@ def go_home():
     """, unsafe_allow_html=True)
 
 
-def get_conn_and_df(sheetname) :
+def get_conn_and_df(sheet_name) :
     conn = st.connection("gsheets", type=GSheetsConnection)
     datas = conn.read(worksheet=sheet_name)
     return datas
