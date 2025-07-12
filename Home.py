@@ -23,39 +23,43 @@ def fab_selector():
                 position: fixed;
                 bottom: 30px;
                 right: 30px;
+                z-index: 1000;
                 display: flex;
                 flex-direction: column;
-                gap: 12px;
-                z-index: 1000;
+                gap: 10px;
             }
-
             .fab-button {
                 width: 55px;
                 height: 55px;
                 border-radius: 50%;
                 background: linear-gradient(135deg, #FF6B6B, #F06543);
                 color: white;
-                font-size: 22px;
+                font-size: 24px;
                 font-weight: bold;
                 border: none;
                 box-shadow: 0px 4px 8px rgba(0,0,0,0.3);
-                cursor: pointer;
                 transition: transform 0.2s, box-shadow 0.2s;
             }
-
             .fab-button:hover {
                 transform: scale(1.1);
                 box-shadow: 0px 6px 12px rgba(0,0,0,0.4);
             }
         </style>
-
-        <div class="fab-container">
-            <button class="fab-button" onclick="window.location.href='/pages/profiles_page.py'">👤</button>
-            <button class="fab-button" onclick="window.location.href='/pages/progress.py'">📊</button>
-            <button class="fab-button" onclick="window.location.href='/pages/ressources.py'">📚</button>
-            <button class="fab-button" onclick="window.location.href='/pages/scheduleResa.py'">📅</button>
-        </div>
     """, unsafe_allow_html=True)
+
+    fab_area = st.container()
+    with fab_area:
+        st.markdown('<div class="fab-container">', unsafe_allow_html=True)
+        if st.button("👤", key="fab_profile"):
+            switch_page("Votre Profil")
+        if st.button("📊", key="fab_progress"):
+            switch_page("Votre Progression")
+        if st.button("📚", key="fab_ressources"):
+            switch_page("Ressources Technique Crossfit")
+        if st.button("📅", key="fab_schedule"):
+            switch_page("Prog de la semaine")
+        st.markdown("</div>", unsafe_allow_html=True)
+
     
 st.set_page_config(layout="wide")
 ### Function 
