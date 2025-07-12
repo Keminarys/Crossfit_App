@@ -10,7 +10,9 @@ from utils.functions import go_home, get_conn_and_df
 
 st.set_page_config(layout="wide")
 go_home()
+athl = str(st.session_state.athl)
 
+st.title(f"{athl}, cette page peut t'aider lors de session open gym")
 st.subheader("💪 Travail de Force")
 
 df = get_conn_and_df("Progression")
@@ -19,23 +21,24 @@ df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire
 berger = get_conn_and_df("berger")
 bergerModified = get_conn_and_df("bergerModified")
 
-data_perso = df.loc[df['Profil'] == "DylL"].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
+
+data_perso = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
 st.write("Si vous souhaitez faire du travail de force, vous pouvez vous aider des onglets ci-dessous suivant le but de votre séance.")
 
-# @st.dialog("Consulter mes RM",  width="large")
-# def get_best_rm(df, athl) :
-#     st.write("Voici vos meilleurs performances pour chaque exercice")
-#     st.divider()
-#     temp = df.loc[(df.Category == "WEIGHTLIFTING") & (df['Profil'] == athl)]
-#     temp = temp.groupby(["Exercice", "RM"]).agg({"Perf" : "max"}).reset_index()
-#     selection = st.pills("Exercice", temp["Exercice"].unique().tolist(), selection_mode="single")
-#     temp = temp.loc[temp.Exercice == selection]
-#     return st.dataframe(temp, use_container_width=True, hide_index = True)
+@st.dialog("Consulter mes RM",  width="large")
+def get_best_rm(df, athl) :
+    st.write("Voici vos meilleurs performances pour chaque exercice")
+    st.divider()
+    temp = df.loc[(df.Category == "WEIGHTLIFTING") & (df['Profil'] == athl)]
+    temp = temp.groupby(["Exercice", "RM"]).agg({"Perf" : "max"}).reset_index()
+    selection = st.pills("Exercice", temp["Exercice"].unique().tolist(), selection_mode="single")
+    temp = temp.loc[temp.Exercice == selection]
+    return st.dataframe(temp, use_container_width=True, hide_index = True)
     
-# # --- RM Consultation ---
-# if "get_best_rm" not in st.session_state:
-#     if st.button("Consulter mes RM"):
-#         get_best_rm(df, "DylL")
+# --- RM Consultation ---
+if "get_best_rm" not in st.session_state:
+    if st.button("Consulter mes RM"):
+        get_best_rm(df, athl)
 
 # --- Expander: Berger Table for One Set ---
 with st.expander("Table de Berger pour une seule série"):
