@@ -11,8 +11,8 @@ from utils.functions import get_conn_and_df, UpdateDB
 #     password=x_pass
 # )
 
-if not cookies.ready():
-    st.stop()
+# if not cookies.ready():
+#     st.stop()
     
 # ---------------------------------------------------------------------------- #
 # 1. Load user database from Google Sheets (cached once per session)
