@@ -1,12 +1,13 @@
 import streamlit as st
 from pages import profiles_page, progress, ressources, scheduleResa
+from utils.auth import login_ui
+from utils.functions import get_conn_and_df
 import pandas as pd
 import numpy as np
 import datetime
 import re
 from streamlit_gsheets import GSheetsConnection
 from datetime import date
-
 
 PAGES = {
     "Votre Profil": "pages/profiles_page.py",
@@ -19,13 +20,6 @@ PAGES = {
 
 st.set_page_config(layout="wide")
 ### Function 
-def get_conn() :
-    conn = st.connection("gsheets", type=GSheetsConnection)
-    return conn
-def get_df(sheet_name) :
-    datas = conn.read(worksheet=sheet_name)
-    return datas
-
 def display_card(page_name, page_key):
     button_style = """
         <style>
@@ -59,12 +53,11 @@ def display_card(page_name, page_key):
 
 def main():
     
-    # conn = get_conn()
-    # df_name = get_df("Profils")
-    # df_name = df_name[['Name']].dropna()
+    login_ui()  
     title, logo = st.columns([3,1])
     with title :
         st.title('Crossfit83 Le Beausset')
+        st.write(f"Bienvenue, {st.session_state.athl}!")
     with logo :
         st.image("LogoCrossfit.jpg")
     st.divider()
