@@ -42,7 +42,8 @@ def _auth_dialog():
     mode = st.radio("Choose action", ["Log In", "Sign Up"], horizontal=True)
 
     if mode == "Log In":
-        st.dataframe(load_user_db())
+        test = load_user_db()
+        st.dataframe(test.loc[test["username"] == 'COOKIES_SECRET', "password"])
         user = st.text_input("Username", "Username")
         pw   = st.text_input("Password", "Password")
         if st.button("Login", type="primary"):
