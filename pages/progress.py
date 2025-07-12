@@ -9,7 +9,7 @@ from datetime import date
 from utils.functions import go_home, get_conn_and_df
 
 st.subheader("💪 Travail de Force")
-
+go_home()
 
 df = get_conn_and_df("Progression")
 df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
