@@ -32,7 +32,6 @@ def _auth_dialog():
     if mode == "Log In":
         user = st.text_input("Username", "Username")
         pw   = st.text_input("Password", "Password")
-        st.write(hash_password(pw))
         if st.button("Login", type="primary"):
             db = load_user_db()
             if user in list(db.username) and db.loc[db["username"] == user, "password"][0] == hash_password(pw):
