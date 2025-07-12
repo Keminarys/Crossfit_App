@@ -50,8 +50,8 @@ def _auth_dialog():
             if user in list(db.username) and db.loc[db["username"] == user, "password"][0] == hash_password(pw):
                 st.session_state.authenticated = True
                 st.session_state.athl = user
-                cookies["athl"] = user 
-                cookies.save()
+                #cookies["athl"] = user 
+                #cookies.save()
                 st.rerun()
             else:
                 st.error("Invalid username or password")
@@ -75,17 +75,17 @@ def _auth_dialog():
                 UpdateDB(df, new_entry, "Credentials")
                 st.session_state.authenticated = True
                 st.session_state.athl = new_user
-                cookies["athl"] = user 
-                cookies.save()
+                #cookies["athl"] = user 
+                #cookies.save()
                 st.rerun()
 
 
 def login_ui():
     if "authenticated" not in st.session_state:
-        if cookies.get("athl"):
-            st.session_state.authenticated = True
-            st.session_state.athl = cookies.get("athl")
-        else:
+        #if cookies.get("athl"):
+            #st.session_state.authenticated = True
+            #st.session_state.athl = cookies.get("athl")
+        #else:
             st.session_state.authenticated = False
             
     if not st.session_state.authenticated:
