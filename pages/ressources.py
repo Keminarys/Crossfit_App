@@ -12,7 +12,7 @@ import yt_dlp
 import requests
 from bs4 import BeautifulSoup
 import streamlit.components.v1 as components
-from utils.functions import go_home, get_conn_and_df, WOD_crossfit, random_date_url, get_all_heroes, wodGirls
+from utils.functions import get_conn_and_df, WOD_crossfit, random_date_url, get_all_heroes, wodGirls
 from utils.auth import login_ui
 from utils.ui_helpers import render_nav_bar
 
