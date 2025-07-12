@@ -11,7 +11,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils.functions import go_home, get_conn_and_df, highlight_rows, ChartDataFS, UpdateDB
+from utils.functions import get_conn_and_df, highlight_rows, ChartDataFS, UpdateDB
 from utils.ui_helpers import render_nav_bar
 from utils.auth import login_ui
     
