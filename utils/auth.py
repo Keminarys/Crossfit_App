@@ -97,9 +97,6 @@ def login_ui():
 def logout_ui():
     if st.session_state.get("authenticated"):
         if st.button("Logout", key="btn_logout"):
-def logout_ui():
-    if st.session_state.get("authenticated"):
-        if st.button("Logout", key="btn_logout"):
             for k in ("authenticated", "athl"):
                 st.session_state.pop(k, None)
             st.session_state.pop("session_id", None)
