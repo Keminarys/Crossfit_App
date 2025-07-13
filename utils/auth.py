@@ -68,10 +68,7 @@ def login_flow():
     Return authenticator on success, else None.
     """
     try:
-        name, status, user = authenticator.login(
-            location="main",
-            name="Login"
-        )
+        name, status, user = authenticator.login()
     except stauth.exceptions.LoginError as e:
         st.error(e)
         return None
@@ -120,7 +117,7 @@ def logout_flow(authenticator):
     """
     Display the logout button.
     """
-    authenticator.logout(location="main", name="Logout")
+    authenticator.logout()
 
 
 # ---------------------------------------------------------------------------- #
