@@ -13,19 +13,25 @@ import requests
 from bs4 import BeautifulSoup
 import streamlit.components.v1 as components
 from utils.functions import get_conn_and_df, WOD_crossfit, random_date_url, get_all_heroes, wodGirls
-from utils.auth import login_ui
+from utils.auth import login_ui, logout_ui
 from utils.ui_helpers import render_navbar    
 
 if not st.session_state.get("authenticated"):
     login_ui()
    
 
-render_navbar([
-        ("Votre Profil", "profiles_page"),
-        ("Votre Progression", "progress"),
-        ("Ressources Crossfit", "ressources"),
-        ("Programmation", "scheduleResa"),
+nav_col, logout_col = st.columns([8, 1])
+
+with nav_col:
+    render_navbar([
+        ("Votre Profil",    "profiles_page"),
+        ("Votre Progression","progress"),
+        ("Ressources Crossfit","ressources"),
+        ("Programmation",   "scheduleResa"),
     ])
+
+with logout_col:
+    logout_ui()
 
 st.set_page_config(layout="wide")
 
