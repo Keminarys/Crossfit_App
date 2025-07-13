@@ -12,3 +12,4 @@ bs4
 requests
 streamlit-cookies-manager
 PyJWT
+streamlit-authenticator
