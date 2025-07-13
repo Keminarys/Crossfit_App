@@ -205,48 +205,48 @@ def _auth_dialog():
     mode = st.radio("Choose action", ["Log In", "Sign Up"], horizontal=True)
     db = load_user_db()
 
-        if mode == "Log In":
-            user = st.text_input("Username")
-            pw   = st.text_input("Password", type="password")
+    if mode == "Log In":
+        user = st.text_input("Username")
+        pw   = st.text_input("Password", type="password")
 
-            if st.button("Login", type="primary"):
-                pw_hash = hash_password(pw)
-                stored = db.set_index("username").to_dict()["password"]
-                if user not in stored or stored[user] != pw_hash:
-                    st.error("Invalid username or password")
-                    return
+        if st.button("Login", type="primary"):
+            pw_hash = hash_password(pw)
+            stored = db.set_index("username").to_dict()["password"]
+            if user not in stored or stored[user] != pw_hash:
+                st.error("Invalid username or password")
+                return
 
-                token, payload = create_token(user)
+            token, payload = create_token(user)
+            record_session(payload)
+            cookies["token"] = token
+            cookies.save()
+            st.session_state.authenticated = True
+            st.session_state.user = user
+            st.experimental_rerun()
+
+    else:  # Sign Up
+        new_user = st.text_input("New Username", key="su_user")
+        pw1      = st.text_input("Password", type="password", key="su_pw1")
+        pw2      = st.text_input("Repeat Password", type="password", key="su_pw2")
+
+        if st.button("Sign Up", type="primary"):
+            if not new_user or not pw1:
+                st.error("All fields are required")
+            elif new_user in set(db["username"]):
+                st.error("Username already exists")
+            elif pw1 != pw2:
+                st.error("Passwords do not match")
+            else:
+                pw_hash = hash_password(pw1)
+                UpdateDB(db, {"username": new_user, "password": pw_hash}, "Credentials")
+
+                token, payload = create_token(new_user)
                 record_session(payload)
                 cookies["token"] = token
                 cookies.save()
                 st.session_state.authenticated = True
-                st.session_state.user = user
-                st.experimental_rerun()
-
-        else:  # Sign Up
-            new_user = st.text_input("New Username", key="su_user")
-            pw1      = st.text_input("Password", type="password", key="su_pw1")
-            pw2      = st.text_input("Repeat Password", type="password", key="su_pw2")
-
-            if st.button("Sign Up", type="primary"):
-                if not new_user or not pw1:
-                    st.error("All fields are required")
-                elif new_user in set(db["username"]):
-                    st.error("Username already exists")
-                elif pw1 != pw2:
-                    st.error("Passwords do not match")
-                else:
-                    pw_hash = hash_password(pw1)
-                    UpdateDB(db, {"username": new_user, "password": pw_hash}, "Credentials")
-
-                    token, payload = create_token(new_user)
-                    record_session(payload)
-                    cookies["token"] = token
-                    cookies.save()
-                    st.session_state.authenticated = True
-                    st.session_state.user = new_user
-                    st.rerun()
+                st.session_state.user = new_user
+                st.rerun()
 # ---------------------------------------------------------------------------- #
 # 3. Login UI Wrapper
 # ---------------------------------------------------------------------------- #
