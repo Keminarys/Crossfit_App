@@ -1,6 +1,6 @@
 import streamlit as st
 
-from utils.auth import login_ui, logout_ui
+from utils.auth import login_ui, logout_ui, cookies
 from utils.functions import get_conn_and_df
 from utils.ui_helpers import render_navbar
 
@@ -14,7 +14,9 @@ from datetime import date
 st.set_page_config(layout="wide")
 
 def main():
-
+    if not cookies.ready():
+        st.stop()
+    
     login_ui()
     nav_col, logout_col = st.columns([8, 1])
 
