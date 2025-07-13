@@ -109,7 +109,7 @@ with st.expander("Inscription au WOD de la semaine :calendar:"):
     else : 
         st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
         if st.button("Modifier son inscription", key="btn_modify"):
-            existing_data = poll[poll["Nom"] == athl].copy()
+            existing_data = poll[poll["Nom"] == str(st.session_state.athl)].copy()
             for c in existing_data.columns:
                 if existing_data[c].dtype == object and c != "Nom":
                     existing_data[c] = existing_data[c].map({"x": True, "": False})
@@ -125,7 +125,7 @@ with st.expander("Inscription au WOD de la semaine :calendar:"):
                     if modified[c].dtype == "bool":
                         modified[c].replace({False:"", True:"x"}, inplace=True)
 
-                poll = poll[poll["Nom"] != athl]
+                poll = poll[poll["Nom"] != str(st.session_state.athl)]
                 UpdateDB(poll, modified, "Inscription")
                 st.cache_data.clear()
                 st.rerun()
