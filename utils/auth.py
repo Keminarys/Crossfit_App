@@ -157,7 +157,7 @@ def get_authenticator():
 
 def login_ui():
     authenticator = get_authenticator()
-    name, auth_status, username = authenticator.login(location="main", title="Login")
+    name, auth_status, username = authenticator.login(location="main")
 
     if auth_status:
         st.session_state["user"] = username
@@ -189,7 +189,7 @@ def signup_ui():
 # ---------------------------------------------------------------------------- #
 
 def logout_ui(authenticator):
-    authenticator.logout(location="main", title="Logout")
+    authenticator.logout(location="main")
 
 # ---------------------------------------------------------------------------- #
 # 5. App-wide integration
