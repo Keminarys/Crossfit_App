@@ -1,6 +1,6 @@
 import streamlit as st
 
-#from utils.auth import login_ui, logout_ui, cookies
+from utils.auth import login_ui, logout_ui, cookies
 from utils.functions import get_conn_and_df
 from utils.ui_helpers import render_navbar
 
@@ -15,13 +15,17 @@ st.set_page_config(layout="wide")
 
 def main():
 
-
-    render_navbar([
-        ("Votre Profil",    "profiles_page"),
-        ("Votre Progression","progress"),
-        ("Ressources Crossfit","ressources"),
-        ("Programmation",   "scheduleResa"),
-    ])
+    login_ui()
+    nav, log = st.columns([8,1])
+    with nav : 
+        render_navbar([
+            ("Votre Profil",    "profiles_page"),
+            ("Votre Progression","progress"),
+            ("Ressources Crossfit","ressources"),
+            ("Programmation",   "scheduleResa"),
+        ])
+    with log : 
+        logout_ui()
 
 
 
