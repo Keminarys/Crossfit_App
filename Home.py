@@ -1,6 +1,6 @@
 import streamlit as st
 
-from utils.auth import login_ui
+from utils.auth import login_ui, logout_ui
 from utils.functions import get_conn_and_df
 from utils.ui_helpers import render_navbar
 
