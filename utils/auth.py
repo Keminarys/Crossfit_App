@@ -112,17 +112,16 @@ from utils.functions import get_conn_and_df, UpdateDB
 # ---------------------------------------------------------------------------- #
 # 0. Configuration
 # ---------------------------------------------------------------------------- #
-# Session lifetime in hours
+
 SESSION_DURATION_HOURS = 24
 
-# Load your Google Sheets “Credentials” and grab the JWT secret
+# Load JWT secret from your “Credentials” sheet
 _creds_df = get_conn_and_df("Credentials")
 JWT_SECRET = _creds_df.loc[
-    _creds_df['username'] == 'COOKIES_SECRET', 'password'
+    _creds_df["username"] == "COOKIES_SECRET", "password"
 ].squeeze()
 
-# Prepare the cookie manager (static prefix per device)
-from streamlit_cookies_manager import EncryptedCookieManager
+# Setup encrypted cookie manager
 cookies = EncryptedCookieManager(
     prefix="crossfit83/auth/",
     password=JWT_SECRET
@@ -133,84 +132,71 @@ if not cookies.ready():
 # ---------------------------------------------------------------------------- #
 # 1. Helpers: Sheets Access & JWT Logic
 # ---------------------------------------------------------------------------- #
+
 def load_user_db():
-    """Returns Credentials sheet as DataFrame, excluding the secret row."""
     df = get_conn_and_df("Credentials")
-    return df[df['username'] != 'COOKIES_SECRET'].copy()
+    return df[df["username"] != "COOKIES_SECRET"].copy()
 
 def load_sessions_db():
-    """Returns Sessions sheet as DataFrame. Ensure it has columns:
-       ['jti','user','issued_at','expires_at','active']"""
     return get_conn_and_df("Sessions")
 
 def hash_password(pw: str) -> str:
     return hashlib.sha256(pw.encode()).hexdigest()
 
 def create_token(username: str):
+    """Generate a JWT and corresponding session payload."""
     jti = str(uuid.uuid4())
-    iat = datetime.utcnow()
-    exp = iat + timedelta(hours=SESSION_DURATION_HOURS)
+    now = datetime.utcnow()
+    exp = now + timedelta(hours=SESSION_DURATION_HOURS)
 
-    # Store raw datetime objects
-    payload = {
-        'sub': username,
-        'jti': jti,
-        'iat': iat,
-        'exp': exp
+    # Use UNIX timestamps in token
+    token_payload = {
+        "sub": username,
+        "jti": jti,
+        "iat": int(now.timestamp()),
+        "exp": int(exp.timestamp()),
     }
-    token = jwt.encode(
-        {
-            'sub': username,
-            'jti': jti,
-            'iat': iat.timestamp(),
-            'exp': exp.timestamp()
-        },
-        JWT_SECRET,
-        algorithm="HS256"
-    )
-    return token, payload
+    token = jwt.encode(token_payload, JWT_SECRET, algorithm="HS256")
+    return token, token_payload
 
 def verify_token(token: str):
-    """Returns payload if valid & not expired, else None."""
+    """Decode JWT and return payload with datetime fields, or None."""
     try:
-        payload = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        # Convert strings back to datetime
-        payload['iat'] = datetime.fromisoformat(payload['iat'])
-        payload['exp'] = datetime.fromisoformat(payload['exp'])
-        return payload
+        data = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
+        # Convert UNIX timestamps back to datetime
+        data["iat"] = datetime.utcfromtimestamp(data["iat"])
+        data["exp"] = datetime.utcfromtimestamp(data["exp"])
+        return data
     except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
         return None
 
 def is_session_active(jti: str) -> bool:
-    """Checks that the session is still active and unexpired."""
     df = load_sessions_db()
-    row = df[df['jti'] == jti]
-    if row.empty or row.iloc[0]['active'] != 'True':
+    row = df[df["jti"] == jti]
+    if row.empty or not row.iloc[0]["active"]:
         return False
-    exp = datetime.fromisoformat(row.iloc[0]['expires_at'])
-    return exp > datetime.utcnow()
+    expires = datetime.fromisoformat(row.iloc[0]["expires_at"])
+    return expires > datetime.utcnow()
 
 def record_session(payload: dict):
     UpdateDB(
         load_sessions_db(),
         {
-            'jti':       payload['jti'],
-            'user':      payload['sub'],
-            'issued_at': payload['iat'].isoformat(),
-            'expires_at': payload['exp'].isoformat(),
-            'active':    'True'
+            "jti":        payload["jti"],
+            "user":       payload["sub"],
+            "issued_at":  datetime.utcfromtimestamp(payload["iat"]).isoformat(),
+            "expires_at": datetime.utcfromtimestamp(payload["exp"]).isoformat(),
+            "active":     True
         },
-        sheet_name="Sessions"
+        sheet_name="Sessions",
     )
 
 def deactivate_session(jti: str):
-    """Marks the session inactive instead of deleting the row."""
     UpdateDB(
         load_sessions_db(),
-        {'jti': jti, 'active': 'False'},
-        sheet_name="Sessions"
+        {"jti": jti, "active": False},
+        sheet_name="Sessions",
     )
-
 # ---------------------------------------------------------------------------- #
 # 2. Login / Sign-Up Dialog
 # ---------------------------------------------------------------------------- #
