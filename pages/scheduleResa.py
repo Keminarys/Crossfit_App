@@ -43,84 +43,78 @@ daysConvert = {
 }
 
 # Define example workout details for each day
-# Streamlit UI
-st.subheader("Planning de la semaine :calendar: ")
-
-# Create seven columns for the buttons
-cols = st.columns(7)
-selected_day = None
-
-# Generate buttons in respective columns
-for i, day in enumerate(days):
-    button_label = f"{daysConvert[day.strftime('%A')]} {day.strftime('%d')}"  # Example: "Monday 28"
-    if cols[i].button(button_label):
-        selected_day = daysConvert[day.strftime('%A')]
-
-# Display workout details for the selected day
-if selected_day:
-    st.subheader("Workout of the Day")
-    selected_planning = planning[['WOD', selected_day]]
-    st.markdown("""
-        <style>
-            .card {
-                border-radius: 10px;
-                padding: 20px;
-                margin-bottom: 15px;
-                background-color: #2E3B4E;
-                color: white;
-                text-align: center;
-                font-size: 18px;
-                box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-            }
-        </style>
-    """, unsafe_allow_html=True)
+with st.expander("Planning de la semaine :calendar:"):
+    cols = st.columns(7)
+    selected_day = None
     
-    # Creating vertical scrolling cards
-    for i in range(len(selected_planning)):
-        with st.container():
-            st.markdown(f"""
-                <div class="card">
-                    <h2>{selected_planning.loc[i, "WOD"]}</h2>
-                    <p>{selected_planning.loc[i, selected_day]}</p>
-                </div>
-            """, unsafe_allow_html=True)
-
-
-st.divider()
-
-st.subheader("Inscription au WOD de la semaine :calendar: ")
-poll = get_conn_and_df("Inscription")
-
-if str(st.session_state.athl) not in poll["Nom"].unique() : 
-    new_row = {col: False for col in poll.columns}
-    new_row["Nom"] = str(st.session_state.athl)
     
-    edited = st.data_editor(
-        pd.DataFrame([new_row]),
-        column_config={
-            "Nom": {"disabled": True}, 
-        },
-        hide_index=True,
-        key="attendance_editor"
+    for i, day in enumerate(days):
+        button_label = f"{daysConvert[day.strftime('%A')]} {day.strftime('%d')}"  # Example: "Monday 28"
+        if cols[i].button(button_label):
+            selected_day = daysConvert[day.strftime('%A')]
+    
+    
+    if selected_day:
+        st.subheader("Workout of the Day")
+        selected_planning = planning[['WOD', selected_day]]
+        st.markdown("""
+            <style>
+                .card {
+                    border-radius: 10px;
+                    padding: 20px;
+                    margin-bottom: 15px;
+                    background-color: #2E3B4E;
+                    color: white;
+                    text-align: center;
+                    font-size: 18px;
+                    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+                }
+            </style>
+        """, unsafe_allow_html=True)
+        
+    
+        for i in range(len(selected_planning)):
+            with st.container():
+                st.markdown(f"""
+                    <div class="card">
+                        <h2>{selected_planning.loc[i, "WOD"]}</h2>
+                        <p>{selected_planning.loc[i, selected_day]}</p>
+                    </div>
+                """, unsafe_allow_html=True)
+
+
+with st.expander("Inscription au WOD de la semaine :calendar: ")
+    poll = get_conn_and_df("Inscription")
+    
+    if str(st.session_state.athl) not in poll["Nom"].unique() : 
+        new_row = {col: False for col in poll.columns}
+        new_row["Nom"] = str(st.session_state.athl)
+        
+        edited = st.data_editor(
+            pd.DataFrame([new_row]),
+            column_config={
+                "Nom": {"disabled": True}, 
+            },
+            hide_index=True,
+            key="attendance_editor"
+        )
+    
+        if st.button("Submit Attendance"):
+            for col in edited.columns:
+                if edited[col].dtype == "bool":
+                    edited[col].replace({False: "", True: "x"}, inplace=True)
+            UpdateDB(poll, edited, "Inscription")
+            st.cache_data.clear()
+            st.rerun() 
+    else : st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
+
+with st.expander("📊 Personnes présentes cette semaine"):
+    st.dataframe(
+        poll,
+        use_container_width=True
     )
 
-    if st.button("Submit Attendance"):
-        for col in edited.columns:
-            if edited[col].dtype == "bool":
-                edited[col].replace({False: "", True: "x"}, inplace=True)
-        UpdateDB(poll, edited, "Inscription")
-        st.cache_data.clear()
-        st.rerun() 
-else : st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
-
-st.subheader("📊 Personnes présentes cette semaine")
-
-st.dataframe(
-    poll,
-    use_container_width=True
-)
-
-
-if not poll.empty:
-    st.plotly_chart(create_heatmap_attend(poll),use_container_width=True)
+with st.expander("📊 HeatMap"):
+    if not poll.empty:
+        st.plotly_chart(create_heatmap_attend(poll),use_container_width=True)
 
