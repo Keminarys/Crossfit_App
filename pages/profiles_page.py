@@ -39,17 +39,7 @@ all_mvmt = all_mvmt[['Category','Exercice','Units']].dropna()
 df = get_conn_and_df("Progression")
 df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
     
-df_name = get_conn_and_df("Profils")
-df_name = df_name[['Name']].dropna()
 
-df_obj = get_conn_and_df("Objectif")
-df_obj = df_obj[['Name','Task','Description','Start','Finish','Completed']].dropna()
-df_obj['Start'] = pd.to_datetime(df_obj['Start'], format='%d/%m/%Y')
-df_obj['Finish'] = pd.to_datetime(df_obj['Finish'], format='%d/%m/%Y')
-
-
-list_name = list(df_name["Name"].unique())
-list_name = [x for x in list_name if str(x) != "nan"]
 list_rm = [i for i in range (1,21)]
 dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
 sorted_dico_ex = sorted(list(dico_ex.keys()), key=lambda x: (x != 'WEIGHTLIFTING', x))
