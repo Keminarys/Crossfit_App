@@ -83,7 +83,7 @@ with st.expander("Planning de la semaine :calendar:"):
                 """, unsafe_allow_html=True)
 
 
-with st.expander("Inscription au WOD de la semaine :calendar: ")
+with st.expander("Inscription au WOD de la semaine :calendar: "):
     poll = get_conn_and_df("Inscription")
     
     if str(st.session_state.athl) not in poll["Nom"].unique() : 
