@@ -181,10 +181,7 @@ def login_ui():
     On success, returns (authenticator, name, username).
     """
     authenticator = init_authenticator()
-    name, auth_status, username = authenticator.login(
-        location="main",
-        name="Login"
-    )
+    name, auth_status, username = authenticator.login(location="main")
 
     if auth_status:
         st.session_state["name"] = name
@@ -224,8 +221,7 @@ def logout_ui(authenticator):
     """
     Renders the logout button.
     """
-    authenticator.logout(location="main",
-        name="Logout")
+    authenticator.logout(location="main")
 
 
 # ---------------------------------------------------------------------------- #
