@@ -108,7 +108,7 @@ import uuid
 import jwt
 from datetime import datetime, timedelta
 from utils.functions import get_conn_and_df, UpdateDB
-
+from streamlit_cookies_manager import EncryptedCookieManager
 # ---------------------------------------------------------------------------- #
 # 0. Configuration
 # ---------------------------------------------------------------------------- #
