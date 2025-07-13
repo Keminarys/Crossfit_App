@@ -1,151 +1,103 @@
 import streamlit as st
 import hashlib
-import streamlit_authenticator as stauth
+import uuid
+from streamlit_gsheets import GSheetsConnection
+from streamlit_cookies_manager import EncryptedCookieManager
 from utils.functions import get_conn_and_df, UpdateDB
 
 # ---------------------------------------------------------------------------- #
-# 1. Helpers: Load & Persist Credentials
+# 0. Per-session unique ID
 # ---------------------------------------------------------------------------- #
+if "session_id" not in st.session_state:
+    st.session_state.session_id = str(uuid.uuid4())
 
-def load_credentials() -> dict:
-    """
-    Read your sheet’s 'Credentials' tab and build the dict
-    that streamlit-authenticator expects, WITHOUT any email.
-    """
-    df = get_conn_and_df("Credentials").fillna("")
-    creds = {"usernames": {}}
+# Load secret for cookie encryption
+x = get_conn_and_df("Credentials")
+x_pass = x.at[x['username'].eq('COOKIES_SECRET').idxmax(), 'password']
 
-    for _, row in df.iterrows():
-        user = row["username"]
-        if user == "COOKIES_SECRET":
-            continue
-
-        creds["usernames"][user] = {
-            "name":     user,
-            "password": row["password"],   # already SHA-256 hashed
-        }
-
-    return creds
-
-
-def persist_user(username: str, hashed_pw: str):
-    """
-    Add or update a row in your 'Credentials' sheet.
-    """
-    UpdateDB(
-        get_conn_and_df("Credentials"),
-        {"username": username, "password": hashed_pw},
-        sheet_name="Credentials",
-    )
-
+cookies = EncryptedCookieManager(
+    prefix=f"crossfit83/{st.session_state.session_id}/",
+    password=x_pass
+)
+if not cookies.ready():
+    st.stop()
 
 # ---------------------------------------------------------------------------- #
-# 2. Instantiate Authenticator (cached)
+# 1. Load user DB
 # ---------------------------------------------------------------------------- #
-
-@st.cache_resource(show_spinner=False)
-def init_authenticator():
-    creds = load_credentials()
-
-    return stauth.Authenticate(
-        credentials=creds,
-        cookie_name=st.secrets["auth"]["cookie_name"],
-        key=st.secrets["auth"]["cookie_key"],
-        expiry_days=st.secrets["auth"]["expiry_days"],
-        preauthorized={"emails": []},    # no emails in use
-    )
-
-authenticator = init_authenticator()
-
+def load_user_db():
+    return get_conn_and_df("Credentials")
+    
+# ---------------------------------------------------------------------------- #
+# 2. Hashing
+# ---------------------------------------------------------------------------- #
+def hash_password(password: str) -> str:
+    return hashlib.sha256(password.encode()).hexdigest()
 
 # ---------------------------------------------------------------------------- #
-# 3. Login Flow
+# 3. Auth Dialog
 # ---------------------------------------------------------------------------- #
+@st.dialog("🔐 Authentication")
+def _auth_dialog():
+    mode = st.radio("Choose action", ["Log In", "Sign Up"], horizontal=True)
 
-def login_flow():
-    """
-    Display the login widget.  
-    Return authenticator on success, else None.
-    """
-    try:
-        authenticator.login()
-    except stauth.exceptions.LoginError as e:
-        st.error(e)
-        return None
+    if mode == "Log In":
+        user = st.text_input("Username")
+        pw   = st.text_input("Password", type="password")
 
-    if status:
-        st.session_state["username"] = user
-        st.session_state["name"]     = name
-        return authenticator
+        if st.button("Login", type="primary"):
+            db = load_user_db()
+            is_valid = (
+                user in list(db.username) and
+                db.at[db['username'].eq(user).idxmax(), 'password'] == hash_password(pw)
+            )
+            if is_valid:
+                st.session_state.authenticated = True
+                st.session_state.athl = user
+                cookies["athl"] = user
+                cookies.save()
+                st.rerun()
+            else:
+                st.error("Invalid username or password")
 
-    if status is False:
-        st.error("Username/password is incorrect")
+    else:  # Sign Up
+        new_user = st.text_input("New Username")
+        pw1      = st.text_input("Password", type="password")
+        pw2      = st.text_input("Repeat Password", type="password")
 
+        if st.button("Sign Up", type="primary"):
+            db = load_user_db()
+            if not new_user or not pw1:
+                st.error("All fields are required")
+            elif new_user in list(db.username):
+                st.error("Username already exists")
+            elif pw1 != pw2:
+                st.error("Passwords do not match")
+            else:
+                password_hashed = hash_password(pw1)
+                UpdateDB(db, {'username': new_user, 'password': password_hashed}, "Credentials")
+                st.session_state.authenticated = True
+                st.session_state.athl = new_user
+                cookies["athl"] = new_user
+                cookies.save()
+                st.rerun()
 
-# ---------------------------------------------------------------------------- #
-# 4. Signup Flow
-# ---------------------------------------------------------------------------- #
-
-def signup_flow():
-    """
-    Custom signup UI (no email).  
-    Hashes password and writes new user to the sheet.
-    """
-    st.header("Create a New Account")
-
-    new_user = st.text_input("Username", key="su_user")
-    pw1      = st.text_input("Password", type="password", key="su_pw1")
-    pw2      = st.text_input("Confirm Password", type="password", key="su_pw2")
-
-    if st.button("Sign up"):
-        if not new_user or not pw1:
-            st.error("All fields are required")
-        elif pw1 != pw2:
-            st.error("Passwords don’t match")
+def login_ui():
+    if "authenticated" not in st.session_state:
+        if cookies.get("athl"):
+            st.session_state.authenticated = True
+            st.session_state.athl = cookies.get("athl")
         else:
-            hashed = hashlib.sha256(pw1.encode()).hexdigest()
-            persist_user(new_user, hashed)
-            st.success("Account created. Please log in.")
-            st.rerun()
+            st.session_state.authenticated = False
 
-
-# ---------------------------------------------------------------------------- #
-# 5. Logout Flow
-# ---------------------------------------------------------------------------- #
-
-def logout_flow(authenticator):
-    """
-    Display the logout button.
-    """
-    authenticator.logout()
-
-
-# ---------------------------------------------------------------------------- #
-# 6. App‐Wide Entry Point
-# ---------------------------------------------------------------------------- #
-
-def main_auth():
-    """
-    Call this at the top of your Streamlit app.
-    Returns True if the user is now authenticated.
-    Otherwise it handles login/signup and stops the app.
-    """
-    # 1) If user clicked “Sign up” button last run, show signup form
-    if st.session_state.get("signup_mode"):
-        signup_flow()
+    if not st.session_state.authenticated:
+        _auth_dialog()
         st.stop()
 
-    # 2) Otherwise attempt login
-    auth = login_flow()
-    if auth:
-        # SUCCESS: show logout + welcome
-        logout_flow(auth)
-        st.write(f"Welcome *{st.session_state['username']}* 👋")
-        return True
-
-    # 3) If not yet authenticated, show “Sign up” switch
-    if st.button("Sign up"):
-        st.session_state["signup_mode"] = True
-        st.rerun()
-
-    st.stop()
+def logout_ui():
+    if st.session_state.get("authenticated"):
+        if st.button("Logout", key="btn_logout"):
+            for k in ("authenticated", "athl"):
+                st.session_state.pop(k, None)
+            st.session_state.pop("session_id", None)
+            st.rerun()
