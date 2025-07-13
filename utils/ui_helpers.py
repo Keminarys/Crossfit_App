@@ -64,7 +64,7 @@ def render_navbar(pages: list[tuple[str, str]]):
         /* Jump-to-top button */
         .jump-top {{
             position: fixed;
-            bottom: 20px;
+            bottom: 60px;
             right: 20px;
             background: #8B0000;
             color: #fff;
