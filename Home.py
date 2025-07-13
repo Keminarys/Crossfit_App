@@ -30,6 +30,6 @@ def main():
         st.write(f"Bienvenue, {st.session_state.athl}!")
     with logo:
         st.image("LogoCrossfit.jpg")
-
+    logout_ui()
 if __name__ == "__main__":
     main()
