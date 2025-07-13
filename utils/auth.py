@@ -264,7 +264,8 @@ def login_ui():
             st.session_state.user = payload['sub']
         else:
             # expired or revoked
-            cookies.delete("token")
+            if "token" in cookies:
+                del cookies["token"]
             cookies.save()
             st.session_state.authenticated = False
 
