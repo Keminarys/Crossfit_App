@@ -12,4 +12,3 @@ bs4
 requests
 streamlit-cookies-manager
 PyJWT
-streamlit-authenticator==0.3.3
