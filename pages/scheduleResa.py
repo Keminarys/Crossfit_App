@@ -83,7 +83,7 @@ with st.expander("Planning de la semaine :calendar:"):
                 """, unsafe_allow_html=True)
 
 
-with st.expander("Inscription au WOD de la semaine :calendar: "):
+with st.expander("Inscription au WOD de la semaine :calendar:"):
     poll = get_conn_and_df("Inscription")
     
     if str(st.session_state.athl) not in poll["Nom"].unique() : 
@@ -99,7 +99,7 @@ with st.expander("Inscription au WOD de la semaine :calendar: "):
             key="attendance_editor"
         )
     
-        if st.button("Submit Attendance"):
+        if st.button("S'inscrire"):
             for col in edited.columns:
                 if edited[col].dtype == "bool":
                     edited[col].replace({False: "", True: "x"}, inplace=True)
@@ -108,24 +108,24 @@ with st.expander("Inscription au WOD de la semaine :calendar: "):
             st.rerun() 
     else : 
         st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
-    
-        if st.button("Modifier la présence"):
-            existing_data = poll[poll["Nom"] == str(st.session_state.athl)].copy()
-            existing_data.replace({"" : False, "x" : True}, inplace=True)
-            
+        if st.button("Modifier son inscription", key="btn_modify"):
+            existing_data = poll[poll["Nom"] == athl].copy()
+            for c in existing_data.columns:
+                if existing_data[c].dtype == object and c != "Nom":
+                    existing_data[c] = existing_data[c].map({"x": True, "": False})
             modified = st.data_editor(
                 existing_data,
-                column_config={
-                    "Nom": {"disabled": True}, 
-                },
+                column_config={"Nom": {"disabled": True}},
                 hide_index=True,
                 key="modify_attendance_editor"
             )
-            for col in modified.columns:
-                if modified[col].dtype == "bool":
-                    modified[col].replace({False: "", True: "x"}, inplace=True)
-            if st.button("Sauvegarder les changements"):
-                poll = poll[poll["Nom"] != str(st.session_state.athl)]
+
+            if st.button("Sauvegarder les changements", key="btn_save"):
+                for c in modified.columns:
+                    if modified[c].dtype == "bool":
+                        modified[c].replace({False:"", True:"x"}, inplace=True)
+
+                poll = poll[poll["Nom"] != athl]
                 UpdateDB(poll, modified, "Inscription")
                 st.cache_data.clear()
                 st.rerun()
