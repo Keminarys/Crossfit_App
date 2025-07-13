@@ -284,7 +284,7 @@ def logout_ui():
                 if payload:
                     deactivate_session(payload['jti'])
             if "token" in cookies:
-                del cookies["token"
+                del cookies["token"]
             cookies.save()
             for key in ("authenticated", "user"):
                 st.session_state.pop(key, None)
