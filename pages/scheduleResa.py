@@ -124,11 +124,11 @@ with st.expander("Inscription au WOD de la semaine :calendar: "):
             for col in modified.columns:
                 if modified[col].dtype == "bool":
                     modified[col].replace({False: "", True: "x"}, inplace=True)
-            
-            poll = poll[poll["Nom"] != str(st.session_state.athl)]
-            UpdateDB(poll, modified, "Inscription")
-            st.cache_data.clear()
-            st.rerun()
+            if st.button("Sauvegarder les changements"):
+                poll = poll[poll["Nom"] != str(st.session_state.athl)]
+                UpdateDB(poll, modified, "Inscription")
+                st.cache_data.clear()
+                st.rerun()
 
 with st.expander("📊 Personnes présentes cette semaine"):
     st.dataframe(
