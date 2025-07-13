@@ -103,195 +103,107 @@
 #             st.rerun()
 
 import streamlit as st
-import hashlib
-import uuid
-import jwt
-from datetime import datetime, timedelta
+import yaml
+from streamlit_authenticator import Authenticate
 from utils.functions import get_conn_and_df, UpdateDB
-from streamlit_cookies_manager import EncryptedCookieManager
+import hashlib
 
 # ---------------------------------------------------------------------------- #
-# 0. Configuration
+# 1. Load or build credentials from your Google Sheet
 # ---------------------------------------------------------------------------- #
 
-SESSION_DURATION_HOURS = 24
-
-# Load JWT secret from Google Sheet
-_creds_df = get_conn_and_df("Credentials")
-JWT_SECRET = _creds_df.loc[
-    _creds_df["username"] == "COOKIES_SECRET", "password"
-].squeeze()
-
-# Setup encrypted cookie manager
-cookies = EncryptedCookieManager(
-    prefix="crossfit83/auth/",
-    password=JWT_SECRET
-)
-if not cookies.ready():
-    st.stop()
-
-# ---------------------------------------------------------------------------- #
-# 1. Helpers: Sheets Access & JWT Logic
-# ---------------------------------------------------------------------------- #
-
-def load_user_db():
+def load_credentials():
     df = get_conn_and_df("Credentials")
-    return df[df["username"] != "COOKIES_SECRET"].copy()
+    creds = {"usernames": {}}
+    for _, row in df[df.username != "COOKIES_SECRET"].iterrows():
+        creds["usernames"][row["username"]] = {
+            "password": row["password"],  # SHA-256 hashed passwords
+            "name": row["username"],
+            "email": row.get("email", ""),
+        }
+    return creds
 
-def load_sessions_db():
-    return get_conn_and_df("Sessions")
-
-def hash_password(pw: str) -> str:
-    return hashlib.sha256(pw.encode()).hexdigest()
-
-def create_token(username: str):
-    jti = str(uuid.uuid4())
-    now = datetime.utcnow()
-    exp = now + timedelta(hours=SESSION_DURATION_HOURS)
-
-    payload = {
-        "sub": username,
-        "jti": jti,
-        "iat": int(now.timestamp()),
-        "exp": int(exp.timestamp()),
-    }
-    token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
-    return token, payload
-
-def verify_token(token: str):
-    try:
-        data = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        data["iat"] = datetime.utcfromtimestamp(data["iat"])
-        data["exp"] = datetime.utcfromtimestamp(data["exp"])
-        return data
-    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, ValueError):
-        return None
-
-def is_session_active(jti: str) -> bool:
-    df = load_sessions_db()
-    row = df[df["jti"] == jti]
-    if row.empty or not row.iloc[0]["active"]:
-        return False
-    expires = datetime.fromisoformat(row.iloc[0]["expires_at"])
-    return expires > datetime.utcnow()
-
-def record_session(payload: dict):
+def sync_new_user(username, password_plain):
+    pw_hash = hashlib.sha256(password_plain.encode()).hexdigest()
+    creds = load_credentials()
+    creds["usernames"][username] = {"password": pw_hash, "name": username, "email": ""}
+    # Update DB
     UpdateDB(
-        load_sessions_db(),
-        {
-            "jti":        payload["jti"],
-            "user":       payload["sub"],
-            "issued_at":  datetime.utcfromtimestamp(payload["iat"]).isoformat(),
-            "expires_at": datetime.utcfromtimestamp(payload["exp"]).isoformat(),
-            "active":     True
+        get_conn_and_df("Credentials"),
+        {"username": username, "password": pw_hash},
+        sheet_name="Credentials",
+    )
+
+# ---------------------------------------------------------------------------- #
+# 2. Initialize Authenticator
+# ---------------------------------------------------------------------------- #
+
+def get_authenticator():
+    creds = load_credentials()
+    config = {
+        "credentials": creds,
+        "cookie": {
+            "name": "streamlit_auth",
+            "key": st.secrets["auth"]["cookie_key"],
+            "expiry_days": 7,
         },
-        sheet_name="Sessions",
-    )
-
-def deactivate_session(jti: str):
-    UpdateDB(
-        load_sessions_db(),
-        {"jti": jti, "active": False},
-        sheet_name="Sessions",
-    )
+        "preauthorized": {"emails": []},
+    }
+    return Authenticate(**config)
 
 # ---------------------------------------------------------------------------- #
-# 2. Login / Sign-Up UI (No Dialogs)
-# ---------------------------------------------------------------------------- #
-
-def auth_page():
-    st.title("🔐 Authentication")
-    mode = st.radio("Choose action", ["Log In", "Sign Up"], horizontal=True)
-    db = load_user_db()
-
-    if mode == "Log In":
-        user = st.text_input("Username")
-        pw   = st.text_input("Password", type="password")
-
-        if st.button("Login", type="primary"):
-            pw_hash = hash_password(pw)
-            stored = db.set_index("username").to_dict()["password"]
-
-            if user not in stored or stored[user] != pw_hash:
-                st.error("Invalid username or password")
-                return
-
-            token, payload = create_token(user)
-            record_session(payload)
-            cookies["token"] = token
-            cookies.save()
-
-            st.session_state.authenticated = True
-            st.session_state.user = user
-            st.rerun()
-
-    else:  # Sign Up
-        new_user = st.text_input("New Username")
-        pw1      = st.text_input("Password", type="password")
-        pw2      = st.text_input("Repeat Password", type="password")
-
-        if st.button("Sign Up", type="primary"):
-            if not new_user or not pw1:
-                st.error("All fields are required")
-            elif new_user in set(db["username"]):
-                st.error("Username already exists")
-            elif pw1 != pw2:
-                st.error("Passwords do not match")
-            else:
-                pw_hash = hash_password(pw1)
-                UpdateDB(db, {"username": new_user, "password": pw_hash}, "Credentials")
-
-                token, payload = create_token(new_user)
-                record_session(payload)
-                cookies["token"] = token
-                cookies.save()
-
-                st.session_state.authenticated = True
-                st.session_state.user = new_user
-                st.rerun()
-
-# ---------------------------------------------------------------------------- #
-# 3. Login Entry Point
+# 3. Login and Signup UI
 # ---------------------------------------------------------------------------- #
 
 def login_ui():
-    # Try silent login from cookie
-    token = cookies.get("token")
-    if token:
-        payload = verify_token(token)
-        if payload and is_session_active(payload['jti']):
-            st.session_state.authenticated = True
-            st.session_state.user = payload['sub']
-        else:
-            if "token" in cookies:
-                del cookies["token"]
-            cookies.save()
-            st.session_state.authenticated = False
+    authenticator = get_authenticator()
+    name, auth_status, username = authenticator.login("Login", "main")
 
-    if not st.session_state.get("authenticated", False):
-        auth_page()
+    if auth_status:
+        st.session_state["user"] = username
+        return authenticator
+
+    if auth_status is False:
+        st.error("Username/password is incorrect")
+    else:
+        if st.button("Sign up"):
+            st.session_state["signup"] = True
+
+def signup_ui():
+    st.header("Create a new account")
+    username = st.text_input("Username")
+    pw1 = st.text_input("Password", type="password")
+    pw2 = st.text_input("Confirm password", type="password")
+    if st.button("Sign up"):
+        if not username or not pw1:
+            st.error("All fields are required")
+        elif pw1 != pw2:
+            st.error("Passwords don’t match")
+        else:
+            sync_new_user(username, pw1)
+            st.success("Account created—please log in")
+            st.session_state.pop("signup", None)
+
+# ---------------------------------------------------------------------------- #
+# 4. Logout UI
+# ---------------------------------------------------------------------------- #
+
+def logout_ui(authenticator):
+    authenticator.logout("Logout", "sidebar")
+
+# ---------------------------------------------------------------------------- #
+# 5. App-wide integration
+# ---------------------------------------------------------------------------- #
+
+def main_auth():
+    if st.session_state.get("signup"):
+        signup_ui()
         st.stop()
 
-# ---------------------------------------------------------------------------- #
-# 4. Logout Button
-# ---------------------------------------------------------------------------- #
+    authenticator = login_ui()
+    if authenticator:
+        logout_ui(authenticator)
+        st.write(f"Welcome *{st.session_state['user']}* 👋")
+        return True
+    st.stop()
 
-def logout_ui():
-    if st.session_state.get("authenticated"):
-        if st.button("Logout", key="btn_logout"):
-            token = cookies.get("token")
-            if token:
-                payload = verify_token(token)
-                if payload:
-                    deactivate_session(payload['jti'])
-
-            if "token" in cookies:
-                del cookies["token"]
-            cookies.save()
-
-            for key in ("authenticated", "user"):
-                st.session_state.pop(key, None)
-
-            st.cache_data.clear()
-            st.query_params.clear()
-            st.rerun()
