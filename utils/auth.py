@@ -203,7 +203,7 @@ def deactivate_session(jti: str):
 @st.dialog("🔐 Authentication")
 def _auth_dialog():
     mode = st.radio("Choose action", ["Log In", "Sign Up"], horizontal=True)
-        db = load_user_db()
+    db = load_user_db()
 
         if mode == "Log In":
             user = st.text_input("Username")
