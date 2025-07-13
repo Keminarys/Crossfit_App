@@ -144,30 +144,30 @@ def hash_password(pw: str) -> str:
     return hashlib.sha256(pw.encode()).hexdigest()
 
 def create_token(username: str):
-    """Generate a JWT and corresponding session payload."""
     jti = str(uuid.uuid4())
     now = datetime.utcnow()
     exp = now + timedelta(hours=SESSION_DURATION_HOURS)
 
-    # Use UNIX timestamps in token
-    token_payload = {
+    # JWT payload uses integer timestamps
+    payload = {
         "sub": username,
         "jti": jti,
         "iat": int(now.timestamp()),
         "exp": int(exp.timestamp()),
     }
-    token = jwt.encode(token_payload, JWT_SECRET, algorithm="HS256")
-    return token, token_payload
+    token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
+    return token, payload
+
 
 def verify_token(token: str):
-    """Decode JWT and return payload with datetime fields, or None."""
+    """Decode JWT; return payload if valid, else None."""
     try:
         data = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        # Convert UNIX timestamps back to datetime
+        # Convert back to datetime objects
         data["iat"] = datetime.utcfromtimestamp(data["iat"])
         data["exp"] = datetime.utcfromtimestamp(data["exp"])
         return data
-    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError):
+    except (jwt.ExpiredSignatureError, jwt.InvalidTokenError, ValueError):
         return None
 
 def is_session_active(jti: str) -> bool:
@@ -285,5 +285,6 @@ def logout_ui():
             cookies.save()
             for key in ("authenticated", "user"):
                 st.session_state.pop(key, None)
+            st.cache_data.clear()
             st.rerun()
 
