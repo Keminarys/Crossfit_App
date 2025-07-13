@@ -119,7 +119,7 @@ def create_heatmap_attend(df: pd.DataFrame) -> px.imshow:
         value_name='dispo'
     )
 
-    poll_long[['Jour', 'Créneau']] = poll_long['jour_creneau'].str.split('\n ', expand=True)
+    poll_long[['Jour', 'Créneau']] = poll_long['jour_creneau'].str.split(' ', n=1, expand=True)
 
     pivot = poll_long.pivot_table(
         index='Créneau',
