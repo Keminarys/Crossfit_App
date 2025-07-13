@@ -108,18 +108,19 @@ with st.expander("Inscription au WOD de la semaine :calendar: "):
             st.rerun() 
     else : 
         st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
-        existing_data = poll[poll["Nom"] == str(st.session_state.athl)].copy()
-    
-        modified = st.data_editor(
-            existing_data,
-            column_config={
-                "Nom": {"disabled": True}, 
-            },
-            hide_index=True,
-            key="modify_attendance_editor"
-        )
     
         if st.button("Modifier la présence"):
+            existing_data = poll[poll["Nom"] == str(st.session_state.athl)].copy()
+            existing_data.replace({"" : False, "x" : True}, inplace=True)
+            
+            modified = st.data_editor(
+                existing_data,
+                column_config={
+                    "Nom": {"disabled": True}, 
+                },
+                hide_index=True,
+                key="modify_attendance_editor"
+            )
             for col in modified.columns:
                 if modified[col].dtype == "bool":
                     modified[col].replace({False: "", True: "x"}, inplace=True)
