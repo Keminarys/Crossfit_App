@@ -222,7 +222,7 @@ def _auth_dialog():
             cookies.save()
             st.session_state.authenticated = True
             st.session_state.user = user
-            st.experimental_rerun()
+            st.rerun()
 
     else:  # Sign Up
         new_user = st.text_input("New Username", key="su_user")
