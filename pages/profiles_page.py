@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.functions import get_conn_and_df, highlight_rows, ChartDataFS, UpdateDB
 from utils.ui_helpers import render_navbar
-from utils.auth import login_ui, logout_ui
+from utils.auth import main_auth#login_ui, logout_ui
     
 
 
@@ -22,39 +22,33 @@ def data_perso(df) :
     temp = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
     return temp
 
-if not st.session_state.get("authenticated"):
-    login_ui()
-
-nav_col, logout_col = st.columns([8, 1])
-
-with nav_col:
+if main_auth():
     render_navbar([
-        ("Votre Profil",    "profiles_page"),
-        ("Votre Progression","progress"),
-        ("Ressources Crossfit","ressources"),
-        ("Programmation",   "scheduleResa"),
+    ("Votre Profil",    "profiles_page"),
+    ("Votre Progression","progress"),
+    ("Ressources Crossfit","ressources"),
+    ("Programmation",   "scheduleResa"),
     ])
-
-with logout_col:
-    logout_ui()
-st.set_page_config(layout="wide")
-
-all_mvmt = get_conn_and_df("All_mvmt")
-all_mvmt = all_mvmt[['Category','Exercice','Units']].dropna()
-
-df = get_conn_and_df("Progression")
-df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
     
-
-list_rm = [i for i in range (1,21)]
-dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
-sorted_dico_ex = sorted(list(dico_ex.keys()), key=lambda x: (x != 'WEIGHTLIFTING', x))
-dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercice').to_dict()['Units']
-all_units = list(all_mvmt["Units"].unique())
-
-### Main
-
-if "athl" in st.session_state :
+    
+    st.set_page_config(layout="wide")
+    
+    all_mvmt = get_conn_and_df("All_mvmt")
+    all_mvmt = all_mvmt[['Category','Exercice','Units']].dropna()
+    
+    df = get_conn_and_df("Progression")
+    df = df[['Profil','Category','Exercice','Date','Perf','Unité','RM','Commentaire']].dropna()
+    
+    
+    list_rm = [i for i in range (1,21)]
+    dico_ex = all_mvmt.groupby('Category')['Exercice'].unique().apply(list).to_dict()
+    sorted_dico_ex = sorted(list(dico_ex.keys()), key=lambda x: (x != 'WEIGHTLIFTING', x))
+    dico_units = all_mvmt[['Exercice','Units']].drop_duplicates().set_index('Exercice').to_dict()['Units']
+    all_units = list(all_mvmt["Units"].unique())
+    
+    ### Main
+    
+    if "athl" in st.session_state :
     st.title(f"Bienvenue sur ton profil {st.session_state.athl} :muscle:")
     athl = str(st.session_state.athl)
     
@@ -65,7 +59,7 @@ if "athl" in st.session_state :
     
     cat = st.selectbox('Choix de la catégorie', sorted_dico_ex)
     ex = st.selectbox('Choix de l"exercice', sorted(dico_ex[cat]))
-
+    
     if cat == 'AJOUTER UN EXERCICE' : 
         st.divider()
         newCat = st.selectbox('Catégorie de l\'exercice à ajouter', [key for key in sorted_dico_ex if key != "AJOUTER UN EXERCICE"])
@@ -124,7 +118,7 @@ if "athl" in st.session_state :
     st.divider()
     st.write("Tu peux visualiser toutes tes performances dans le tableau ci-dessous !")
     st.divider()
-
+    
     col1, col2 = st.columns(2)
     
     with col1 :
