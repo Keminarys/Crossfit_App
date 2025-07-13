@@ -9,7 +9,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils.functions import get_conn_and_df, UpdateDB, create_heatmap_attend
+from utils.functions import get_conn_and_df, UpdateDB, create_heatmap_attend, dropRecordDB
 import streamlit.components.v1 as components
 from utils.auth import login_ui
 from utils.ui_helpers import render_navbar    
@@ -109,26 +109,12 @@ with st.expander("Inscription au WOD de la semaine :calendar:"):
     else : 
         st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
         if st.button("Modifier son inscription", key="btn_modify"):
-            existing_data = poll[poll["Nom"] == str(st.session_state.athl)].copy()
-            for c in existing_data.columns:
-                if existing_data[c].dtype == object and c != "Nom":
-                    existing_data[c] = existing_data[c].map({"x": True, "": False})
-            modified = st.data_editor(
-                existing_data,
-                column_config={"Nom": {"disabled": True}},
-                hide_index=True,
-                key="modify_attendance_editor"
-            )
-
-            if st.button("Sauvegarder les changements", key="btn_save"):
-                for c in modified.columns:
-                    if modified[c].dtype == "bool":
-                        modified[c].replace({False:"", True:"x"}, inplace=True)
-
-                poll = poll[poll["Nom"] != str(st.session_state.athl)]
-                UpdateDB(poll, modified, "Inscription")
-                st.cache_data.clear()
-                st.rerun()
+            poll = poll[poll["Nom"] != str(st.session_state.athl)]
+            if poll.empty:
+                poll = poll.iloc[0:0] 
+            dropRecordDB(poll, "Inscription")
+            st.cache_data.clear()
+            st.rerun()
 
 with st.expander("📊 Personnes présentes cette semaine"):
     st.dataframe(
