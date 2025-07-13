@@ -16,7 +16,6 @@ st.set_page_config(layout="wide")
 def main():
     # Render red pill page links
     render_navbar([
-        ("Menu Principal", "Home"),
         ("Votre Profil", "profiles_page"),
         ("Votre Progression", "progress"),
         ("Ressources Crossfit", "ressources"),
