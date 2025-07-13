@@ -17,7 +17,8 @@ x_pass = x.at[x['username'].eq('COOKIES_SECRET').idxmax(), 'password']
 
 cookies = EncryptedCookieManager(
     prefix=f"crossfit83/{st.session_state.session_id}/",
-    password=x_pass
+    password=x_pass, 
+    session_cookie=True
 )
 if not cookies.ready():
     st.stop()
