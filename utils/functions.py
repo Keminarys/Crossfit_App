@@ -105,3 +105,57 @@ def UpdateDB(df, new_entry, sheet_name):
     updatedDB = pd.concat([df, pd.DataFrame(new_entry, index=[len(df)])], ignore_index=True)
     updatedDB = conn.update(worksheet=sheet_name,data=updatedDB)
 
+
+def create_heatmap_attend(df: pd.DataFrame) -> px.imshow:
+
+    color_continuous_scale_perso=[[0, '#99ccff'], [0.5, '#ff8533'], [1, '#b30000']]
+
+    df = df.replace('', 0).infer_objects(copy=False)
+    df.iloc[:, 1:] = df.iloc[:, 1:].fillna(0).astype(int)
+
+    poll_long = df.melt(
+        id_vars='Nom',
+        var_name='jour_creneau',
+        value_name='dispo'
+    )
+
+    poll_long[['Jour', 'Créneau']] = poll_long['jour_creneau'].str.split('\n ', expand=True)
+
+    pivot = poll_long.pivot_table(
+        index='Créneau',
+        columns='Jour',
+        values='dispo',
+        aggfunc='sum'
+    ).fillna(0).astype(int)
+
+    jours = ["Lundi", "Mardi", "Mercredi", "Jeudi", "Vendredi", "Samedi", "Dimanche"]
+    creneaux = ["10:00 - 11:00",
+                "11:00 - 12:00",
+                "12:15 - 13:15",
+                "18:00 - 19:00",
+                "19:00 - 20:00"]
+    pivot = pivot.reindex(index=creneaux, columns=jours, fill_value=0)
+
+    fig = px.imshow(
+        pivot,
+        labels={
+            'x': 'Jour',
+            'y': 'Créneau',
+            'color': 'Nb de personnes'
+        },
+        x=pivot.columns,
+        y=pivot.index,
+        text_auto=True,
+        aspect='auto',
+        color_continuous_scale=color_continuous_scale_perso
+    )
+
+    fig.update_layout(
+        title="Nb d'inscrits par jour et crénau",
+        xaxis_title="Jour",
+        yaxis_title="Créneau",
+        yaxis=dict(tickmode='array', tickvals=creneaux)
+    )
+
+    return fig
+
