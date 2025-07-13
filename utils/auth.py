@@ -124,14 +124,13 @@ def load_credentials():
 
         creds["usernames"][row.username] = {
             "name": row.username,
-            "email": row.email,
             "password": row.password,  # already hashed
         }
 
     return creds
 
 
-def sync_new_user(username: str, email: str, plain_password: str):
+def sync_new_user(username: str, plain_password: str):
     """
     Hashes the user’s password, adds the new user both
     to the in-memory creds and the Google Sheet.
@@ -142,7 +141,7 @@ def sync_new_user(username: str, email: str, plain_password: str):
     # 2) Persist to the Google Sheet
     UpdateDB(
         get_conn_and_df("Credentials"),
-        {"username": username, "email": email, "password": hashed},
+        {"username": username, "password": hashed},
         sheet_name="Credentials",
     )
 
@@ -202,7 +201,6 @@ def signup_ui():
     st.header("Create a New Account")
 
     username = st.text_input("Choose a username")
-    email    = st.text_input("Your email address")
     pw1      = st.text_input("Password", type="password")
     pw2      = st.text_input("Confirm password", type="password")
 
@@ -213,7 +211,7 @@ def signup_ui():
             st.error("Passwords don’t match")
         else:
             # Sync new user & inform
-            sync_new_user(username, email, pw1)
+            sync_new_user(username, pw1)
             st.success("Account created. Please log in.")
             st.session_state.pop("register_mode", None)
             st.experimental_rerun()
@@ -251,6 +249,6 @@ def main_auth():
     # --- Offer switch to signup
     if st.button("Sign up"):
         st.session_state["register_mode"] = True
-        st.experimental_rerun()
+        st.rerun()
 
     st.stop()
