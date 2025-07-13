@@ -109,13 +109,14 @@ import jwt
 from datetime import datetime, timedelta
 from utils.functions import get_conn_and_df, UpdateDB
 from streamlit_cookies_manager import EncryptedCookieManager
+
 # ---------------------------------------------------------------------------- #
 # 0. Configuration
 # ---------------------------------------------------------------------------- #
 
 SESSION_DURATION_HOURS = 24
 
-# Load JWT secret from your “Credentials” sheet
+# Load JWT secret from Google Sheet
 _creds_df = get_conn_and_df("Credentials")
 JWT_SECRET = _creds_df.loc[
     _creds_df["username"] == "COOKIES_SECRET", "password"
@@ -148,7 +149,6 @@ def create_token(username: str):
     now = datetime.utcnow()
     exp = now + timedelta(hours=SESSION_DURATION_HOURS)
 
-    # JWT payload uses integer timestamps
     payload = {
         "sub": username,
         "jti": jti,
@@ -158,12 +158,9 @@ def create_token(username: str):
     token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
     return token, payload
 
-
 def verify_token(token: str):
-    """Decode JWT; return payload if valid, else None."""
     try:
         data = jwt.decode(token, JWT_SECRET, algorithms=["HS256"])
-        # Convert back to datetime objects
         data["iat"] = datetime.utcfromtimestamp(data["iat"])
         data["exp"] = datetime.utcfromtimestamp(data["exp"])
         return data
@@ -197,11 +194,13 @@ def deactivate_session(jti: str):
         {"jti": jti, "active": False},
         sheet_name="Sessions",
     )
+
 # ---------------------------------------------------------------------------- #
-# 2. Login / Sign-Up Dialog
+# 2. Login / Sign-Up UI (No Dialogs)
 # ---------------------------------------------------------------------------- #
-@st.dialog("🔐 Authentication")
-def _auth_dialog():
+
+def auth_page():
+    st.title("🔐 Authentication")
     mode = st.radio("Choose action", ["Log In", "Sign Up"], horizontal=True)
     db = load_user_db()
 
@@ -212,6 +211,7 @@ def _auth_dialog():
         if st.button("Login", type="primary"):
             pw_hash = hash_password(pw)
             stored = db.set_index("username").to_dict()["password"]
+
             if user not in stored or stored[user] != pw_hash:
                 st.error("Invalid username or password")
                 return
@@ -220,14 +220,15 @@ def _auth_dialog():
             record_session(payload)
             cookies["token"] = token
             cookies.save()
+
             st.session_state.authenticated = True
             st.session_state.user = user
             st.rerun()
 
     else:  # Sign Up
-        new_user = st.text_input("New Username", key="su_user")
-        pw1      = st.text_input("Password", type="password", key="su_pw1")
-        pw2      = st.text_input("Repeat Password", type="password", key="su_pw2")
+        new_user = st.text_input("New Username")
+        pw1      = st.text_input("Password", type="password")
+        pw2      = st.text_input("Repeat Password", type="password")
 
         if st.button("Sign Up", type="primary"):
             if not new_user or not pw1:
@@ -244,14 +245,17 @@ def _auth_dialog():
                 record_session(payload)
                 cookies["token"] = token
                 cookies.save()
+
                 st.session_state.authenticated = True
                 st.session_state.user = new_user
                 st.rerun()
+
 # ---------------------------------------------------------------------------- #
-# 3. Login UI Wrapper
+# 3. Login Entry Point
 # ---------------------------------------------------------------------------- #
+
 def login_ui():
-    # Attempt silent login via existing cookie
+    # Try silent login from cookie
     token = cookies.get("token")
     if token:
         payload = verify_token(token)
@@ -259,19 +263,19 @@ def login_ui():
             st.session_state.authenticated = True
             st.session_state.user = payload['sub']
         else:
-            # expired or revoked
             if "token" in cookies:
                 del cookies["token"]
             cookies.save()
             st.session_state.authenticated = False
 
     if not st.session_state.get("authenticated", False):
-        _auth_dialog()
+        auth_page()
         st.stop()
 
 # ---------------------------------------------------------------------------- #
 # 4. Logout Button
 # ---------------------------------------------------------------------------- #
+
 def logout_ui():
     if st.session_state.get("authenticated"):
         if st.button("Logout", key="btn_logout"):
@@ -280,11 +284,14 @@ def logout_ui():
                 payload = verify_token(token)
                 if payload:
                     deactivate_session(payload['jti'])
+
             if "token" in cookies:
                 del cookies["token"]
             cookies.save()
+
             for key in ("authenticated", "user"):
                 st.session_state.pop(key, None)
-            st.cache_data.clear()
-            st.rerun()
 
+            st.cache_data.clear()
+            st.query_params.clear()
+            st.rerun()
