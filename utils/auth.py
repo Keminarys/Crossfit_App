@@ -147,17 +147,27 @@ def hash_password(pw: str) -> str:
     return hashlib.sha256(pw.encode()).hexdigest()
 
 def create_token(username: str):
-    """Builds a JWT with unique jti, issues & expiration times."""
     jti = str(uuid.uuid4())
     iat = datetime.utcnow()
     exp = iat + timedelta(hours=SESSION_DURATION_HOURS)
+
+    # Store raw datetime objects
     payload = {
         'sub': username,
         'jti': jti,
-        'iat': iat.isoformat(),
-        'exp': exp.isoformat()
+        'iat': iat,
+        'exp': exp
     }
-    token = jwt.encode(payload, JWT_SECRET, algorithm="HS256")
+    token = jwt.encode(
+        {
+            'sub': username,
+            'jti': jti,
+            'iat': iat.timestamp(),
+            'exp': exp.timestamp()
+        },
+        JWT_SECRET,
+        algorithm="HS256"
+    )
     return token, payload
 
 def verify_token(token: str):
@@ -181,15 +191,14 @@ def is_session_active(jti: str) -> bool:
     return exp > datetime.utcnow()
 
 def record_session(payload: dict):
-    """Writes a new active session row to the Sessions sheet."""
     UpdateDB(
         load_sessions_db(),
         {
-            'jti':      payload['jti'],
-            'user':     payload['sub'],
+            'jti':       payload['jti'],
+            'user':      payload['sub'],
             'issued_at': payload['iat'].isoformat(),
             'expires_at': payload['exp'].isoformat(),
-            'active':   'True'
+            'active':    'True'
         },
         sheet_name="Sessions"
     )
