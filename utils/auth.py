@@ -103,107 +103,154 @@
 #             st.rerun()
 
 import streamlit as st
-import yaml
-from streamlit_authenticator import Authenticate
+from streamlit_authenticator import Authenticate, Hasher
 from utils.functions import get_conn_and_df, UpdateDB
-import hashlib
 
 # ---------------------------------------------------------------------------- #
-# 1. Load or build credentials from your Google Sheet
+# 1. Helpers: Load & Sync Credentials with Google Sheet
 # ---------------------------------------------------------------------------- #
 
 def load_credentials():
-    df = get_conn_and_df("Credentials")
+    """
+    Fetches the 'Credentials' sheet and builds the dict
+    that streamlit-authenticator expects.
+    """
+    df = get_conn_and_df("Credentials").fillna("")
     creds = {"usernames": {}}
-    for _, row in df[df.username != "COOKIES_SECRET"].iterrows():
-        creds["usernames"][row["username"]] = {
-            "password": row["password"],  # SHA-256 hashed passwords
-            "name": row["username"],
-            "email": row.get("email", ""),
+
+    for _, row in df.iterrows():
+        if row.username == "COOKIES_SECRET":
+            continue
+
+        creds["usernames"][row.username] = {
+            "name": row.username,
+            "email": row.email,
+            "password": row.password,  # already hashed
         }
+
     return creds
 
-def sync_new_user(username, password_plain):
-    pw_hash = hashlib.sha256(password_plain.encode()).hexdigest()
-    creds = load_credentials()
-    creds["usernames"][username] = {"password": pw_hash, "name": username, "email": ""}
-    # Update DB
+
+def sync_new_user(username: str, email: str, plain_password: str):
+    """
+    Hashes the user’s password, adds the new user both
+    to the in-memory creds and the Google Sheet.
+    """
+    # 1) Generate a secure hash
+    hashed = Hasher([plain_password]).generate()[0]
+
+    # 2) Persist to the Google Sheet
     UpdateDB(
         get_conn_and_df("Credentials"),
-        {"username": username, "password": pw_hash},
+        {"username": username, "email": email, "password": hashed},
         sheet_name="Credentials",
     )
 
+
 # ---------------------------------------------------------------------------- #
-# 2. Initialize Authenticator
+# 2. Authenticator Factory
 # ---------------------------------------------------------------------------- #
 
-def get_authenticator():
-    creds = load_credentials()
-    config = {
-        "credentials": creds,
-        "cookie": {
-            "name": "streamlit_auth",
-            "key": st.secrets["auth"]["cookie_key"],
-            "expiry_days": 7,
-        },
-        "preauthorized": {"emails": []},
+@st.cache_resource(show_spinner=False)
+def init_authenticator():
+    """
+    Builds and returns a configured Authenticate instance.
+    Caches to avoid re-creating on every rerun.
+    """
+    credentials = load_credentials()
+    cookie_cfg = {
+        "name":           "streamlit_auth",
+        "key":            st.secrets["auth"]["cookie_key"],
+        "expiry_days":    7,
     }
-    return Authenticate(**config)
+    preauth_cfg = {"emails": []}  # you can pre-authorize some addresses here
+
+    return Authenticate(
+        credentials=credentials,
+        cookie=cookie_cfg,
+        preauthorized=preauth_cfg,
+    )
+
 
 # ---------------------------------------------------------------------------- #
-# 3. Login and Signup UI
+# 3. Login, Signup, Logout UIs
 # ---------------------------------------------------------------------------- #
 
 def login_ui():
-    authenticator = get_authenticator()
-    name, auth_status, username = authenticator.login(location="main")
+    """
+    Renders the login widget.  
+    On success, returns (authenticator, name, username).
+    """
+    authenticator = init_authenticator()
+    name, auth_status, username = authenticator.login("Login", "main")
 
     if auth_status:
-        st.session_state["user"] = username
-        return authenticator
+        st.session_state["name"] = name
+        st.session_state["username"] = username
+        return authenticator, name, username
 
     if auth_status is False:
         st.error("Username/password is incorrect")
-    else:
-        if st.button("Sign up"):
-            st.session_state["signup"] = True
+    return None, None, None
+
 
 def signup_ui():
-    st.header("Create a new account")
-    username = st.text_input("Username")
-    pw1 = st.text_input("Password", type="password")
-    pw2 = st.text_input("Confirm password", type="password")
+    """
+    Renders the signup widget.  
+    Creates a new user in your Google Sheet on success.
+    """
+    st.header("Create a New Account")
+
+    username = st.text_input("Choose a username")
+    email    = st.text_input("Your email address")
+    pw1      = st.text_input("Password", type="password")
+    pw2      = st.text_input("Confirm password", type="password")
+
     if st.button("Sign up"):
-        if not username or not pw1:
+        if not (username and email and pw1):
             st.error("All fields are required")
         elif pw1 != pw2:
             st.error("Passwords don’t match")
         else:
-            sync_new_user(username, pw1)
-            st.success("Account created—please log in")
-            st.session_state.pop("signup", None)
+            # Sync new user & inform
+            sync_new_user(username, email, pw1)
+            st.success("Account created. Please log in.")
+            st.session_state.pop("register_mode", None)
+            st.experimental_rerun()
 
-# ---------------------------------------------------------------------------- #
-# 4. Logout UI
-# ---------------------------------------------------------------------------- #
 
 def logout_ui(authenticator):
-    authenticator.logout(location="main")
+    """
+    Renders the logout button.
+    """
+    authenticator.logout("Logout", "main")
+
 
 # ---------------------------------------------------------------------------- #
-# 5. App-wide integration
+# 4. App-Wide Entry Point
 # ---------------------------------------------------------------------------- #
 
 def main_auth():
-    if st.session_state.get("signup"):
+    """
+    Call this at the top of your app to guard access.
+    Returns True if the user is authenticated, else halts execution.
+    """
+    # --- If user clicked “Sign up” previously, show signup form
+    if st.session_state.get("register_mode"):
         signup_ui()
         st.stop()
 
-    authenticator = login_ui()
+    # --- Login form
+    authenticator, name, username = login_ui()
     if authenticator:
+        # on successful login
         logout_ui(authenticator)
-        st.write(f"Welcome *{st.session_state['user']}* 👋")
+        st.write(f"Welcome *{name}* 👋")
         return True
-    st.stop()
 
+    # --- Offer switch to signup
+    if st.button("Sign up"):
+        st.session_state["register_mode"] = True
+        st.experimental_rerun()
+
+    st.stop()
