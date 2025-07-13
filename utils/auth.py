@@ -23,19 +23,11 @@ if not cookies.ready():
     st.stop()
 
 # ---------------------------------------------------------------------------- #
-# 1. Load user DB & clear cookies
+# 1. Load user DB
 # ---------------------------------------------------------------------------- #
 def load_user_db():
     return get_conn_and_df("Credentials")
     
-def clear_all_cookies():
-    # grab a snapshot of all cookie keys
-    keys = list(cookies.keys())
-    # delete each one
-    for k in keys:
-        del cookies[k]
-    # persist the empty state
-    cookies.save()
 # ---------------------------------------------------------------------------- #
 # 2. Hashing
 # ---------------------------------------------------------------------------- #
@@ -105,8 +97,10 @@ def login_ui():
 def logout_ui():
     if st.session_state.get("authenticated"):
         if st.button("Logout", key="btn_logout"):
+def logout_ui():
+    if st.session_state.get("authenticated"):
+        if st.button("Logout", key="btn_logout"):
+            for k in ("authenticated", "athl"):
+                st.session_state.pop(k, None)
             st.session_state.pop("session_id", None)
-            del st.session_state["authenticated"]
-            del st.session_state["athl"]
-            clear_all_cookies()
             st.rerun()
