@@ -157,7 +157,7 @@ def get_authenticator():
 
 def login_ui():
     authenticator = get_authenticator()
-    name, auth_status, username = authenticator.login("Login", location="main")
+    name, auth_status, username = authenticator.login(location="main", title="Login"
 
     if auth_status:
         st.session_state["user"] = username
