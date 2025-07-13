@@ -109,7 +109,7 @@ def UpdateDB(df, new_entry, sheet_name):
 def create_heatmap_attend(df: pd.DataFrame) -> px.imshow:
 
     color_continuous_scale_perso=[[0, '#99ccff'], [0.5, '#ff8533'], [1, '#b30000']]
-
+    df = df.replace("x", 1).infer_objects(copy=False)
     df = df.replace('', 0).infer_objects(copy=False)
     df.iloc[:, 1:] = df.iloc[:, 1:].fillna(0).astype(int)
 
