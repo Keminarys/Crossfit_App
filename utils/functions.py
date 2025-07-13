@@ -106,6 +106,10 @@ def UpdateDB(df, new_entry, sheet_name):
     updatedDB = conn.update(worksheet=sheet_name,data=updatedDB)
 
 
+def dropRecordDB(df, sheet_name):
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    df = conn.update(worksheet=sheet_name,data=df)
+    
 def create_heatmap_attend(df: pd.DataFrame) -> px.imshow:
 
     color_continuous_scale_perso=[[0, '#99ccff'], [0.5, '#ff8533'], [1, '#b30000']]
