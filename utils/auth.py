@@ -68,7 +68,7 @@ def login_flow():
     Return authenticator on success, else None.
     """
     try:
-        name, status, user = authenticator.login()
+        authenticator.login()
     except stauth.exceptions.LoginError as e:
         st.error(e)
         return None
