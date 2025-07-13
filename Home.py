@@ -14,22 +14,27 @@ from datetime import date
 st.set_page_config(layout="wide")
 
 def main():
-    # Render red pill page links
-    render_navbar([
-        ("Votre Profil", "profiles_page"),
-        ("Votre Progression", "progress"),
-        ("Ressources Crossfit", "ressources"),
-        ("Programmation", "scheduleResa"),
-    ])
 
-    # This part stays since it's specific to Home.py
     login_ui()
+    nav_col, logout_col = st.columns([8, 1])
+
+    with nav_col:
+        render_navbar([
+            ("Votre Profil",    "profiles_page"),
+            ("Votre Progression","progress"),
+            ("Ressources Crossfit","ressources"),
+            ("Programmation",   "scheduleResa"),
+        ])
+
+    with logout_col:
+        logout_ui()
+
     title, logo = st.columns([3, 1])
     with title:
         st.title('Crossfit83 Le Beausset')
         st.write(f"Bienvenue, {st.session_state.athl}!")
     with logo:
         st.image("LogoCrossfit.jpg")
-    logout_ui()
+
 if __name__ == "__main__":
     main()
