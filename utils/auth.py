@@ -91,4 +91,9 @@ def login_ui():
         _auth_dialog()  
         st.stop()       
 
-
+def logout_ui():
+    if st.session_state.get("authenticated"):
+        if st.button("Logout", key="btn_logout"):
+            for k in ("authenticated", "athl"):
+                st.session_state.pop(k, None)
+            st.rerun()
