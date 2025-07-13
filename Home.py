@@ -29,6 +29,7 @@ def main():
     with title:
         st.title('Crossfit83 Le Beausset')
         st.write(f"Bienvenue, {st.session_state.athl}!")
+        st.session_state.athl = st.text_input()
     with logo:
         st.image("LogoCrossfit.jpg")
 
