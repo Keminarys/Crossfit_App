@@ -27,9 +27,11 @@ def main():
 
     title, logo = st.columns([3, 1])
     with title:
-        st.title('Crossfit83 Le Beausset')
-        st.write(f"Bienvenue, {st.session_state.athl}!")
-        st.session_state.athl = st.text_input()
+        st.session_state.athl = st.text_input("Profil", "Here")
+        if st.session_state.athl != None :
+            st.title('Crossfit83 Le Beausset')
+            st.write(f"Bienvenue, {st.session_state.athl}!")
+        
     with logo:
         st.image("LogoCrossfit.jpg")
 
