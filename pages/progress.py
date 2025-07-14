@@ -8,13 +8,15 @@ from streamlit_gsheets import GSheetsConnection
 from datetime import date
 from utils.functions import get_conn_and_df
 #from utils.auth import login_ui, logout_ui
-from utils.auth import require_login, get_current_user, logout_button   
+# from utils.auth import require_login, get_current_user, logout_button   
 from utils.ui_helpers import render_navbar    
 
-require_login()      
-nav_col, logout_col = st.columns([8, 1])
-
-with nav_col:
+if not st.user.is_logged_in:
+        if st.button("Log in with Google"):
+            st.login("google")
+            st.stop()
+    nav, log = st.columns([8,1])
+with nav : 
     render_navbar([
         ("Votre Profil",    "profiles_page"),
         ("Ressources Crossfit","ressources"),
@@ -22,12 +24,13 @@ with nav_col:
     ])
 
 with logout_col:
-    logout_button()
+    if st.button("Log out"):
+            st.logout()
 
 
 
 st.set_page_config(layout="wide")
-athl = get_current_user()
+athl = st.user.name
 
 st.title(f"{athl}, cette page peut t'aider lors de session open gym")
 st.subheader("💪 Travail de Force")
