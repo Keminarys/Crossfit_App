@@ -262,10 +262,8 @@ def require_login():
 def logout_button():
     if is_authenticated() and st.button("Logout"):
         st.session_state.pop('CookieManager.queue', None)
-        st.success("Current cookies:", dict(cookies))
         st.cache_data.clear()
         for k in cookies.keys():
             del cookies[k]
-        st.success("Current cookies:", dict(cookies))
         st.rerun()
         require_login()
