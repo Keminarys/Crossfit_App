@@ -35,7 +35,7 @@ def main():
     with title:
         st.title('Crossfit83 Le Beausset')
         st.write(f"Bienvenue, {user}!")
-        
+        st.write(cookie)
     with logo:
         st.image("LogoCrossfit.jpg")
 
