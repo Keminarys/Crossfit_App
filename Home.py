@@ -17,9 +17,9 @@ st.set_page_config(layout="wide")
 def main():
     
     if not st.user.is_logged_in:
-    if st.button("Log in with Google"):
-        st.login("google")
-        st.stop()
+        if st.button("Log in with Google"):
+            st.login("google")
+            st.stop()
     nav, log = st.columns([8,1])
     with nav : 
         render_navbar([
