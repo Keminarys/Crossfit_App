@@ -142,7 +142,7 @@ with col2 :
     st.plotly_chart(fig,use_container_width=True)
     
     st.divider()
-    data_full_scoped = df.loc[df['Profil'] == str(st.session_state.athl)]
+    data_full_scoped = df.loc[df['Profil'] == st.user.name]
     selected_cat = st.selectbox('Choix de la catégorie', list(data_full_scoped.Category.unique()))
     selected_ex = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[data_full_scoped['Category'] == selected_cat]['Exercice'].unique()))
    
