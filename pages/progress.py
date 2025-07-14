@@ -7,12 +7,11 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 from datetime import date
 from utils.functions import get_conn_and_df
-from utils.auth import login_ui, logout_ui
+#from utils.auth import login_ui, logout_ui
+from utils.auth import require_login, get_current_user, logout_button   
 from utils.ui_helpers import render_navbar    
 
-if not st.session_state.get("authenticated"):
-    login_ui()
-    
+require_login()      
 nav_col, logout_col = st.columns([8, 1])
 
 with nav_col:
@@ -23,12 +22,12 @@ with nav_col:
     ])
 
 with logout_col:
-    logout_ui()
+    logout_button()
 
 
 
 st.set_page_config(layout="wide")
-athl = str(st.session_state.athl)
+athl = get_current_user()
 
 st.title(f"{athl}, cette page peut t'aider lors de session open gym")
 st.subheader("💪 Travail de Force")
