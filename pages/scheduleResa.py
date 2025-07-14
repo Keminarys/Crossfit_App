@@ -20,9 +20,9 @@ nav_col, logout_col = st.columns([8, 1])
 
 with nav_col:
     render_navbar([
+        ("Votre Profil",    "profiles_page"),
         ("Votre Progression","progress"),
-        ("Ressources Crossfit","ressources"),
-        ("Programmation",   "scheduleResa"),
+        ("Ressources Crossfit","ressources")
     ])
 
 with logout_col:
