@@ -1,6 +1,7 @@
 import streamlit as st
 
-from utils.auth import login_ui, logout_ui, cookies
+#from utils.auth import login_ui, logout_ui, cookies
+from utils.auth import require_login, get_current_user, logout_button
 from utils.functions import get_conn_and_df
 from utils.ui_helpers import render_navbar
 
@@ -14,8 +15,9 @@ from datetime import date
 st.set_page_config(layout="wide")
 
 def main():
-
-    login_ui()
+    
+    require_login()
+    user = get_current_user()
     nav, log = st.columns([8,1])
     with nav : 
         render_navbar([
@@ -25,14 +27,14 @@ def main():
             ("Programmation",   "scheduleResa"),
         ])
     with log : 
-        logout_ui()
+        logout_button()
 
 
 
     title, logo = st.columns([3, 1])
     with title:
         st.title('Crossfit83 Le Beausset')
-        st.write(f"Bienvenue, {st.session_state.athl}!")
+        st.write(f"Bienvenue, {user}!")
         
     with logo:
         st.image("LogoCrossfit.jpg")
