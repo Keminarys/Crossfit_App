@@ -4,6 +4,23 @@ import uuid
 from streamlit_gsheets import GSheetsConnection
 from streamlit_cookies_manager import EncryptedCookieManager
 from utils.functions import get_conn_and_df, UpdateDB
+import streamlit_cookies_manager
+from datetime import datetime, timedelta
+
+
+# ---------------------------------------------------------------------------- #
+# Changing expiry from cookie created
+# ---------------------------------------------------------------------------- #
+
+_original_init = streamlit_cookies_manager.CookieManager.__init__
+
+def _patched_init(self, *args, expiry_min=10, **kwargs):
+    _original_init(self, *args, **kwargs)
+    self._default_expiry = datetime.now() + timedelta(minutes=expiry_min)
+
+streamlit_cookies_manager.CookieManager.__init__ = _patched_init
+
+# Now all CookieManager (and thus EncryptedCookieManager) use 10 mins by default
 
 # ---------------------------------------------------------------------------- #
 # 0. Per-session unique ID
@@ -17,8 +34,7 @@ x_pass = x.at[x['username'].eq('COOKIES_SECRET').idxmax(), 'password']
 
 cookies = EncryptedCookieManager(
     prefix=f"crossfit83/{st.session_state.session_id}/",
-    password=x_pass, 
-    session_cookie=True
+    password=x_pass
 )
 if not cookies.ready():
     st.stop()
