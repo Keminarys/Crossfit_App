@@ -7,8 +7,6 @@ import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 from datetime import date
 from utils.functions import get_conn_and_df
-#from utils.auth import login_ui, logout_ui
-# from utils.auth import require_login, get_current_user, logout_button   
 from utils.ui_helpers import render_navbar    
 
 if not st.user.is_logged_in:
