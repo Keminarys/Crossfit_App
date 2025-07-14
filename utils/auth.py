@@ -131,6 +131,7 @@ from datetime import datetime, timedelta
 
 import streamlit_cookies_manager
 from streamlit_cookies_manager.cookie_manager import CookieManager as _BaseCM
+from streamlit_cookies_manager.encrypted_cookie_manager import EncryptedCookieManager as _BaseECM
 from streamlit_cookies_manager import CookieManager, EncryptedCookieManager
 
 from utils.functions import get_conn_and_df, UpdateDB
