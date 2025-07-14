@@ -203,8 +203,9 @@ def get_current_user() -> str | None:
     return cookies.get("athl")
 
 def is_authenticated() -> bool:
-    if  get_current_user() is not None and get_current_user() != 'Relog' :
-        resp = True
+    if  get_current_user() is not None :
+        if get_current_user() != 'Relog' :
+            resp = True
     else resp = False
     return resp
 
