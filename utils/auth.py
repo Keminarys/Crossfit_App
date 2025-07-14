@@ -206,7 +206,8 @@ def is_authenticated() -> bool:
     if  get_current_user() is not None :
         if get_current_user() != 'Relog' :
             resp = True
-    else resp = False
+    else :
+        resp = False
     return resp
 
 
