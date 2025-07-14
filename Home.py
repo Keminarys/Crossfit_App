@@ -36,9 +36,7 @@ def main():
     title, logo = st.columns([3, 1])
     with title:
         st.title('Crossfit83 Le Beausset')
-        st.write(st.session_state)
-        st.write(st.user)
-        #st.write(f"Bienvenue, {user}!")
+        st.write(f"Bienvenue, {user}!")
     with logo:
         st.image("LogoCrossfit.jpg")
 
