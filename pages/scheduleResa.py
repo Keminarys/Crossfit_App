@@ -107,7 +107,7 @@ with st.expander("Inscription au WOD de la semaine :calendar:"):
         if st.button("S'inscrire"):
             for col in edited.columns:
                 if edited[col].dtype == "bool":
-                    edited[col].replace({False: "", True: "x"}, inplace=True)
+                    edited[col] = edited[col].replace({False: "", True: "x"})
             UpdateDB(poll, edited, "Inscription")
             st.cache_data.clear()
             st.rerun() 
