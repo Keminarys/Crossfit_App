@@ -11,15 +11,24 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.functions import get_conn_and_df, UpdateDB, create_heatmap_attend, dropRecordDB
 import streamlit.components.v1 as components
-#from utils.auth import login_ui, logout_ui
+from utils.auth import login_ui, logout_ui
 from utils.ui_helpers import render_navbar    
 
-render_navbar([
-("Votre Profil",    "profiles_page"),
-("Votre Progression","progress"),
-("Ressources Crossfit","ressources"),
-("Programmation",   "scheduleResa"),
-])
+if not st.session_state.get("authenticated"):
+    login_ui()
+    
+nav_col, logout_col = st.columns([8, 1])
+
+with nav_col:
+    render_navbar([
+        ("Votre Profil",    "profiles_page"),
+        ("Votre Progression","progress"),
+        ("Ressources Crossfit","ressources"),
+        ("Programmation",   "scheduleResa"),
+    ])
+
+with logout_col:
+    logout_ui()
 
 st.set_page_config(layout="wide")
 
