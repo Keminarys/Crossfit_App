@@ -134,7 +134,7 @@ if get_current_user() is not None :
         st.dataframe(styled_df, use_container_width=True, hide_index=True)
     
     with col2 :
-        fig = ChartDataFS(df)
+        fig = ChartDataFS(df, athl)
         st.plotly_chart(fig,use_container_width=True)
         
         st.divider()
