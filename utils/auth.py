@@ -264,6 +264,6 @@ def logout_button():
         st.session_state.pop('CookieManager.queue', None)
         st.cache_data.clear()
         for k in cookies.keys():
-            del cookies[k]
+            cookies[k] = None
         st.rerun()
         require_login()
