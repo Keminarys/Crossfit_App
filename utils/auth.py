@@ -130,6 +130,7 @@ import uuid
 from datetime import datetime, timedelta
 
 import streamlit_cookies_manager
+from streamlit_cookies_manager.cookie_manager import CookieManager as _BaseCM
 from streamlit_cookies_manager import CookieManager, EncryptedCookieManager
 
 from utils.functions import get_conn_and_df, UpdateDB
