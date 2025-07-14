@@ -1,7 +1,7 @@
 import streamlit as st
 
 #from utils.auth import login_ui, logout_ui, cookies
-from utils.auth import require_login, get_current_user, logout_button
+from utils.auth import require_login, get_current_user, logout_button, cookies
 from utils.functions import get_conn_and_df
 from utils.ui_helpers import render_navbar
 
@@ -36,6 +36,7 @@ def main():
         st.title('Crossfit83 Le Beausset')
         st.write(f"Bienvenue, {user}!")
         st.write(st.session_state)
+        st.write("Current cookies:", dict(cookies))
     with logo:
         st.image("LogoCrossfit.jpg")
 
