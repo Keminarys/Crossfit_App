@@ -13,7 +13,7 @@ if not st.user.is_logged_in:
         if st.button("Log in with Google"):
             st.login("google")
             st.stop()
-    nav, log = st.columns([8,1])
+nav, log = st.columns([8,1])
 with nav : 
     render_navbar([
         ("Votre Profil",    "profiles_page"),
