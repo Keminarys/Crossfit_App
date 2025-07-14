@@ -115,14 +115,14 @@ if st.user.is_logged_in :
                 """, unsafe_allow_html=True)
         
         
-        for i in range(len(selected_planning)):
-                with st.container():
-                        st.markdown(f"""
-                        <div class="card">
-                        <h2>{selected_planning.loc[i, "WOD"]}</h2>
-                        <p>{selected_planning.loc[i, selected_day]}</p>
-                        </div>
-                        """, unsafe_allow_html=True)
+                for i in range(len(selected_planning)):
+                        with st.container():
+                                st.markdown(f"""
+                                <div class="card">
+                                <h2>{selected_planning.loc[i, "WOD"]}</h2>
+                                <p>{selected_planning.loc[i, selected_day]}</p>
+                                </div>
+                                """, unsafe_allow_html=True)
         
         with st.expander("📊 Personnes présentes cette semaine"):
             st.dataframe(
