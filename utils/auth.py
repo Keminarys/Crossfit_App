@@ -261,8 +261,7 @@ def require_login():
 
 def logout_button():
     if is_authenticated() and st.button("Logout"):
-        del cookies["athl"]
-        cookies.save()
         del cookies
+        st.cache_data.clear()
         st.rerun()
         require_login()
