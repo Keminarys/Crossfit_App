@@ -126,7 +126,8 @@ with st.expander("Planning de la semaine :calendar:"):
 with st.expander("📊 Personnes présentes cette semaine"):
     st.dataframe(
         poll,
-        use_container_width=True
+        use_container_width=True, 
+        hide_index=True
     )
 
 with st.expander("📊 HeatMap"):
