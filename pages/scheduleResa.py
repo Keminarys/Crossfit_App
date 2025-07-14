@@ -12,10 +12,13 @@ import seaborn as sns
 from utils.functions import get_conn_and_df, UpdateDB, create_heatmap_attend, dropRecordDB
 import streamlit.components.v1 as components
 #from utils.auth import login_ui, logout_ui
-from utils.auth import require_login, get_current_user, logout_button  
+#from utils.auth import require_login, get_current_user, logout_button  
 from utils.ui_helpers import render_navbar    
 
-require_login()    
+if not st.user.is_logged_in:
+        if st.button("Log in with Google"):
+            st.login("google")
+            st.stop() 
 nav_col, logout_col = st.columns([8, 1])
 
 with nav_col:
@@ -26,11 +29,12 @@ with nav_col:
     ])
 
 with logout_col:
-    logout_button()
+    if st.button("Log out"):
+            st.logout()
 
 
 st.set_page_config(layout="wide")
-athl = get_current_user()
+athl = st.user.name
 planning = get_conn_and_df("WODSemaine")
 planning = planning[['WOD', 'Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']].dropna()
 
