@@ -21,10 +21,10 @@ nav_col, logout_col = st.columns([8, 1])
 
 with nav_col:
     render_navbar([
+        ("Menu Principal",   "Home"),
         ("Votre Profil",    "profiles_page"),
         ("Votre Progression","progress"),
         ("Ressources Crossfit","ressources"),
-        ("Programmation",   "scheduleResa"),
     ])
 
 with logout_col:
@@ -48,7 +48,7 @@ daysConvert = {
 }
 
 
-st.subheader("Inscription au WOD de la semaine :calendar:"):
+st.subheader("Inscription au WOD de la semaine :calendar:")
 poll = get_conn_and_df("Inscription")
 
 if str(st.session_state.athl) not in poll["Nom"].unique() : 
