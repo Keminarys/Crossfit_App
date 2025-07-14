@@ -32,7 +32,7 @@ def main():
         if st.button("Log out"):
             st.logout()
 
-    if st.user.name is not None :
+    if st.user.is_logged_in :
         title, logo = st.columns([3, 1])
         with title:
             st.title('Crossfit83 Le Beausset')
