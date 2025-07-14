@@ -21,7 +21,7 @@ with nav :
         ("Programmation",   "scheduleResa"),
     ])
 
-with logout_col:
+with log:
     if st.button("Log out"):
             st.logout()
 
