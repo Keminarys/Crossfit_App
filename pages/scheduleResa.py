@@ -92,7 +92,7 @@ if st.user.is_logged_in :
         for i, day in enumerate(days):
                 button_label = f"{daysConvert[day.strftime('%A')]} {day.strftime('%d')}"  # Example: "Monday 28"
                 if cols[i].button(button_label):
-                selected_day = daysConvert[day.strftime('%A')]
+                        selected_day = daysConvert[day.strftime('%A')]
         
         
         
