@@ -17,7 +17,6 @@ nav_col, logout_col = st.columns([8, 1])
 
 with nav_col:
     render_navbar([
-        ("Menu Principal",   "Home"),
         ("Votre Profil",    "profiles_page"),
         ("Ressources Crossfit","ressources"),
         ("Programmation",   "scheduleResa"),
