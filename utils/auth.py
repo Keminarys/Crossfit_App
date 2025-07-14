@@ -112,9 +112,11 @@ def login_ui():
         st.stop()
 
 def logout_ui():
-    if st.session_state.get("authenticated"):
+    if st.session_state.authenticated == True:
         if st.button("Logout", key="btn_logout"):
-            for k in ("authenticated", "athl"):
-                st.session_state.pop(k, None)
-            st.session_state.pop("session_id", None)
+            st.session_state.authenticated == False
+            st.session_state.pop('athl', None)
+            st.session_state.pop('CookieManager.queue', None)
+            st.cache_data.clear()
             st.rerun()
+            log_in()
