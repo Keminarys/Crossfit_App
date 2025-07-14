@@ -12,9 +12,12 @@ def render_navbar(pages: list[tuple[str, str]]):
         "Keminarys/Crossfit_App/main/LogoCrossfit.jpg"
     )
 
-    # Build link HTML
-    links_html = "".join(
-        f'<a class="nav-link" href="/{path}" target="_self">{label}</a>'
+    # Manually add Home link (at repo root)
+    home_link = '<a class="nav-link" href="/Home" target="_self">Home</a>'
+
+    # Add links for pages in the 'pages/' subfolder
+    links_html = home_link + "".join(
+        f'<a class="nav-link" href="/pages/{path}" target="_self">{label}</a>'
         for label, path in pages
     )
 
