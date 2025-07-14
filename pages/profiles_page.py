@@ -13,18 +13,17 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.functions import get_conn_and_df, highlight_rows, ChartDataFS, UpdateDB
 from utils.ui_helpers import render_navbar
-from utils.auth import login_ui, logout_ui
-    
+#from utils.auth import login_ui, logout_ui
+from utils.auth import require_login, get_current_user, logout_button   
 
 
 def data_perso(df) :
-    athl = str(st.session_state.athl)
+    athl = get_current_user()
     temp = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
     return temp
 
-if not st.session_state.get("authenticated"):
-    login_ui()
-    
+
+require_login()    
 nav_col, logout_col = st.columns([8, 1])
 
 with nav_col:
@@ -35,7 +34,7 @@ with nav_col:
     ])
 
 with logout_col:
-    logout_ui()
+    logout_button()
 
 
 
@@ -56,9 +55,9 @@ all_units = list(all_mvmt["Units"].unique())
 
 ### Main
 
-if "athl" in st.session_state :
-    st.title(f"Bienvenue sur ton profil {st.session_state.athl} :muscle:")
-    athl = str(st.session_state.athl)
+if get_current_user() is not None :
+    athl = get_current_user()
+    st.title(f"Bienvenue sur ton profil {athl} :muscle:")
     
     st.divider()
     st.write("Cette page te permet de tracker tes PR.")
