@@ -13,7 +13,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.functions import get_conn_and_df, highlight_rows, ChartDataFS, UpdateDB
 from utils.ui_helpers import render_navbar
-#from utils.auth import login_ui, logout_ui
+from utils.auth import login_ui, logout_ui
     
 
 
@@ -22,13 +22,22 @@ def data_perso(df) :
     temp = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
     return temp
 
+if not st.session_state.get("authenticated"):
+    login_ui()
+    
+nav_col, logout_col = st.columns([8, 1])
 
-render_navbar([
-("Votre Profil",    "profiles_page"),
-("Votre Progression","progress"),
-("Ressources Crossfit","ressources"),
-("Programmation",   "scheduleResa"),
-])
+with nav_col:
+    render_navbar([
+        ("Votre Profil",    "profiles_page"),
+        ("Votre Progression","progress"),
+        ("Ressources Crossfit","ressources"),
+        ("Programmation",   "scheduleResa"),
+    ])
+
+with logout_col:
+    logout_ui()
+
 
 
 st.set_page_config(layout="wide")
