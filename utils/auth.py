@@ -118,7 +118,6 @@ def logout_ui():
             if "athl" in cookies:
                 del cookies["athl"]
             cookies.save()
-            st.session_state.current_page = "Home"
             st.session_state.pop('athl', None)
             st.session_state.pop('CookieManager.queue', None)
             st.cache_data.clear()
