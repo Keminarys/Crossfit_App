@@ -13,8 +13,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.functions import get_conn_and_df, highlight_rows, ChartDataFS, UpdateDB
 from utils.ui_helpers import render_navbar
-#from utils.auth import login_ui, logout_ui
-#from utils.auth import require_login, get_current_user, logout_button   
 
 
 def data_perso(df) :
