@@ -132,7 +132,7 @@ if "athl" in st.session_state :
     with col1 :
         data_perso = data_perso(df)
         styled_df = data_perso.style.apply(highlight_rows, axis=1)
-        st.dataframe(styled_df, use_container_width=True)
+        st.dataframe(styled_df, use_container_width=True, hide_index=True)
     
     with col2 :
         fig = ChartDataFS(df)
