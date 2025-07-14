@@ -12,6 +12,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import requests
 from bs4 import BeautifulSoup
+from utils.auth import get_current_user
 
 def get_conn_and_df(sheet_name) :
     conn = st.connection("gsheets", type=GSheetsConnection)
@@ -34,7 +35,7 @@ def highlight_rows(row):
 
 
 def ChartDataFS(df) :
-    athl = str(st.session_state.athl)
+    athl = get_current_user()
     data_full_scoped = df.loc[df['Profil'] == athl]
     data_grouped =  data_full_scoped.groupby(['Category', 'Exercice']).count().reset_index()
  
