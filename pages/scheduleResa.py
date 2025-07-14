@@ -69,7 +69,7 @@ if str(st.session_state.athl) not in poll["Nom"].unique() :
                 edited[col] = edited[col].replace({False: "", True: "x"})
         st.dataframe(poll)
         st.dataframe(edited)
-        updatedDB = pd.concat([df, pd.DataFrame(new_entry, index=[len(df)])], ignore_index=True)
+        updatedDB = pd.concat([poll, pd.DataFrame(edited, index=[len(poll)])], ignore_index=True)
         st.dataframe(updatedDB)
         # UpdateDB(poll, edited, "Inscription")
         # st.cache_data.clear()
