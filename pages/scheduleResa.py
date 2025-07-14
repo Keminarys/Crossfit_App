@@ -67,13 +67,12 @@ if str(st.session_state.athl) not in poll["Nom"].unique() :
         for col in edited.columns:
             if edited[col].dtype == "bool":
                 edited[col] = edited[col].replace({False: "", True: "x"})
-        st.dataframe(poll)
-        st.dataframe(edited)
-        updatedDB = pd.concat([poll, edited] , ignore_index=True)
-        st.dataframe(updatedDB)
-        # UpdateDB(poll, edited, "Inscription")
-        # st.cache_data.clear()
-        # st.rerun() 
+        dict_edited = {}
+        for col in edited.columns :
+          dict_edited[col] = edited[col][0]
+        UpdateDB(poll, dict_edited, "Inscription")
+        st.cache_data.clear()
+        st.rerun() 
 else : 
     st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
     if st.button("Modifier son inscription", key="btn_modify"):
