@@ -263,5 +263,6 @@ def logout_button():
     if is_authenticated() and st.button("Logout"):
         st.session_state.pop('CookieManager.queue', None)
         st.cache_data.clear()
+        st.stop()
         st.rerun()
         require_login()
