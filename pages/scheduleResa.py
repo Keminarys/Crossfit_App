@@ -96,33 +96,33 @@ if st.user.is_logged_in :
         
         
         
-                if selected_day:
-                        st.subheader("Workout of the Day")
-                        selected_planning = planning[['WOD', selected_day]]
-                        st.markdown("""
-                        <style>
-                        .card {
-                        border-radius: 10px;
-                        padding: 20px;
-                        margin-bottom: 15px;
-                        background-color: #2E3B4E;
-                        color: white;
-                        text-align: center;
-                        font-size: 18px;
-                        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-                        }
-                        </style>
+        if selected_day:
+                st.subheader("Workout of the Day")
+                selected_planning = planning[['WOD', selected_day]]
+                st.markdown("""
+                <style>
+                .card {
+                border-radius: 10px;
+                padding: 20px;
+                margin-bottom: 15px;
+                background-color: #2E3B4E;
+                color: white;
+                text-align: center;
+                font-size: 18px;
+                box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+                }
+                </style>
+                """, unsafe_allow_html=True)
+        
+        
+        for i in range(len(selected_planning)):
+                with st.container():
+                        st.markdown(f"""
+                        <div class="card">
+                        <h2>{selected_planning.loc[i, "WOD"]}</h2>
+                        <p>{selected_planning.loc[i, selected_day]}</p>
+                        </div>
                         """, unsafe_allow_html=True)
-        
-        
-                for i in range(len(selected_planning)):
-                        with st.container():
-                                st.markdown(f"""
-                                <div class="card">
-                                <h2>{selected_planning.loc[i, "WOD"]}</h2>
-                                <p>{selected_planning.loc[i, selected_day]}</p>
-                                </div>
-                                """, unsafe_allow_html=True)
         
         with st.expander("📊 Personnes présentes cette semaine"):
             st.dataframe(
