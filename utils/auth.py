@@ -145,31 +145,44 @@ def _patched_init(self, *args, expiry_min=10, **kwargs):
 
 streamlit_cookies_manager.CookieManager.__init__ = _patched_init
 
+_orig_run = _BaseCM._run_component
+def _patched_run(self, save_only: bool, key: str):
+    """
+    Override the component key to be unique per‐instance, based on prefix.
+    """
+    # strip any trailing slash from prefix for cleaner key
+    p = self._prefix.rstrip("/")
+    suffix = ".save" if save_only else ""
+    unique_key = f"{p or 'cm' }{suffix}"
+    return _orig_run(self, save_only=save_only, key=unique_key)
 
-# -----------------------------------------------------------------------------
-# 1. Generate or retrieve session_id via a raw CookieManager
-# -----------------------------------------------------------------------------
-raw_cm = CookieManager(prefix="crossfit83/", key="session_id_manager")  
+# Apply the patch to both the raw and encrypted managers
+_BaseCM._run_component = _patched_run
+_BaseECM._run_component = _patched_run
+
+# ------------------------------------------------------------
+# 1. Raw CookieManager to hold the session_id in a non‐encrypted cookie
+# ------------------------------------------------------------
+raw_cm = _BaseCM(prefix="crossfit83/session", path="/")
 if not raw_cm.ready():
     st.stop()
 
 session_id = raw_cm.get("session_id")
-if not session_id:
+if session_id is None:
     session_id = str(uuid.uuid4())
     raw_cm["session_id"] = session_id
     raw_cm.save()
 
 
-# -----------------------------------------------------------------------------
-# 2. Load encryption secret and create your EncryptedCookieManager
-# -----------------------------------------------------------------------------
+# ------------------------------------------------------------
+# 2. EncryptedCookieManager for storing “athl”
+# ------------------------------------------------------------
 _creds = get_conn_and_df("Credentials")
 _secret = _creds.loc[_creds.username.eq("COOKIES_SECRET"), "password"].iat[0]
 
-cookies = EncryptedCookieManager(
-    prefix=f"crossfit83/{session_id}/",
-    password=_secret, 
-    key="auth_manager"
+cookies = _BaseECM(
+    prefix=f"crossfit83/{session_id}/", 
+    password=_secret
 )
 if not cookies.ready():
     st.stop()
