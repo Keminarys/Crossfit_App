@@ -11,8 +11,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.functions import get_conn_and_df, UpdateDB, create_heatmap_attend, dropRecordDB
 import streamlit.components.v1 as components
-#from utils.auth import login_ui, logout_ui
-#from utils.auth import require_login, get_current_user, logout_button  
 from utils.ui_helpers import render_navbar    
 
 if not st.user.is_logged_in:
