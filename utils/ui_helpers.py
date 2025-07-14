@@ -14,7 +14,7 @@ def render_navbar(pages: list[tuple[str, str]]):
 
     # Add links for pages in the 'pages/' subfolder
     links_html = "".join(
-        f'<a class="nav-link" href="/pages/{path}" target="_self">{label}</a>'
+        f'<a class="nav-link" href="/{path}" target="_self">{label}</a>'
         for label, path in pages
     )
 
