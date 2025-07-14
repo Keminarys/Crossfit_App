@@ -47,6 +47,40 @@ daysConvert = {
     "Sunday": "Dimanche"
 }
 
+
+st.subheader("Inscription au WOD de la semaine :calendar:"):
+poll = get_conn_and_df("Inscription")
+
+if str(st.session_state.athl) not in poll["Nom"].unique() : 
+    new_row = {col: False for col in poll.columns}
+    new_row["Nom"] = str(st.session_state.athl)
+    
+    edited = st.data_editor(
+        pd.DataFrame([new_row]),
+        column_config={
+            "Nom": {"disabled": True}, 
+        },
+        hide_index=True,
+        key="attendance_editor"
+    )
+
+    if st.button("S'inscrire"):
+        for col in edited.columns:
+            if edited[col].dtype == "bool":
+                edited[col] = edited[col].replace({False: "", True: "x"})
+        UpdateDB(poll, edited, "Inscription")
+        st.cache_data.clear()
+        st.rerun() 
+else : 
+    st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
+    if st.button("Modifier son inscription", key="btn_modify"):
+        poll = poll[poll["Nom"] != str(st.session_state.athl)]
+        if poll.empty:
+            poll = poll.iloc[0:0] 
+        dropRecordDB(poll, "Inscription")
+        st.cache_data.clear()
+        st.rerun()
+
 # Define example workout details for each day
 with st.expander("Planning de la semaine :calendar:"):
     cols = st.columns(7)
@@ -86,40 +120,6 @@ with st.expander("Planning de la semaine :calendar:"):
                         <p>{selected_planning.loc[i, selected_day]}</p>
                     </div>
                 """, unsafe_allow_html=True)
-
-
-with st.expander("Inscription au WOD de la semaine :calendar:"):
-    poll = get_conn_and_df("Inscription")
-    
-    if str(st.session_state.athl) not in poll["Nom"].unique() : 
-        new_row = {col: False for col in poll.columns}
-        new_row["Nom"] = str(st.session_state.athl)
-        
-        edited = st.data_editor(
-            pd.DataFrame([new_row]),
-            column_config={
-                "Nom": {"disabled": True}, 
-            },
-            hide_index=True,
-            key="attendance_editor"
-        )
-    
-        if st.button("S'inscrire"):
-            for col in edited.columns:
-                if edited[col].dtype == "bool":
-                    edited[col] = edited[col].replace({False: "", True: "x"})
-            UpdateDB(poll, edited, "Inscription")
-            st.cache_data.clear()
-            st.rerun() 
-    else : 
-        st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
-        if st.button("Modifier son inscription", key="btn_modify"):
-            poll = poll[poll["Nom"] != str(st.session_state.athl)]
-            if poll.empty:
-                poll = poll.iloc[0:0] 
-            dropRecordDB(poll, "Inscription")
-            st.cache_data.clear()
-            st.rerun()
 
 with st.expander("📊 Personnes présentes cette semaine"):
     st.dataframe(
