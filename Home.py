@@ -32,13 +32,13 @@ def main():
         if st.button("Log out"):
             st.logout()
 
-
-    title, logo = st.columns([3, 1])
-    with title:
-        st.title('Crossfit83 Le Beausset')
-        st.write(f"Bienvenue, {user}!")
-    with logo:
-        st.image("LogoCrossfit.jpg")
+    if st.user.name is not None :
+        title, logo = st.columns([3, 1])
+        with title:
+            st.title('Crossfit83 Le Beausset')
+            st.write(f"Bienvenue, {st.user.name}!")
+        with logo:
+            st.image("LogoCrossfit.jpg")
 
 if __name__ == "__main__":
     main()
