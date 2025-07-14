@@ -12,8 +12,11 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import requests
 from bs4 import BeautifulSoup
-from utils.auth import get_current_user
 
+
+def get_current_user() -> str | None:
+    return cookies.get("athl")
+    
 def get_conn_and_df(sheet_name) :
     conn = st.connection("gsheets", type=GSheetsConnection)
     datas = conn.read(worksheet=sheet_name)
