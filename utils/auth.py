@@ -149,7 +149,7 @@ streamlit_cookies_manager.CookieManager.__init__ = _patched_init
 # -----------------------------------------------------------------------------
 # 1. Generate or retrieve session_id via a raw CookieManager
 # -----------------------------------------------------------------------------
-raw_cm = CookieManager(prefix="crossfit83/")  
+raw_cm = CookieManager(prefix="crossfit83/", key="session_id_manager")  
 if not raw_cm.ready():
     st.stop()
 
@@ -168,7 +168,8 @@ _secret = _creds.loc[_creds.username.eq("COOKIES_SECRET"), "password"].iat[0]
 
 cookies = EncryptedCookieManager(
     prefix=f"crossfit83/{session_id}/",
-    password=_secret
+    password=_secret, 
+    key="auth_manager"
 )
 if not cookies.ready():
     st.stop()
