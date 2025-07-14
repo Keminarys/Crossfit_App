@@ -11,26 +11,26 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from utils.functions import get_conn_and_df, UpdateDB, create_heatmap_attend, dropRecordDB
 import streamlit.components.v1 as components
-from utils.auth import login_ui, logout_ui
+#from utils.auth import login_ui, logout_ui
+from utils.auth import require_login, get_current_user, logout_button  
 from utils.ui_helpers import render_navbar    
 
-if not st.session_state.get("authenticated"):
-    login_ui()
-    
+require_login()    
 nav_col, logout_col = st.columns([8, 1])
 
 with nav_col:
     render_navbar([
-        ("Votre Profil",    "profiles_page"),
         ("Votre Progression","progress"),
         ("Ressources Crossfit","ressources"),
+        ("Programmation",   "scheduleResa"),
     ])
 
 with logout_col:
-    logout_ui()
+    logout_button()
+
 
 st.set_page_config(layout="wide")
-
+athl = get_current_user()
 planning = get_conn_and_df("WODSemaine")
 planning = planning[['WOD', 'Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']].dropna()
 
@@ -50,9 +50,9 @@ daysConvert = {
 st.subheader("Inscription au WOD de la semaine :calendar:")
 poll = get_conn_and_df("Inscription")
 
-if str(st.session_state.athl) not in poll["Nom"].unique() : 
+if athl not in poll["Nom"].unique() : 
     new_row = {col: False for col in poll.columns}
-    new_row["Nom"] = str(st.session_state.athl)
+    new_row["Nom"] = athl
     
     edited = st.data_editor(
         pd.DataFrame([new_row]),
@@ -76,7 +76,7 @@ if str(st.session_state.athl) not in poll["Nom"].unique() :
 else : 
     st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
     if st.button("Modifier son inscription", key="btn_modify"):
-        poll = poll[poll["Nom"] != str(st.session_state.athl)]
+        poll = poll[poll["Nom"] != athl]
         if poll.empty:
             poll = poll.iloc[0:0] 
         dropRecordDB(poll, "Inscription")
