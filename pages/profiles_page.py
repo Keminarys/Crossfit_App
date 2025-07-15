@@ -128,7 +128,7 @@ if st.user.is_logged_in :
     st.write("Tu peux visualiser toutes tes performances dans le tableau ci-dessous !")
     st.divider()
 
-    if st.user.name in df["Profil"].values
+    if st.user.name in df["Profil"].values :
         col1, col2 = st.columns(2)
         
         with col1 :
