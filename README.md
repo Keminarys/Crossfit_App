@@ -2,5 +2,5 @@ Link to the app [![Streamlit App](https://static.streamlit.io/badges/streamlit_b
 
 Improvement incoming : 
 - Get feedbacks
-- Implement a system to schedule course and reservation
+
 
