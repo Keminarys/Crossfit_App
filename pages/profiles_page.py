@@ -127,27 +127,28 @@ if st.user.is_logged_in :
     st.divider()
     st.write("Tu peux visualiser toutes tes performances dans le tableau ci-dessous !")
     st.divider()
-    
-    col1, col2 = st.columns(2)
-    
-    with col1 :
-        data_perso = data_perso(df)
-        styled_df = data_perso.style.apply(highlight_rows, axis=1)
-        st.dataframe(styled_df, use_container_width=True, hide_index=True)
-    
-    with col2 :
-        fig = ChartDataFS(df, athl)
-        st.plotly_chart(fig,use_container_width=True)
+
+    if st.user.name in df["Profil"].values
+        col1, col2 = st.columns(2)
         
-        st.divider()
-        data_full_scoped = df.loc[df['Profil'] == st.user.name]
-        selected_cat = st.selectbox('Choix de la catégorie', list(data_full_scoped.Category.unique()))
-        selected_ex = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[data_full_scoped['Category'] == selected_cat]['Exercice'].unique()))
-       
-        data_graph = data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]
-        if (len(selected_cat) > 0) and (len(selected_ex) > 0) and (data_graph["Unité"].unique().tolist()[0] == "HH:MM:SS") :
-            data_graph = data_graph.assign(**data_graph[['Perf']].apply(pd.to_datetime, format='%H:%M:%S'))
-        data_graph['Exo_RM'] = data_graph['Exercice'] + '// RM : ' +data_graph['RM'].astype(str)
-        fig_line = px.line(data_graph,x="Date", y="Perf", color='Exo_RM', markers=True)
-        st.plotly_chart(fig_line,use_container_width=True)
+        with col1 :
+            data_perso = data_perso(df)
+            styled_df = data_perso.style.apply(highlight_rows, axis=1)
+            st.dataframe(styled_df, use_container_width=True, hide_index=True)
+        
+        with col2 :
+            fig = ChartDataFS(df, athl)
+            st.plotly_chart(fig,use_container_width=True)
+            
+            st.divider()
+            data_full_scoped = df.loc[df['Profil'] == st.user.name]
+            selected_cat = st.selectbox('Choix de la catégorie', list(data_full_scoped.Category.unique()))
+            selected_ex = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[data_full_scoped['Category'] == selected_cat]['Exercice'].unique()))
+           
+            data_graph = data_full_scoped.loc[(data_full_scoped['Category'] == selected_cat) & (data_full_scoped['Exercice'].isin(selected_ex))]
+            if (len(selected_cat) > 0) and (len(selected_ex) > 0) and (data_graph["Unité"].unique().tolist()[0] == "HH:MM:SS") :
+                data_graph = data_graph.assign(**data_graph[['Perf']].apply(pd.to_datetime, format='%H:%M:%S'))
+            data_graph['Exo_RM'] = data_graph['Exercice'] + '// RM : ' +data_graph['RM'].astype(str)
+            fig_line = px.line(data_graph,x="Date", y="Perf", color='Exo_RM', markers=True)
+            st.plotly_chart(fig_line,use_container_width=True)
 
