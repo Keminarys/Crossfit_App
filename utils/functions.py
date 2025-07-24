@@ -176,7 +176,7 @@ def pplComingToday(df) :
     today_french = days_map[today_english]
 
     filtered_columns = ["Nom"]
-    filtered_columns += [col for col in columns if today_french in col]
+    filtered_columns += [col for col in df.columns if today_french in col]
     
     filteredDF = df[filtered_columns]
     input_dict = filteredDF.to_dict()
