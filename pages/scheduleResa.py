@@ -60,7 +60,7 @@ if st.user.is_logged_in :
                                     st.markdown(f"<div style='background-color:#dff0d8;padding:10px;border-radius:5px;text-align:center;font-weight:bold;'>{name}</div>", unsafe_allow_html=True)
                         else:
                             st.markdown("🚫 Personne n'est prévu pour ce créneau.")
-        st.div()
+        
         st.subheader("Inscription au WOD de la semaine :calendar:")
         
         
