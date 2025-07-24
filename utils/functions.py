@@ -162,3 +162,30 @@ def create_heatmap_attend(df: pd.DataFrame) -> px.imshow:
 
     return fig
 
+def pplComingToday(df) :
+    days_map = {
+        'Monday': 'Lundi',
+        'Tuesday': 'Mardi',
+        'Wednesday': 'Mercredi',
+        'Thursday': 'Jeudi',
+        'Friday': 'Vendredi',
+        'Saturday': 'Samedi',
+        'Sunday': 'Dimanche'
+    }
+    today_english = datetime.datetime.today().strftime('%A')
+    today_french = days_map[today_english]
+
+    filtered_columns = ["Nom"]
+    filtered_columns += [col for col in columns if today_french in col]
+    
+    filteredDF = df[filtered_columns]
+    input_dict = filteredDF.to_dict()
+    names = input_dict['Nom']
+    output_dict = {}
+    for time_slot, attendance in input_dict.items():
+        if time_slot == 'Nom':
+            continue
+        output_dict[time_slot] = {
+            names[idx] for idx, val in attendance.items() if val == 1
+        }
+    return output_dict
