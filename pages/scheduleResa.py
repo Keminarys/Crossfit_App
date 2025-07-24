@@ -52,14 +52,14 @@ if st.user.is_logged_in :
         st.subheader()
         attendance_dict = pplComingToday(poll)
         for time_slot, people in attendance_dict.items():
-        with st.expander(f"🕒 {time_slot}", expanded=True):
-                if people:
-                    cols = st.columns(min(len(people), 4))
-                    for idx, name in enumerate(people):
-                        with cols[idx % 4]:
-                            st.markdown(f"<div style='background-color:#dff0d8;padding:10px;border-radius:5px;text-align:center;font-weight:bold;'>{name}</div>", unsafe_allow_html=True)
-                else:
-                    st.markdown("🚫 Personne n'est prévu pour ce créneau.")
+                with st.expander(f"🕒 {time_slot}", expanded=True):
+                        if people:
+                            cols = st.columns(min(len(people), 4))
+                            for idx, name in enumerate(people):
+                                with cols[idx % 4]:
+                                    st.markdown(f"<div style='background-color:#dff0d8;padding:10px;border-radius:5px;text-align:center;font-weight:bold;'>{name}</div>", unsafe_allow_html=True)
+                        else:
+                            st.markdown("🚫 Personne n'est prévu pour ce créneau.")
         st.div()
         st.subheader("Inscription au WOD de la semaine :calendar:")
         
