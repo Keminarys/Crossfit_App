@@ -9,7 +9,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils.functions import get_conn_and_df, UpdateDB, create_heatmap_attend, dropRecordDB
+from utils.functions import get_conn_and_df, UpdateDB, create_heatmap_attend, dropRecordDB, pplComingToday
 import streamlit.components.v1 as components
 from utils.ui_helpers import render_navbar    
 
@@ -35,6 +35,7 @@ if st.user.is_logged_in :
         athl = st.user.name
         planning = get_conn_and_df("WODSemaine")
         planning = planning[['WOD', 'Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']].dropna()
+        poll = get_conn_and_df("Inscription")
         
         # Get current date and determine Monday of the current week
         today = date.today()
@@ -48,9 +49,20 @@ if st.user.is_logged_in :
             "Sunday": "Dimanche"
         }
         
-        
+        st.subheader()
+        attendance_dict = pplComingToday(poll)
+        for time_slot, people in attendance_dict.items():
+        with st.expander(f"🕒 {time_slot}", expanded=True):
+                if people:
+                    cols = st.columns(min(len(people), 4))
+                    for idx, name in enumerate(people):
+                        with cols[idx % 4]:
+                            st.markdown(f"<div style='background-color:#dff0d8;padding:10px;border-radius:5px;text-align:center;font-weight:bold;'>{name}</div>", unsafe_allow_html=True)
+                else:
+                    st.markdown("🚫 Personne n'est prévu pour ce créneau.")
+        st.div()
         st.subheader("Inscription au WOD de la semaine :calendar:")
-        poll = get_conn_and_df("Inscription")
+        
         
         if athl not in poll["Nom"].unique() : 
             new_row = {col: False for col in poll.columns}
