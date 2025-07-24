@@ -57,7 +57,7 @@ if st.user.is_logged_in :
                             cols = st.columns(min(len(people), 4))
                             for idx, name in enumerate(people):
                                 with cols[idx % 4]:
-                                    st.markdown(f"<div style='background-color:#dff0d8;padding:10px;border-radius:5px;text-align:center;font-weight:bold;'>{name}</div>", unsafe_allow_html=True)
+                                    st.markdown(f"<div style='background-color:#8B0000;padding:10px;border-radius:5px;text-align:center;font-weight:bold;'>{name}</div>", unsafe_allow_html=True)
                         else:
                             st.markdown("🚫 Personne n'est prévu pour ce créneau.")
         
