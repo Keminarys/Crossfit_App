@@ -186,6 +186,6 @@ def pplComingToday(df) :
         if time_slot == 'Nom':
             continue
         output_dict[time_slot] = {
-            names[idx] for idx, val in attendance.items() if val == 1
+            names[idx] for idx, val in attendance.items() if val == "x"
         }
     return output_dict
