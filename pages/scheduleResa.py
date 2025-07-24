@@ -49,7 +49,7 @@ if st.user.is_logged_in :
             "Sunday": "Dimanche"
         }
         
-        st.subheader()
+        st.subheader("Personnes présentes au cours aujourd'hui")
         attendance_dict = pplComingToday(poll)
         for time_slot, people in attendance_dict.items():
                 with st.expander(f"🕒 {time_slot}", expanded=True):
