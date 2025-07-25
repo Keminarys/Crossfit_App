@@ -33,17 +33,22 @@ def main():
     if st.user.is_logged_in :
         title, logo = st.columns([3, 1])
         with title:
-            st.title('Crossfit83 Le Beausset')
-            st.write(f"Bienvenue, {st.user.name}!")
             stUserChangeDF = get_conn_and_df("CorrespondanceSTUser")
-            st.write(f"Le nom associé à votre compte google est le suivant : {st.user.name}, souhaitez vous apparaître sous un autre nom ?")
-            on = st.toggle("Changer de Nom")
-            if on :
-                newname = st.text_input("Nouveau Nom")
-                if st.button("Valider"):
-                    change = {"Original" : st.user.name,
+            OgDict = dict(zip(stUserChangeDF['Original'], stUserChangeDF['NewValue']))
+            if st.user.name in OgList.keys() : 
+                athl = OgDict[st.user.name]
+            else : athl = st.user.name
+            st.title('Crossfit83 Le Beausset')
+            st.write(f"Bienvenue, {athl}!")
+            if st.user.name not in OgList.keys() : 
+                st.write(f"Le nom associé à votre compte google est le suivant : {st.user.name}, souhaitez vous apparaître sous un autre nom ?")
+                on = st.toggle("Changer de Nom")
+                if on :
+                    newname = st.text_input("Nouveau Nom")
+                    if st.button("Valider"):
+                        change = {"Original" : st.user.name,
                             "NewValue" : newname}
-                    UpdateDB(stUserChangeDF, change, "CorrespondanceSTUser")
+                        UpdateDB(stUserChangeDF, change, "CorrespondanceSTUser")
         with logo:
             st.image("LogoCrossfit.jpg")
 
