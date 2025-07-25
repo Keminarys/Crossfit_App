@@ -6,7 +6,7 @@ import re
 import streamlit as st
 from streamlit_gsheets import GSheetsConnection
 from datetime import date
-from utils.functions import get_conn_and_df
+from utils.functions import get_conn_and_df, newName
 from utils.ui_helpers import render_navbar    
 
 if not st.user.is_logged_in:
@@ -28,7 +28,7 @@ with log:
 
 if st.user.is_logged_in :
         st.set_page_config(layout="wide")
-        athl = st.user.name
+        athl = newName()
         
         st.title(f"{athl}, cette page peut t'aider lors de session open gym")
         st.subheader("💪 Travail de Force")
