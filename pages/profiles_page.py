@@ -11,12 +11,12 @@ import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils.functions import get_conn_and_df, highlight_rows, ChartDataFS, UpdateDB
+from utils.functions import get_conn_and_df, highlight_rows, ChartDataFS, UpdateDB, newName
 from utils.ui_helpers import render_navbar
 
 
 def data_perso(df) :
-    athl = st.user.name
+    athl = newName()
     temp = df.loc[df['Profil'] == athl].sort_values(by=["Category", "Exercice", "Date"], ascending = [True, True, False])
     return temp
 
@@ -58,7 +58,7 @@ if st.user.is_logged_in :
     ### Main
     
     
-    athl = st.user.name
+    athl = newName()
     st.title(f"Bienvenue sur ton profil {athl} :muscle:")
     
     st.divider()
@@ -128,7 +128,7 @@ if st.user.is_logged_in :
     st.write("Tu peux visualiser toutes tes performances dans le tableau ci-dessous !")
     st.divider()
 
-    if st.user.name in df["Profil"].values :
+    if athl in df["Profil"].values :
         col1, col2 = st.columns(2)
         
         with col1 :
@@ -141,7 +141,7 @@ if st.user.is_logged_in :
             st.plotly_chart(fig,use_container_width=True)
             
             st.divider()
-            data_full_scoped = df.loc[df['Profil'] == st.user.name]
+            data_full_scoped = df.loc[df['Profil'] == athl]
             selected_cat = st.selectbox('Choix de la catégorie', list(data_full_scoped.Category.unique()))
             selected_ex = st.multiselect('Choix de la catégorie', list(data_full_scoped.loc[data_full_scoped['Category'] == selected_cat]['Exercice'].unique()))
            
