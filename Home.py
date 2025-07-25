@@ -40,7 +40,7 @@ def main():
             else : athl = st.user.name
             st.title('Crossfit83 Le Beausset')
             st.write(f"Bienvenue, {athl}!")
-            if st.user.name not in OgList.keys() : 
+            if st.user.name not in OgDict.keys() : 
                 st.write(f"Le nom associé à votre compte google est le suivant : {st.user.name}, souhaitez vous apparaître sous un autre nom ?")
                 on = st.toggle("Changer de Nom")
                 if on :
