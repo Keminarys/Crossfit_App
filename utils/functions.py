@@ -189,3 +189,11 @@ def pplComingToday(df) :
             names[idx] for idx, val in attendance.items() if val == "x"
         }
     return output_dict
+
+def newName() :
+    stUserChangeDF = get_conn_and_df("CorrespondanceSTUser")
+    OgDict = dict(zip(stUserChangeDF['Original'], stUserChangeDF['NewValue']))
+    if st.user.name in OgDict.keys() : 
+        athl = OgDict[st.user.name]
+    else : athl = st.user.name
+    return athl
