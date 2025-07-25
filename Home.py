@@ -35,7 +35,7 @@ def main():
         with title:
             stUserChangeDF = get_conn_and_df("CorrespondanceSTUser")
             OgDict = dict(zip(stUserChangeDF['Original'], stUserChangeDF['NewValue']))
-            if st.user.name in OgList.keys() : 
+            if st.user.name in OgDict.keys() : 
                 athl = OgDict[st.user.name]
             else : athl = st.user.name
             st.title('Crossfit83 Le Beausset')
