@@ -9,7 +9,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
-from utils.functions import get_conn_and_df, UpdateDB, create_heatmap_attend, dropRecordDB, pplComingToday
+from utils.functions import get_conn_and_df, UpdateDB, create_heatmap_attend, dropRecordDB, pplComingToday, newName
 import streamlit.components.v1 as components
 from utils.ui_helpers import render_navbar    
 
@@ -32,7 +32,7 @@ with logout_col:
 
 if st.user.is_logged_in :
         st.set_page_config(layout="wide")
-        athl = st.user.name
+        athl = newName()
         planning = get_conn_and_df("WODSemaine")
         planning = planning[['WOD', 'Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']].dropna()
         poll = get_conn_and_df("Inscription")
