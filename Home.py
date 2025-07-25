@@ -1,6 +1,6 @@
 import streamlit as st
 
-from utils.functions import get_conn_and_df
+from utils.functions import get_conn_and_df, UpdateDB
 from utils.ui_helpers import render_navbar
 
 import pandas as pd
@@ -35,6 +35,15 @@ def main():
         with title:
             st.title('Crossfit83 Le Beausset')
             st.write(f"Bienvenue, {st.user.name}!")
+            stUserChangeDF = get_conn_and_df("CorrespondanceSTUser")
+            st.write(f"Le nom associé à votre compte google est le suivant : {st.user.name}, souhaitez vous apparaître sous un autre nom ?")
+            on = st.toggle("Changer de Nom")
+            if on :
+                newname = st.text_input("Nouveau Nom")
+                if st.button("Valider"):
+                    change = {"Original" : st.user.name,
+                            "NewValue" : newname}
+                    UpdateDB(stUserChangeDF, change, "CorrespondanceSTUser")
         with logo:
             st.image("LogoCrossfit.jpg")
 
