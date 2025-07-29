@@ -49,6 +49,8 @@ def main():
                         change = {"Original" : st.user.name,
                             "NewValue" : newname}
                         UpdateDB(stUserChangeDF, change, "CorrespondanceSTUser")
+                        st.cache_data.clear()
+                        st.rerun()
         with logo:
             st.image("LogoCrossfit.jpg")
 
