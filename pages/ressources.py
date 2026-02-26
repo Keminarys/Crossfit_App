@@ -87,7 +87,7 @@ if st.user.is_logged_in :
         wods_df = get_all_heroes()
         chosen_hero = expanderWODHero.selectbox("Quel WOD Hero voulez vous voir", wods_df.Name.tolist())
         if len(chosen_hero) > 0 : 
-            wod = wods_df.loc[wods_df.Name == chosen_hero]['Desc'].value
+            wod = wods_df.loc[wods_df.Name == chosen_hero]['Desc'].values
             expanderWODHero.markdown(wod, unsafe_allow_html=True)
         st.divider()
         
