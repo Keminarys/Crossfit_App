@@ -70,7 +70,7 @@ def random_date_url():
 def get_all_heroes() : 
     wodHerosPage = get_conn_and_df("benchmarks")
     wodHerosPage = wodHerosPage.iloc[1:]
-    wodHerosPage.columns = ['wodHeroNb','Name','Desc']
+    wodHerosPage.columns = ['Name','vide','Desc']
     return wodHerosPage
 
 def wodGirls() :
