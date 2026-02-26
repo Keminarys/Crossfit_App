@@ -69,9 +69,9 @@ def random_date_url():
 
 def get_all_heroes() : 
     wodHerosPage = get_conn_and_df("benchmarks")
-    wodHerosPage = wodHerosPage.iloc[1:]["Description"]
-    wodGirls = ast.literal_eval(wodHerosPage)
-    return wods
+    wodHerosPage = wodHerosPage.iloc[1:]
+    wodHerosPage.columns = ['wodHeroNb','Name','Desc']
+    return wodHerosPage
 
 def wodGirls() :
     wodGirlsPage = get_conn_and_df("benchmarks")
