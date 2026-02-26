@@ -84,11 +84,11 @@ if st.user.is_logged_in :
         st.divider()
         st.write("Vous trouverez ci dessous les WODs HERO")
         expanderWODHero = st.expander(":red[Tous les WOD Hero]")
-        wods = get_all_heroes()
-        chosen_hero = expanderWODHero.selectbox("Quel WOD Hero voulez vous voir", [i["name"] for i in wods])
+        wods_df = get_all_heroes()
+        chosen_hero = expanderWODHero.selectbox("Quel WOD Hero voulez vous voir", wods_df.Name.tolist())
         if len(chosen_hero) > 0 : 
-            wod = next((wod for wod in wods if wod['name'] == chosen_hero), None)
-            expanderWODHero.markdown(wod['description'].replace('\n', '<br>'), unsafe_allow_html=True)
+            wod = wods_df.loc[wods_df.Name == chosen_hero]['Desc']
+            expanderWODHero.markdown(wod, unsafe_allow_html=True)
         st.divider()
         
         st.write("Vous trouverez ci dessous les WODs GIRL")
