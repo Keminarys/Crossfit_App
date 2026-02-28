@@ -12,13 +12,22 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 import requests
 from bs4 import BeautifulSoup
-    
+import json 
+from google.auth.transport.requests import AuthorizedSession 
+   
 def get_conn_and_df(sheet_name) :
     conn = st.connection("gsheets", type=GSheetsConnection)
     datas = conn.read(worksheet=sheet_name)
     return datas
 
-
+def load_drive_json(file_id, creds): 
+    authed_session = AuthorizedSession(creds) 
+    url = f"https://www.googleapis.com/drive/v3/files/{file_id}?alt=media" 
+    response = authed_session.get(url) 
+    if response.status_code != 200: 
+        raise Exception( f"Failed to download file {file_id}: " f"{response.status_code} - {response.text}" ) 
+    return response.json()
+    
 def highlight_rows(row):
     styles = {
         'GYMNASTIC': 'background-color: darkgray;',
