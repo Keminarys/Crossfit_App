@@ -32,6 +32,7 @@ with nav_col:
         ("Votre Progression","progress"),
         ("Ressources Crossfit","ressources"),
         ("Programmation",   "scheduleResa"),
+        ("Calisthenics",   "calisthenics"),
     ])
 
 with logout_col:
