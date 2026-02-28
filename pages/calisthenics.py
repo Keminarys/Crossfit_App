@@ -36,7 +36,7 @@ if st.user.is_logged_in :
         data = load_drive_json(file_id, creds)
         all_tree_list = []
         for i in range(0,len(data)):
-          tree = j[i]['movements'][0]['skill_tree_links']
+          tree = data[i]['movements'][0]['skill_tree_links']
           all_tree_list.append(tree[0])
         st.title("Bienvenue sur la page spéciale Calisthénie !")
         st.divider()
