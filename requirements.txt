@@ -13,3 +13,6 @@ requests
 streamlit-cookies-manager
 PyJWT
 Authlib
+dash
+json
+dash_cytoscape
