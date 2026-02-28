@@ -7,7 +7,7 @@ from dash import html
 from google.oauth2 import service_account 
 from utils.functions import get_conn_and_df, load_drive_json
 from utils.ui_helpers import render_navbar
-from streamlit_cytoscapejs import cytoscape
+#from streamlit_cytoscapejs import cytoscape
 
 if not st.user.is_logged_in:
         if st.button("Log in with Google"):
