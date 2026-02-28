@@ -15,4 +15,4 @@ PyJWT
 Authlib
 dash
 dash_cytoscape
-googleapiclient
+google-api-python-client
