@@ -7,7 +7,7 @@ from dash import html
 from google.oauth2 import service_account 
 from utils.functions import get_conn_and_df, load_drive_json
 from utils.ui_helpers import render_navbar
-from streamlit_cytoscapejs import Cytoscape
+import streamlit_cytoscapejs
 
 if not st.user.is_logged_in:
         if st.button("Log in with Google"):
@@ -35,6 +35,7 @@ if st.user.is_logged_in :
         file_id = st.secrets["drive"]["json_file_id"]
         data = load_drive_json(file_id, creds)
         all_tree_list = []
+        dir(streamlit_cytoscapejs)
         for i in range(0,len(data)):
           tree = data[i]['movements'][0]['skill_tree_links']
           all_tree_list.append(tree[0])
