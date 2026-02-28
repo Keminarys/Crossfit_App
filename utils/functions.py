@@ -186,3 +186,24 @@ def newName() :
         athl = OgDict[st.user.name]
     else : athl = st.user.name
     return athl
+
+def progressCalistenics(df, user_id, new_mastered, sheet_name):
+    conn = st.connection("gsheets", type=GSheetsConnection)
+    if user_id not in df["id"].values:
+        new_row = {
+            "id": user_id,
+            "mastered": json.dumps([new_mastered])
+        }
+        df = pd.concat([df, pd.DataFrame([new_row])], ignore_index=True)
+    else:
+        idx = df.index[df["id"] == user_id][0]
+        try:
+            mastered_list = json.loads(df.loc[idx, "mastered"])
+        except:
+            mastered_list = []
+        if new_mastered not in mastered_list:
+            mastered_list.append(new_mastered)
+        df.loc[idx, "mastered"] = json.dumps(mastered_list)
+    conn.update(worksheet=sheet_name, data=df)
+    return df
+
