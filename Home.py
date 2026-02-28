@@ -25,6 +25,7 @@ def main():
             ("Votre Progression","progress"),
             ("Ressources Crossfit","ressources"),
             ("Programmation",   "scheduleResa"),
+            ("Calisthenics",   "calisthenics"),
         ])
     with log : 
         if st.button("Log out"):
