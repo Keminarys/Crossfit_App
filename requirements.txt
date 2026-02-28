@@ -13,6 +13,4 @@ requests
 streamlit-cookies-manager
 PyJWT
 Authlib
-dash
-dash_cytoscape
-google-api-python-client
+streamlit-cytoscapejs
