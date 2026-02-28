@@ -23,7 +23,8 @@ with nav_col:
     render_navbar([
         ("Votre Profil",    "profiles_page"),
         ("Votre Progression","progress"),
-        ("Ressources Crossfit","ressources")
+        ("Ressources Crossfit","ressources"),
+        ("Calisthenics",   "calisthenics"),
     ])
 
 with logout_col:
