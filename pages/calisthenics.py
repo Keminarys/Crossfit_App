@@ -12,7 +12,7 @@ drive = build("drive", "v3", credentials=creds)
 file_id = st.secrets["drive"]["json_file_id"] 
 
 
-results = drive.files().list( q="mimeType='application/json'", fields="files(id, name)" ).execute() 
+results = drive.files().list( q="name='calithenicsDB.json'", fields="files(id, name, mimeType)" ).execute() 
 st.write(results)
 # request = drive.files().get_media(fileId=file_id) 
 # content = request.execute() 
