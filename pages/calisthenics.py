@@ -7,7 +7,7 @@ from dash import html
 from google.oauth2 import service_account 
 from utils.functions import get_conn_and_df, load_drive_json
 from utils.ui_helpers import render_navbar
-import streamlit_cytoscapejs
+from streamlit_cytoscapejs import st_cytoscapejs
 
 if not st.user.is_logged_in:
         if st.button("Log in with Google"):
@@ -35,7 +35,6 @@ if st.user.is_logged_in :
         file_id = st.secrets["drive"]["json_file_id"]
         data = load_drive_json(file_id, creds)
         all_tree_list = []
-        st.write(dir(streamlit_cytoscapejs))
         for i in range(0,len(data)):
           tree = data[i]['movements'][0]['skill_tree_links']
           all_tree_list.append(tree[0])
@@ -45,7 +44,29 @@ if st.user.is_logged_in :
         if len(selected_tree) > 0 :
                 idx_skill_tree = all_tree_list.index(selected_tree)
                 movements = data[idx_skill_tree]["movements"]
-                st.write(movements)
+                elements = []
+                for item in movements:
+                        node_id = item["id"]
+                        node_classes = "mastered" if node_id in st.session_state.selected_nodes else ""
+        
+                        elements.append({
+                            "data": {"id": node_id, "label": item["name"]},
+                            "classes": node_classes
+                        })
+                
+                for nxt in item.get("progressions_to", []):
+                        elements.append({
+                        "data": {"source": node_id, "target": nxt}})
+                clicked = st_cytoscapejs(
+                    elements=elements,
+                    layout={"name": "breadthfirst"},
+                    stylesheet=[
+                        {"selector": "node", "style": {"background-color": "#88c", "label": "data(label)"}},
+                        {"selector": ".mastered", "style": {"background-color": "green"}}
+                    ],
+                    key="skilltree"
+                )
+
         
 # if st.user.is_logged_in:
 #         st.set_page_config(layout="wide")
