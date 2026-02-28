@@ -4,11 +4,15 @@ import json
 import dash
 import dash_cytoscape as cyto
 from dash import html
+from google.oauth2 import service_account 
+from googleapiclient.discovery import build 
 
+creds = service_account.Credentials.from_service_account_info( st.secrets["gcp_service_account"], scopes=["https://www.googleapis.com/auth/drive.readonly"] ) 
+drive = build("drive", "v3", credentials=creds) 
 file_id = st.secrets["drive"]["json_file_id"] 
-url = f"https://drive.google.com/uc?export=download&id={file_id}" 
-response = requests.get(url) 
-data = json.loads(response.text) 
+request = drive.files().get_media(fileId=file_id) 
+content = request.execute() 
+data = json.loads(content)
 
 testnode = data[0]['movements']
 elements = []
