@@ -26,22 +26,23 @@ with log:
             st.logout()
 
 if st.user.is_logged_in :
-    creds = service_account.Credentials.from_service_account_info(
+        st.set_page_config(layout="wide")
+        creds = service_account.Credentials.from_service_account_info(
         st.secrets["connections"]["gsheets"],
         scopes=["https://www.googleapis.com/auth/drive.readonly"]
-    )
-    file_id = st.secrets["drive"]["json_file_id"]
-    data = load_drive_json(file_id, creds)
-    
-    testnode = data[0]['movements']
-    elements = []
-    for item in testnode:
+        )
+        file_id = st.secrets["drive"]["json_file_id"]
+        data = load_drive_json(file_id, creds)
+        
+        testnode = data[0]['movements']
+        elements = []
+        for item in testnode:
         elements.append({"data": {"id": item["id"], "label": item["name"]}})
         for nxt in item.get("progressions_to", []):
             elements.append({"data": {"source": item["id"], "target": nxt}})
-    
-    app = dash.Dash(__name__)
-    app.layout = html.Div([
+        
+        app = dash.Dash(__name__)
+        app.layout = html.Div([
         cyto.Cytoscape(
             id="skill-tree",
             elements=elements,
@@ -52,22 +53,22 @@ if st.user.is_logged_in :
                 {"selector": ".mastered", "style": {"background-color": "green"}}
             ]
         )
-    ])
-    
-    # Run Dash inside Streamlit
-    from dash.dependencies import Input, Output, State
-    
-    @app.callback(
+        ])
+        
+        # Run Dash inside Streamlit
+        from dash.dependencies import Input, Output, State
+        
+        @app.callback(
         Output("skill-tree", "elements"),
         Input("skill-tree", "tapNodeData"),
         State("skill-tree", "elements")
-    )
-    def mark_mastered(node, elements):
+        )
+        def mark_mastered(node, elements):
         if node:
             for el in elements:
                 if el.get("data", {}).get("id") == node["id"]:
                     el["classes"] = "mastered"
         return elements
-    
-    # Embed
-    st.components.v1.html(app.index(), height=900, scrolling=True)
+        
+        # Embed
+        st.components.v1.html(app.index(), height=900, scrolling=True)
