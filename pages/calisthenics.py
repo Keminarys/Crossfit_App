@@ -5,6 +5,7 @@ import dash
 import dash_cytoscape as cyto
 from dash import html
 from google.oauth2 import service_account 
+from utils import load_drive_json
 
 creds = service_account.Credentials.from_service_account_info(
     st.secrets["connections"]["gsheets"],
