@@ -35,7 +35,7 @@ if st.user.is_logged_in :
         file_id = st.secrets["drive"]["json_file_id"]
         data = load_drive_json(file_id, creds)
         all_tree_list = []
-        dir(streamlit_cytoscapejs)
+        st.write(dir(streamlit_cytoscapejs))
         for i in range(0,len(data)):
           tree = data[i]['movements'][0]['skill_tree_links']
           all_tree_list.append(tree[0])
