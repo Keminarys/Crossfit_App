@@ -26,6 +26,7 @@ with nav_col:
         ("Votre Profil",    "profiles_page"),
         ("Votre Progression","progress"),
         ("Programmation",   "scheduleResa"),
+        ("Calisthenics",   "calisthenics"),
     ])
 
 with logout_col:
