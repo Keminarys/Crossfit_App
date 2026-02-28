@@ -19,6 +19,7 @@ with nav :
         ("Votre Profil",    "profiles_page"),
         ("Ressources Crossfit","ressources"),
         ("Programmation",   "scheduleResa"),
+        ("Calisthenics",   "calisthenics"),
     ])
 
 with log:
