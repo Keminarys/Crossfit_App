@@ -58,15 +58,16 @@ if st.user.is_logged_in :
                 for nxt in item.get("progressions_to", []):
                         elements.append({
                         "data": {"source": node_id, "target": nxt}})
-                clicked = st_cytoscapejs({
-                                    "elements": elements,
-                                    "layout": {"name": "breadthfirst"},
-                                    "stylesheet": [
+                clicked = st_cytoscapejs(
+                                    elements,
+                                    {"name": "breadthfirst"},
+                                    [
                                         {"selector": "node", "style": {"background-color": "#88c", "label": "data(label)"}},
                                         {"selector": ".mastered", "style": {"background-color": "green"}}
-                                    ],
-                                    "key": "skilltree"
-                                })
+                                    ]
+                                )
+
+
 
 
         
