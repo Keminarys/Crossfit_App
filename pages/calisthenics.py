@@ -47,7 +47,8 @@ if st.user.is_logged_in :
                 elements = []
                 for item in movements:
                         node_id = item["id"]
-                        node_classes = "mastered" if node_id in st.session_state.selected_nodes else ""
+                        node_classes = ""
+                        #node_classes = "mastered" if node_id in st.session_state.selected_nodes else ""
         
                         elements.append({
                             "data": {"id": node_id, "label": item["name"]},
