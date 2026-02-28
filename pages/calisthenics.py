@@ -7,7 +7,7 @@ from dash import html
 from google.oauth2 import service_account 
 from googleapiclient.discovery import build 
 
-creds = service_account.Credentials.from_service_account_info( st.secrets["gcp_service_account"], scopes=["https://www.googleapis.com/auth/drive.readonly"] ) 
+creds = service_account.Credentials.from_service_account_info( st.secrets["connection"]["gsheet"], scopes=["https://www.googleapis.com/auth/drive.readonly"] ) 
 drive = build("drive", "v3", credentials=creds) 
 file_id = st.secrets["drive"]["json_file_id"] 
 request = drive.files().get_media(fileId=file_id) 
