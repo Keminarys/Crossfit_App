@@ -15,6 +15,8 @@ from bs4 import BeautifulSoup
 import json 
 from google.auth.transport.requests import AuthorizedSession 
 from pyvis.network import Network
+import tempfile
+import streamlit.components.v1 as components
 
 def get_conn_and_df(sheet_name) :
     conn = st.connection("gsheets", type=GSheetsConnection)
