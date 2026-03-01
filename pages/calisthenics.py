@@ -2,7 +2,7 @@ import streamlit as st
 import requests 
 import json 
 from google.oauth2 import service_account 
-from utils.functions import get_conn_and_df, load_drive_json, render_tree
+from utils.functions import get_conn_and_df, load_drive_json, render_tree, newName
 from utils.ui_helpers import render_navbar
 import graphviz
 import tempfile
@@ -36,11 +36,18 @@ if st.user.is_logged_in :
         file_id = st.secrets["drive"]["json_file_id"]
         data = load_drive_json(file_id, creds)
         all_tree_list = []
+        mastered_df = get_conn_and_df("calistenicPathway")
+        athl = newName()
         for i in range(0,len(data)):
           tree = data[i]['movements'][0]['skill_tree_links']
           all_tree_list.append(tree[0])
-        st.title("Bienvenue sur la page spéciale Calisthénie !")
+        st.title(f"Bienvenue sur la page spéciale Calisthénie {athl}!")
         st.divider()
+        if athl in mastered_df.id.unique().tolist() : 
+                 progressState = mastered_df[mastered_df['id'] == athl].iloc[0].to_dict()
+        else : 
+                 progressState = {'id' : athl, 
+                   'mastered' : []}
         selected_tree = st.selectbox("Quel arbre de compétence voulez vous voir ?", all_tree_list)
         if len(selected_tree) > 0 :
                  idx_skill_tree = all_tree_list.index(selected_tree)
