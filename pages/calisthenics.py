@@ -2,7 +2,7 @@ import streamlit as st
 import requests 
 import json 
 from google.oauth2 import service_account 
-from utils.functions import get_conn_and_df, load_drive_json, build_pyvis_tree, render_tree, get_clicked_node
+from utils.functions import get_conn_and_df, load_drive_json, build_pyvis_tree, render_tree
 from utils.ui_helpers import render_navbar
 import graphviz
 import tempfile
