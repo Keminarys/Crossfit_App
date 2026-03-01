@@ -46,6 +46,10 @@ if st.user.is_logged_in :
                  idx_skill_tree = all_tree_list.index(selected_tree)
                  movements = data[idx_skill_tree]["movements"]
                  st.subheader(f"Arbre interactif : {selected_tree}")
+                 st.markdown(""" <style> 
+                 div[data-testid="stIFrame"] { border: none !important; padding: 0 !important; background: transparent !important; } 
+                 div[data-testid="stIFrame"] iframe { border: none !important; } </style> """, 
+                             unsafe_allow_html=True)
                  render_tree(movements)
 
 
