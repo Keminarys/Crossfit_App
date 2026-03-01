@@ -209,6 +209,13 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
     return df
 
 def build_pyvis_tree(movements):
+    
+    LEVEL_COLORS = {
+    "Beginner": "#4CAF50",
+    "Intermediate": "#FFC107",
+    "Advanced": "#F44336",
+    "Elite": "#9C27B0"}
+    
     net = Network(
         height="650px",
         width="100%",
