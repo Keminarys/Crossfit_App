@@ -288,7 +288,7 @@ def render_tree(movements):
         }
         </script>
         """
-        components.html(html, height=650, scrolling=True, key="pyvis_graph")
+    return components.html(html, height=650, scrolling=True)
 
 
 def get_clicked_node():
