@@ -5,16 +5,38 @@ from google.oauth2 import service_account
 from utils.functions import get_conn_and_df, load_drive_json
 from utils.ui_helpers import render_navbar
 import graphviz
+from pyvis.network import Network
+import tempfile
+import streamlit.components.v1 as components
 
-def build_graphviz_tree(movements):
-        dot = graphviz.Digraph()
-        dot.attr(rankdir="TB") 
-        for mv in movements:
-                 dot.node(mv["id"], mv["name"])
-        for mv in movements:
-                for target in mv.get("progressions_to", []):
-                        dot.edge(mv["id"], target)
-        return dot
+# def build_graphviz_tree(movements):
+#         dot = graphviz.Digraph()
+#         dot.attr(rankdir="TB") 
+#         for mv in movements:
+#                  dot.node(mv["id"], mv["name"])
+#         for mv in movements:
+#                 for target in mv.get("progressions_to", []):
+#                         dot.edge(mv["id"], target)
+#         return dot
+def build_pyvis_tree(movements):
+    net = Network(height="650px", width="100%", directed=True)
+    net.toggle_physics(True)
+
+    # Nodes
+    for mv in movements:
+        net.add_node(
+            mv["id"],
+            label=mv["name"],
+            title=mv["description"],
+            color="#4C8BF5"
+        )
+
+    # Edges
+    for mv in movements:
+        for target in mv.get("progressions_to", []):
+            net.add_edge(mv["id"], target)
+
+    return net
          
 if not st.user.is_logged_in:
         if st.button("Log in with Google"):
@@ -50,18 +72,16 @@ if st.user.is_logged_in :
         selected_tree = st.selectbox("Quel arbre de compétence voulez vous voir ?", all_tree_list)
         if len(selected_tree) > 0 :
                 idx_skill_tree = all_tree_list.index(selected_tree)
-                movements = data[idx_skill_tree]["movements"]              
-
-
-
-
-               
-                
+                movements = data[idx_skill_tree]["movements"]
                 # Inside your Streamlit block:
-                st.subheader(f"Arbre : {selected_tree}")
-                
-                graph = build_graphviz_tree(movements)
-                st.graphviz_chart(graph)
+                st.subheader(f"Arbre interactif : {selected_tree}")
+
+                net = build_pyvis_tree(movements)
+
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp:
+                    net.save_graph(tmp.name)
+                    html = open(tmp.name, "r").read()
+                    components.html(html, height=650, scrolling=True)
 
 
         
