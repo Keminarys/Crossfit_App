@@ -219,7 +219,7 @@ def build_pyvis_tree(movements):
         "Elite": "#D7BDE2"
     }
     net = Network(
-        height="650px",
+        height="800px",
         width="100%",
         directed=True,
         bgcolor="#111111",
