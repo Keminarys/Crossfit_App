@@ -316,27 +316,4 @@ def render_tree(movements):
                 });
                 </script>
                 """
-    return components.html(html, height=650, scrolling=True)
-
-def listen_for_click():
-    return components.html("""
-        <script>
-        window.addEventListener("message", (event) => {
-            if (event.data.type === "pyvis_click") {
-                window.parent.postMessage(
-                    {type: "streamlit:setComponentValue", value: event.data.node_id},
-                    "*"
-                );
-            }
-        });
-        </script>
-    """, height=0)
-
-def get_clicked_node():
-    listen_for_click()
-
-    if "_component_value" in st.session_state:
-        st.session_state["last_clicked_node"] = st.session_state["_component_value"]
-
-    return st.session_state.get("last_clicked_node", None)
-
+    return components.html(html, height=800, scrolling=True)
