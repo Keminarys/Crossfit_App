@@ -225,7 +225,7 @@ def build_pyvis_tree(movements):
     )
 
     net.toggle_physics(True)
-    net.hierarchical_layout(direction="UD", sort_method="directed")
+    
     for mv in movements:
         level = mv.get("level", "Beginner")
         color = LEVEL_COLORS.get(level, "#4C8BF5")
@@ -253,11 +253,21 @@ def build_pyvis_tree(movements):
         for target in mv.get("progressions_to", []):
             net.add_edge(mv["id"], target)
     net.set_options("""
-    var options = {
-      interaction: { hover: true },
-      manipulation: false
-    }
-    """)
+            var options = {
+              layout: {
+                hierarchical: {
+                  enabled: true,
+                  direction: "UD",
+                  sortMethod: "directed",
+                  nodeSpacing: 200,
+                  levelSeparation: 250
+                }
+              },
+              physics: {
+                enabled: false
+              }
+            }
+            """)
 
     return net
 
