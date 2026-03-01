@@ -226,51 +226,48 @@ def build_pyvis_tree(movements):
         bgcolor="#000000",
         font_color="white"
     )
+
     for mv in movements:
         level = mv.get("level", "Beginner")
         color = LEVEL_COLORS.get(level, "#4C8BF5")
 
-        if mv["id"] in st.session_state["completed"]:
-            border_color = "#00E676"
-            border_width = 4
-        else:
-            border_color = "#FFFFFF"
-            border_width = 1
+        title = f"""
+        <b>{mv['name']}</b><br>
+        Niveau : {mv['level']}<br>
+        Muscles : {', '.join(mv['muscles'])}<br><br>
+        {mv['description']}
+        """
 
         net.add_node(
             mv["id"],
             label=mv["name"],
-            title=mv["description"],
+            title=title,
             color=color,
-            borderWidth=border_width,
-            borderWidthSelected=border_width,
             shape="dot",
-            size=25,
-            border_color=border_color
+            size=25
         )
+
     for mv in movements:
         for target in mv.get("progressions_to", []):
             net.add_edge(mv["id"], target)
+
     net.set_options("""
-var options = {
-  "layout": {
-    "hierarchical": {
-      "enabled": true,
-      "direction": "UD",
-      "sortMethod": "directed",
-      "nodeSpacing": 200,
-      "levelSeparation": 250
+    var options = {
+      "layout": {
+        "hierarchical": {
+          "enabled": true,
+          "direction": "LR",
+          "sortMethod": "directed",
+          "nodeSpacing": 200,
+          "levelSeparation": 250
+        }
+      },
+      "interaction": { "hover": true },
+      "physics": { "enabled": false }
     }
-  },
-  "interaction": { "hover": true },
-  "physics": { "enabled": false }
-}
-""")
+    """)
 
     return net
-
-
-
 
 def render_tree(movements):
     net = build_pyvis_tree(movements)
@@ -294,32 +291,6 @@ def render_tree(movements):
                 </script>
                 """
     return components.html(html, height=650, scrolling=True)
-
-def listen_for_click():
-    clicked = components.html("""
-        <script>
-        window.addEventListener("message", (event) => {
-            if (event.data.type === "pyvis_node_click") {
-                const id = event.data.node_id;
-                window.parent.postMessage(
-                    {type: "streamlit:setComponentValue", value: id},
-                    "*"
-                );
-            }
-        });
-        </script>
-    """, height=0)
-    return clicked
-
-def get_clicked_node():
-    listen_for_click()
-
-    if "last_clicked_node" not in st.session_state:
-        st.session_state["last_clicked_node"] = None
-    clicked = st.session_state.get("_component_value", None)
-    if clicked:
-        st.session_state["last_clicked_node"] = clicked
-    return st.session_state["last_clicked_node"]
 
 
 
