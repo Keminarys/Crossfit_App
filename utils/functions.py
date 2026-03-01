@@ -209,18 +209,78 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
     return df
 
 def build_pyvis_tree(movements):
-    net = Network(height="650px", width="100%", directed=True)
+    net = Network(
+        height="650px",
+        width="100%",
+        directed=True,
+        bgcolor="#000000",
+        font_color="white"
+    )
+
     net.toggle_physics(True)
+    net.hierarchical_layout(direction="UD", sort_method="directed")
     for mv in movements:
+        level = mv.get("level", "Beginner")
+        color = LEVEL_COLORS.get(level, "#4C8BF5")
+
+        # Highlight completed nodes
+        if mv["id"] in st.session_state["completed"]:
+            border_color = "#00E676"
+            border_width = 4
+        else:
+            border_color = "#FFFFFF"
+            border_width = 1
+
         net.add_node(
             mv["id"],
             label=mv["name"],
             title=mv["description"],
-            color="#4C8BF5"
+            color=color,
+            borderWidth=border_width,
+            borderWidthSelected=border_width,
+            shape="dot",
+            size=25,
+            border_color=border_color
         )
     for mv in movements:
         for target in mv.get("progressions_to", []):
             net.add_edge(mv["id"], target)
+    net.set_options("""
+    var options = {
+      interaction: { hover: true },
+      manipulation: false
+    }
+    """)
 
     return net
 
+
+def render_tree(movements):
+    net = build_pyvis_tree(movements)
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp:
+        net.save_graph(tmp.name)
+        html = open(tmp.name, "r").read()
+        html += """
+        <script>
+        var nodes = document.getElementsByTagName('canvas')[0];
+        nodes.onclick = function(e){
+            var id = window.network.getNodeAt(e);
+            if(id){
+                localStorage.setItem("last_clicked_node", id);
+            }
+        }
+        </script>
+        """
+        components.html(html, height=650, scrolling=True, key="pyvis_graph")
+
+
+def get_clicked_node():
+    clicked = components.html("""
+        <script>
+        const id = localStorage.getItem("last_clicked_node");
+        if(id){
+            document.write(id);
+        }
+        </script>
+    """, height=0)
+    return clicked
