@@ -230,6 +230,7 @@ def build_pyvis_tree(movements):
         color = LEVEL_COLORS.get(level, "#85C1E9")
         title = (
             f"{mv['name']}\n"
+            f"──────────────\n"
             f"Niveau : {mv['level']}\n"
             f"Muscles : {', '.join(mv['muscles'])}\n\n"
             f"{mv['description']}"
