@@ -278,42 +278,48 @@ def render_tree(movements):
         net.save_graph(tmp.name)
         html = open(tmp.name, "r").read()
         html += """
-        <script>
-        var nodes = document.getElementsByTagName('canvas')[0];
-        nodes.onclick = function(e){
-            var id = window.network.getNodeAt(e);
-            if(id){
-                localStorage.setItem("last_clicked_node", id);
-            }
-        }
-        </script>
-        """
+                <script>
+                document.addEventListener("DOMContentLoaded", function() {
+                    const canvas = document.getElementsByTagName('canvas')[0];
+                    canvas.onclick = function(e) {
+                        var id = window.network.getNodeAt(e);
+                        if (id) {
+                            window.parent.postMessage(
+                                {type: "pyvis_node_click", node_id: id},
+                                "*"
+                            );
+                        }
+                    };
+                });
+                </script>
+                """
     return components.html(html, height=650, scrolling=True)
 
-
-def get_clicked_node():
-    node_id = components.html("""
+def listen_for_click():
+    clicked = components.html("""
         <script>
-        const id = localStorage.getItem("last_clicked_node");
-        if (id) {
-            const form = document.createElement('form');
-            form.method = 'POST';
-            form.action = window.location.href;
-
-            const input = document.createElement('input');
-            input.type = 'hidden';
-            input.name = 'clicked_node';
-            input.value = id;
-
-            form.appendChild(input);
-            document.body.appendChild(form);
-            form.submit();
-        }
+        window.addEventListener("message", (event) => {
+            if (event.data.type === "pyvis_node_click") {
+                const id = event.data.node_id;
+                window.parent.postMessage(
+                    {type: "streamlit:setComponentValue", value: id},
+                    "*"
+                );
+            }
+        });
         </script>
     """, height=0)
-    clicked = st.experimental_get_query_params().get("clicked_node", None)
+    return clicked
+
+def get_clicked_node():
+    listen_for_click()
+
+    if "last_clicked_node" not in st.session_state:
+        st.session_state["last_clicked_node"] = None
+    clicked = st.session_state.get("_component_value", None)
     if clicked:
-        st.session_state["last_clicked_node"] = clicked[0]
-    return st.session_state.get("last_clicked_node", None)
+        st.session_state["last_clicked_node"] = clicked
+    return st.session_state["last_clicked_node"]
+
 
 
