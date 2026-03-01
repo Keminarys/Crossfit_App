@@ -224,10 +224,10 @@ def build_pyvis_tree(movements):
         bgcolor="#000000",
         font_color="white"
     )
-
     for mv in movements:
         level = mv.get("level", "Beginner")
         color = LEVEL_COLORS.get(level, "#4C8BF5")
+
         if mv["id"] in st.session_state["completed"]:
             border_color = "#00E676"
             border_width = 4
@@ -249,24 +249,24 @@ def build_pyvis_tree(movements):
     for mv in movements:
         for target in mv.get("progressions_to", []):
             net.add_edge(mv["id"], target)
-
     net.set_options("""
-    var options = {
-      layout: {
-        hierarchical: {
-          enabled: true,
-          direction: "UD",
-          sortMethod: "directed",
-          nodeSpacing: 200,
-          levelSeparation: 250
-        }
-      },
-      interaction: { hover: true },
-      physics: { enabled: false }
+var options = {
+  "layout": {
+    "hierarchical": {
+      "enabled": true,
+      "direction": "UD",
+      "sortMethod": "directed",
+      "nodeSpacing": 200,
+      "levelSeparation": 250
     }
-    """)
+  },
+  "interaction": { "hover": true },
+  "physics": { "enabled": false }
+}
+""")
 
     return net
+
 
 
 
