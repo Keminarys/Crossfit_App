@@ -13,4 +13,4 @@ requests
 streamlit-cookies-manager
 PyJWT
 Authlib
-streamlit-cytoscapejs
+graphviz
