@@ -211,6 +211,7 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
     return df
 
 def build_pyvis_tree(movements):
+
     LEVEL_COLORS = {
         "Beginner": "#A3E4D7",
         "Intermediate": "#F9E79F",
@@ -227,17 +228,12 @@ def build_pyvis_tree(movements):
     for mv in movements:
         level = mv.get("level", "Beginner")
         color = LEVEL_COLORS.get(level, "#85C1E9")
-
-        title = f"""
-        <div style='font-family:Inter; padding:6px 4px;'>
-            <div style='font-weight:600; font-size:15px; margin-bottom:4px;'>{mv['name']}</div>
-            <div style='font-size:13px; opacity:0.9;'>
-                <b>Niveau :</b> {mv['level']}<br>
-                <b>Muscles :</b> {', '.join(mv['muscles'])}<br><br>
-                {mv['description']}
-            </div>
-        </div>
-        """
+        title = (
+            f"{mv['name']}\n"
+            f"Niveau : {mv['level']}\n"
+            f"Muscles : {', '.join(mv['muscles'])}\n\n"
+            f"{mv['description']}"
+        )
 
         net.add_node(
             mv["id"],
@@ -258,6 +254,7 @@ def build_pyvis_tree(movements):
                 width=1.5,
                 arrows="to"
             )
+
     net.set_options("""
     var options = {
       "nodes": {
@@ -288,18 +285,14 @@ def build_pyvis_tree(movements):
       },
       "interaction": {
         "hover": true,
-        "tooltipDelay": 80,
-        "useHtml": true
+        "tooltipDelay": 80
       },
       "physics": {
         "enabled": false
       }
     }
     """)
-
     return net
-
-
 
 def render_tree(movements):
     net = build_pyvis_tree(movements)
