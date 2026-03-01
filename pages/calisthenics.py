@@ -43,29 +43,24 @@ if st.user.is_logged_in :
         selected_tree = st.selectbox("Quel arbre de compétence voulez vous voir ?", all_tree_list)
         if len(selected_tree) > 0 :
                 idx_skill_tree = all_tree_list.index(selected_tree)
-                movements = data[idx_skill_tree]["movements"]
-                elements = []
-                for item in movements:
-                        node_id = item["id"]
-                        node_classes = ""
-                        #node_classes = "mastered" if node_id in st.session_state.selected_nodes else ""
-        
-                        elements.append({
-                            "data": {"id": node_id, "label": item["name"]},
-                            "classes": node_classes
-                        })
+                movements = data[idx_skill_tree]["movements"]               
+                nodes = [{"id": ex["id"], "name": ex["name"]} for ex in movements]
+                links = []
+                for ex in movements:
+                    for t in ex.get("progressions_to", []):
+                        links.append({"source": ex["id"], "target": t})
                 
-                for nxt in item.get("progressions_to", []):
-                        elements.append({
-                        "data": {"source": node_id, "target": nxt}})
-                clicked = st_cytoscapejs(
-                                    elements,
-                                    {"name": "breadthfirst"},
-                                    [
-                                        {"selector": "node", "style": {"background-color": "#88c", "label": "data(label)"}},
-                                        {"selector": ".mastered", "style": {"background-color": "green"}}
-                                    ]
-                                )
+                graph = {"nodes": nodes, "links": links}
+                
+                st.components.v1.html(f"""
+                <div id="graph"></div>
+                <script src="https://d3js.org/d3.v7.min.js"></script>
+                <script>
+                const graph = {json.dumps(graph)};
+                
+                // D3 force-directed graph code here...
+                </script>
+                """, height=600)
 
 
 
