@@ -45,6 +45,8 @@ if st.user.is_logged_in :
         if len(selected_tree) > 0 :
                  idx_skill_tree = all_tree_list.index(selected_tree)
                  movements = data[idx_skill_tree]["movements"]
+                 if "completed" not in st.session_state:
+                      st.session_state["completed"] = set()
                  col1, col2 = st.columns([3, 2])
                  with col1:
                           st.subheader(f"Arbre interactif : {selected_tree}")
