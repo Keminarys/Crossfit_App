@@ -219,7 +219,7 @@ def build_pyvis_tree(movements):
         "Elite": "#D7BDE2"
     }
     net = Network(
-        height="800px",
+        height="720px",
         width="100%",
         directed=True,
         bgcolor="#111111",
@@ -316,4 +316,4 @@ def render_tree(movements):
                 });
                 </script>
                 """
-    return components.html(html, height=800, scrolling=True)
+    return components.html(html, height=720)
