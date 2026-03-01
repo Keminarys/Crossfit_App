@@ -2,7 +2,7 @@ import streamlit as st
 import requests 
 import json 
 from google.oauth2 import service_account 
-from utils.functions import get_conn_and_df, load_drive_json, build_pyvis_tree, render_tree
+from utils.functions import get_conn_and_df, load_drive_json, build_pyvis_tree, render_tree, get_clicked_node
 from utils.ui_helpers import render_navbar
 import graphviz
 import tempfile
@@ -53,4 +53,16 @@ if st.user.is_logged_in :
                           render_tree(movements)
                  with col2:
                           st.subheader("Détails du mouvement")
+                          clicked_id = get_clicked_node() 
+                          if clicked_id: 
+                                   mv = next((m for m in movements if m["id"] == clicked_id), None) 
+                                   if mv: 
+                                            st.markdown(f"### {mv['name']}") 
+                                            st.write(f"Niveau : {mv['level']}") 
+                                            st.write(f"Muscles : {', '.join(mv['muscles'])}") 
+                                            st.write(mv['description']) 
+                                            # if st.button("Marquer comme maîtrisé"): 
+                                            #          df = progressCalistenics(df, user_id, clicked_id, sheet_name) 
+                                            #          st.session_state["mastered"] = json.loads(df[df["id"] == user_id]["mastered"].values[0]) 
+                                            #          st.experimental_rerun()
 
