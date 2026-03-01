@@ -6,7 +6,7 @@ from utils.functions import get_conn_and_df, load_drive_json
 from utils.ui_helpers import render_navbar
 import graphviz
 
- def build_graphviz_tree(movements):
+def build_graphviz_tree(movements):
         dot = graphviz.Digraph()
         dot.attr(rankdir="TB") 
         for mv in movements:
