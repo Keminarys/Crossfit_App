@@ -47,26 +47,31 @@ if st.user.is_logged_in :
                  movements = data[idx_skill_tree]["movements"]
                  st.subheader(f"Arbre interactif : {selected_tree}")
                  st.markdown("""
-                          <style>
-                           iframe {
-                               border: none !important;
-                               box-shadow: none !important;
-                           }
-                           
-                           div.stElementContainer {
-                               padding: 0 !important;
-                               margin: 0 !important;
-                           }
-                           
-                           div[data-testid="stComponent"] {
-                               padding: 0 !important;
-                               margin: 0 !important;
-                               background: transparent !important;
-                               border: none !important;
-                           }
-                           
-                           </style>
-                           """, unsafe_allow_html=True)
+                                    <style>
+                                    iframe {
+                                        border: none !important;
+                                        box-shadow: none !important;
+                                    }
+                                    div.stElementContainer {
+                                        padding: 0 !important;
+                                        margin: 0 !important;
+                                    }
+                                    div[data-testid="stComponent"] {
+                                        padding: 0 !important;
+                                        margin: 0 !important;
+                                        background: transparent !important;
+                                        border: none !important;
+                                    }
+                                    div[class^="st-emotion-cache"] {
+                                        padding: 0 !important;
+                                        margin: 0 !important;
+                                        background: transparent !important;
+                                        border: none !important;
+                                        box-shadow: none !important;
+                                    }
+                                    </style>
+                                    """, unsafe_allow_html=True)
+
 
                  render_tree(movements)
 
