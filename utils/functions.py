@@ -211,10 +211,11 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
 def build_pyvis_tree(movements):
     
     LEVEL_COLORS = {
-    "Beginner": "#4CAF50",
-    "Intermediate": "#FFC107",
-    "Advanced": "#F44336",
-    "Elite": "#9C27B0"}
+        "Beginner": "#4CAF50",
+        "Intermediate": "#FFC107",
+        "Advanced": "#F44336",
+        "Elite": "#9C27B0"
+    }
     
     net = Network(
         height="650px",
@@ -224,13 +225,9 @@ def build_pyvis_tree(movements):
         font_color="white"
     )
 
-    net.toggle_physics(True)
-    
     for mv in movements:
         level = mv.get("level", "Beginner")
         color = LEVEL_COLORS.get(level, "#4C8BF5")
-
-        # Highlight completed nodes
         if mv["id"] in st.session_state["completed"]:
             border_color = "#00E676"
             border_width = 4
@@ -252,24 +249,25 @@ def build_pyvis_tree(movements):
     for mv in movements:
         for target in mv.get("progressions_to", []):
             net.add_edge(mv["id"], target)
+
     net.set_options("""
-            var options = {
-              layout: {
-                hierarchical: {
-                  enabled: true,
-                  direction: "UD",
-                  sortMethod: "directed",
-                  nodeSpacing: 200,
-                  levelSeparation: 250
-                }
-              },
-              physics: {
-                enabled: false
-              }
-            }
-            """)
+    var options = {
+      layout: {
+        hierarchical: {
+          enabled: true,
+          direction: "UD",
+          sortMethod: "directed",
+          nodeSpacing: 200,
+          levelSeparation: 250
+        }
+      },
+      interaction: { hover: true },
+      physics: { enabled: false }
+    }
+    """)
 
     return net
+
 
 
 def render_tree(movements):
