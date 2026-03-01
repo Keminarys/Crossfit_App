@@ -14,7 +14,8 @@ import requests
 from bs4 import BeautifulSoup
 import json 
 from google.auth.transport.requests import AuthorizedSession 
-   
+from pyvis.network import Network
+
 def get_conn_and_df(sheet_name) :
     conn = st.connection("gsheets", type=GSheetsConnection)
     datas = conn.read(worksheet=sheet_name)
@@ -206,4 +207,20 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
         df.loc[idx, "mastered"] = json.dumps(mastered_list)
     conn.update(worksheet=sheet_name, data=df)
     return df
+
+def build_pyvis_tree(movements):
+    net = Network(height="650px", width="100%", directed=True)
+    net.toggle_physics(True)
+    for mv in movements:
+        net.add_node(
+            mv["id"],
+            label=mv["name"],
+            title=mv["description"],
+            color="#4C8BF5"
+        )
+    for mv in movements:
+        for target in mv.get("progressions_to", []):
+            net.add_edge(mv["id"], target)
+
+    return net
 
