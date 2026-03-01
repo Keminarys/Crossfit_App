@@ -4,7 +4,18 @@ import json
 from google.oauth2 import service_account 
 from utils.functions import get_conn_and_df, load_drive_json
 from utils.ui_helpers import render_navbar
+import graphviz
 
+ def build_graphviz_tree(movements):
+        dot = graphviz.Digraph()
+        dot.attr(rankdir="TB") 
+        for mv in movements:
+                 dot.node(mv["id"], mv["name"])
+        for mv in movements:
+                for target in mv.get("progressions_to", []):
+                        dot.edge(mv["id"], target)
+        return dot
+         
 if not st.user.is_logged_in:
         if st.button("Log in with Google"):
             st.login("google")
@@ -39,26 +50,18 @@ if st.user.is_logged_in :
         selected_tree = st.selectbox("Quel arbre de compétence voulez vous voir ?", all_tree_list)
         if len(selected_tree) > 0 :
                 idx_skill_tree = all_tree_list.index(selected_tree)
-                movements = data[idx_skill_tree]["movements"]               
-                nodes = [{"id": ex["id"], "name": ex["name"]} for ex in movements]
-                links = []
-                for ex in movements:
-                    for t in ex.get("progressions_to", []):
-                        links.append({"source": ex["id"], "target": t})
-                
-                graph = {"nodes": nodes, "links": links}
-                
-                st.components.v1.html(f"""
-                <div id="graph"></div>
-                <script src="https://d3js.org/d3.v7.min.js"></script>
-                <script>
-                const graph = {json.dumps(graph)};
-                
-                // D3 force-directed graph code here...
-                </script>
-                """, height=600)
+                movements = data[idx_skill_tree]["movements"]              
 
 
+
+
+               
+                
+                # Inside your Streamlit block:
+                st.subheader(f"Arbre : {selected_tree}")
+                
+                graph = build_graphviz_tree(movements)
+                st.graphviz_chart(graph)
 
 
         
