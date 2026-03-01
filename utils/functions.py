@@ -292,12 +292,23 @@ def render_tree(movements):
 
 
 def get_clicked_node():
-    clicked = components.html("""
+    val = components.html("""
         <script>
         const id = localStorage.getItem("last_clicked_node");
-        if(id){
-            document.write(id);
+        if (id) {
+            const pyVal = document.createElement("div");
+            pyVal.id = "clicked_node_value";
+            pyVal.innerText = id;
+            document.body.appendChild(pyVal);
         }
         </script>
     """, height=0)
-    return clicked
+    try:
+        node_id = val
+        if isinstance(node_id, str) and node_id.strip():
+            st.session_state["last_clicked_node"] = node_id.strip()
+    except:
+        pass
+
+    return st.session_state.get("last_clicked_node", None)
+
