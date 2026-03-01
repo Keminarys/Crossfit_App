@@ -1,13 +1,9 @@
 import streamlit as st 
 import requests 
 import json 
-import dash
-import dash_cytoscape as cyto
-from dash import html
 from google.oauth2 import service_account 
 from utils.functions import get_conn_and_df, load_drive_json
 from utils.ui_helpers import render_navbar
-from streamlit_cytoscapejs import st_cytoscapejs
 
 if not st.user.is_logged_in:
         if st.button("Log in with Google"):
