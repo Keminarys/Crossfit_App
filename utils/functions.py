@@ -211,33 +211,31 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
     return df
 
 def build_pyvis_tree(movements):
-
     LEVEL_COLORS = {
-        "Beginner": "#6EE7B7",        # vert pastel
-        "Intermediate": "#FCD34D",    # jaune pastel
-        "Advanced": "#F87171",        # rouge pastel
-        "Elite": "#C084FC"            # violet pastel
+        "Beginner": "#A3E4D7",
+        "Intermediate": "#F9E79F",
+        "Advanced": "#F5B7B1",
+        "Elite": "#D7BDE2"
     }
-
     net = Network(
         height="650px",
         width="100%",
         directed=True,
-        bgcolor="#0D0D0D",
-        font_color="white"
+        bgcolor="#111111",
+        font_color="#E5E5E5"
     )
-
     for mv in movements:
         level = mv.get("level", "Beginner")
-        color = LEVEL_COLORS.get(level, "#60A5FA")
+        color = LEVEL_COLORS.get(level, "#85C1E9")
 
-        # Tooltip HTML stylé
         title = f"""
-        <div style='padding:8px; font-size:14px;'>
-            <div style='font-size:16px; font-weight:bold; margin-bottom:6px;'>{mv['name']}</div>
-            <b>Niveau :</b> {mv['level']}<br>
-            <b>Muscles :</b> {', '.join(mv['muscles'])}<br><br>
-            <div style='opacity:0.85'>{mv['description']}</div>
+        <div style='font-family:Inter; padding:6px 4px;'>
+            <div style='font-weight:600; font-size:15px; margin-bottom:4px;'>{mv['name']}</div>
+            <div style='font-size:13px; opacity:0.9;'>
+                <b>Niveau :</b> {mv['level']}<br>
+                <b>Muscles :</b> {', '.join(mv['muscles'])}<br><br>
+                {mv['description']}
+            </div>
         </div>
         """
 
@@ -247,42 +245,36 @@ def build_pyvis_tree(movements):
             title=title,
             color=color,
             shape="dot",
-            size=28,
-            borderWidth=2,
-            borderWidthSelected=4
+            size=22,
+            borderWidth=1,
+            borderWidthSelected=2
         )
-
-    # Edges
     for mv in movements:
         for target in mv.get("progressions_to", []):
             net.add_edge(
                 mv["id"],
                 target,
-                color="#FFFFFF55",
-                width=2,
+                color="#BBBBBB55",
+                width=1.5,
                 arrows="to"
             )
-
-    # Layout horizontal + style global
     net.set_options("""
     var options = {
       "nodes": {
         "font": {
-          "size": 16,
-          "face": "Inter"
-        },
-        "shadow": {
-          "enabled": true,
-          "color": "rgba(0,0,0,0.5)",
-          "size": 10,
-          "x": 2,
-          "y": 2
+          "size": 14,
+          "face": "Inter",
+          "color": "#E5E5E5"
         }
       },
       "edges": {
-        "smooth": true,
+        "smooth": {
+          "enabled": true,
+          "type": "cubicBezier"
+        },
         "color": {
-          "inherit": false
+          "color": "#999999",
+          "highlight": "#FFFFFF"
         }
       },
       "layout": {
@@ -290,13 +282,14 @@ def build_pyvis_tree(movements):
           "enabled": true,
           "direction": "LR",
           "sortMethod": "directed",
-          "nodeSpacing": 220,
-          "levelSeparation": 260
+          "nodeSpacing": 180,
+          "levelSeparation": 220
         }
       },
       "interaction": {
         "hover": true,
-        "tooltipDelay": 50
+        "tooltipDelay": 80,
+        "useHtml": true
       },
       "physics": {
         "enabled": false
@@ -305,6 +298,7 @@ def build_pyvis_tree(movements):
     """)
 
     return net
+
 
 
 def render_tree(movements):
