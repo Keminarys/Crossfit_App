@@ -47,22 +47,10 @@ if st.user.is_logged_in :
                  movements = data[idx_skill_tree]["movements"]
                  if "completed" not in st.session_state:
                       st.session_state["completed"] = set()
-                 col1, col2 = st.columns([3, 2])
+                 col1, col2 = st.columns([3, 1])
                  with col1:
                           st.subheader(f"Arbre interactif : {selected_tree}")
                           render_tree(movements)
                  with col2:
                           st.subheader("Détails du mouvement")
-                          clicked_id = get_clicked_node()
-                          if clicked_id: 
-                                   mv = next((m for m in movements if m["id"] == clicked_id), None)
-                                   if mv:
-                                       st.markdown(f"### {mv['name']}")
-                                       st.write(f"**Niveau :** {mv['level']}")
-                                       st.write(f"**Muscles :** {', '.join(mv['muscles'])}")
-                                       st.write(f"**Description :** {mv['description']}")
-                                       st.write(f"**Progressions vers :** {mv.get('progressions_to', [])}")
-                                            
-                                       if st.button("Marquer comme complété"):
-                                           st.session_state["completed"].add(clicked_id)
-                                           st.experimental_rerun()
+
