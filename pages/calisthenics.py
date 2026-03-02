@@ -4,7 +4,6 @@ import json
 from google.oauth2 import service_account 
 from utils.functions import get_conn_and_df, load_drive_json, render_tree, newName
 from utils.ui_helpers import render_navbar
-import graphviz
 import tempfile
 import streamlit.components.v1 as components
 
