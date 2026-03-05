@@ -34,7 +34,12 @@ def main():
 
     if st.user.is_logged_in :
         user_email = st.user.email
-        if is_email_allowed(user_email, "allowedList"):
+        allowed, role = get_user_role(user_email, "allowlist")
+        if not allowed:
+            st.error("Authenticated but NOT authorized.")
+            st.stop()
+            
+        else : 
             title, logo = st.columns([3, 1])
             with title:
                 stUserChangeDF = get_conn_and_df("CorrespondanceSTUser")
@@ -44,6 +49,13 @@ def main():
                 else : athl = st.user.name
                 st.title('Crossfit83 Le Beausset')
                 st.write(f"Bienvenue, {athl}!")
+                if role == "admin":
+                    st.subheader("Admin Panel – Add allowed email")
+                    new_email = st.text_input("Email to allow")
+                    new_role = st.selectbox("Role", ["user", "admin"])
+                    if st.button("Add email"):
+                        add_allowed_email(new_email, new_role, "allowlist")
+                        st.success("Email added to allowlist.")
                 if st.user.name not in OgDict.keys() : 
                     st.write(f"Le nom associé à votre compte google est le suivant : {st.user.name}, souhaitez vous apparaître sous un autre nom ?")
                     on = st.toggle("Changer de Nom")
@@ -58,10 +70,6 @@ def main():
             with logo:
                 st.image("LogoCrossfit.jpg")
 
-   
-        else:
-            st.error("Authenticated but NOT authorized.")
-            st.stop()
         
 if __name__ == "__main__":
     main()
