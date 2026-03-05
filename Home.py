@@ -54,8 +54,8 @@ def main():
                             UpdateDB(stUserChangeDF, change, "CorrespondanceSTUser")
                             st.cache_data.clear()
                             st.rerun()
-        with logo:
-            st.image("LogoCrossfit.jpg")
+            with logo:
+                st.image("LogoCrossfit.jpg")
 
    
         else:
