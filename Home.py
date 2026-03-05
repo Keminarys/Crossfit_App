@@ -1,7 +1,7 @@
 import streamlit as st
 
 from utils.functions import get_conn_and_df, UpdateDB
-from utils.allow import is_email_allowed
+from utils.allow import is_email_allowed, get_user_role
 from utils.ui_helpers import render_navbar
 
 import pandas as pd
