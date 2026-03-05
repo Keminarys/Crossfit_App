@@ -34,7 +34,7 @@ def main():
 
     if st.user.is_logged_in :
         user_email = st.user.email
-        allowed, role = get_user_role(user_email, "allowlist")
+        allowed, role = get_user_role(user_email, "allowList")
         if not allowed:
             st.error("Authenticated but NOT authorized.")
             st.stop()
@@ -54,7 +54,7 @@ def main():
                     new_email = st.text_input("Email to allow")
                     new_role = st.selectbox("Role", ["user", "admin"])
                     if st.button("Add email"):
-                        add_allowed_email(new_email, new_role, "allowlist")
+                        add_allowed_email(new_email, new_role, "allowList")
                         st.success("Email added to allowlist.")
                 if st.user.name not in OgDict.keys() : 
                     st.write(f"Le nom associé à votre compte google est le suivant : {st.user.name}, souhaitez vous apparaître sous un autre nom ?")
