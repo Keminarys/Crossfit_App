@@ -2,8 +2,8 @@ import streamlit as st
 import requests 
 import json 
 from google.oauth2 import service_account 
-from utils.functions import get_conn_and_df, load_drive_json, newName
-from utils.allow import is_email_allowed, get_user_role, add_allowed_email, build_agraph_nodes_edges, get_video_for_movement
+from utils.functions import get_conn_and_df, load_drive_json, newName, build_agraph_nodes_edges, get_video_for_movement
+from utils.allow import is_email_allowed, get_user_role, add_allowed_email
 from utils.ui_helpers import render_navbar
 import streamlit.components.v1 as components
 from streamlit_agraph import agraph, Config
