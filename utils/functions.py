@@ -11,6 +11,8 @@ import plotly.graph_objects as go
 import matplotlib.pyplot as plt
 import seaborn as sns
 import requests
+import re
+import urllib.parse
 from bs4 import BeautifulSoup
 import json 
 from google.auth.transport.requests import AuthorizedSession 
