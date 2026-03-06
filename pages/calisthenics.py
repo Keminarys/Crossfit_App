@@ -91,13 +91,13 @@ if st.user.is_logged_in :
                               if selected:
                                        mv = next((m for m in movements if str(m["id"]) == str(selected)), None)
                                        video_url = get_video_for_movement(mv, lang='en')
-                                       if video_url:
-                                                st.video(video_url)
-                                       else:
-                                                st.info("Aucune vidéo trouvée.")
+                                       with st.expander("Video démonstration") :
+                                                if video_url:
+                                                         st.video(video_url)
+                                                else:
+                                                         st.info("Aucune vidéo trouvée.")
                      else:
                               st.info("Cliquez sur un nœud pour afficher sa vidéo.")
-                     st.markdown(f"All clicked node : {st.session_state.get("selected_nodes")}")
 
 
 
