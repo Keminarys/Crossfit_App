@@ -404,19 +404,23 @@ def save_and_print_html(movements, out_path=None):
     # also write to a file (already saved) and return path
     return out_path
 
-def save_and_print_html_with_debug(movements, out_path=None):
+def save_and_show_html_with_debug(movements, out_path=None):
     """
-    Same as save_and_print_html but appends a debug script that:
-    - waits for window.network
-    - logs readiness and node/edge counts
-    - attaches network.on('click', ...) to postMessage clicked node id
+    Save pyvis graph to an HTML file and display the full HTML in Streamlit for copy/paste.
+    - Shows saved path with st.markdown
+    - Shows full HTML in st.text_area for easy copy
+    - Appends a debug script that logs window.network readiness and posts node clicks
+    Returns the path to the saved file.
     """
     net = build_pyvis_tree(movements)
+
     if out_path is None:
         tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
         out_path = tmp.name
         tmp.close()
+
     net.save_graph(out_path)
+
     with open(out_path, "r", encoding="utf-8") as f:
         html = f.read()
 
@@ -450,10 +454,13 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 </script>
 """
-    html += debug_script
-    # print the augmented HTML to stdout
-    print(html)
-    # overwrite file with debug script appended so you can open it locally
+    # append debug script and overwrite file so you can open it locally with debug enabled
+    html_with_debug = html + debug_script
     with open(out_path, "w", encoding="utf-8") as f:
-        f.write(html)
+        f.write(html_with_debug)
+
+    # show saved path and the full HTML in Streamlit so you can copy/paste
+    st.markdown(f"**Saved HTML to:** `{out_path}`")
+    st.text_area("Generated HTML (copy all and paste here)", value=html_with_debug, height=420)
+
     return out_path
