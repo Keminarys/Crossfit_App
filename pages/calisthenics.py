@@ -2,23 +2,11 @@ import streamlit as st
 import requests 
 import json 
 from google.oauth2 import service_account 
-from utils.functions import get_conn_and_df, load_drive_json, render_tree, newName, show_calisthenics_tab, save_and_show_html_with_debug
-from utils.allow import is_email_allowed, get_user_role, add_allowed_email
+from utils.functions import get_conn_and_df, load_drive_json, newName, 
+from utils.allow import is_email_allowed, get_user_role, add_allowed_email, build_agraph_nodes_edges, get_video_for_movement
 from utils.ui_helpers import render_navbar
-import tempfile
 import streamlit.components.v1 as components
-import sys
-from streamlit_agraph import agraph, Node, Edge, Config
-
-def build_agraph_nodes_edges(movements):
-    nodes = []
-    edges = []
-    for mv in movements:
-        nid = str(mv["id"])
-        nodes.append(Node(id=nid, label=mv.get("name", nid), size=22, color=mv.get("color", None)))
-        for tgt in mv.get("progressions_to", []):
-            edges.append(Edge(source=nid, target=str(tgt)))
-    return nodes, edges
+from streamlit_agraph import agraph, Config
          
 if not st.user.is_logged_in:
         if st.button("Log in with Google"):
@@ -75,54 +63,28 @@ if st.user.is_logged_in :
                      st.subheader("Arbre interactif")
                      nodes, edges = build_agraph_nodes_edges(movements)
                      config = Config(
-                                  width="100%",
-                                  height=550,
-                                  directed=True,
-                                  physics=False,
-                                  hierarchical=True,  # active si vous voulez layout hiérarchique
-                                  nodeHighlightBehavior=True
-                              )
-                              
-                          
+                                    width="100%",
+                                    height=height,
+                                    directed=True,
+                                    physics=False,
+                                    hierarchical=True,
+                                    nodeHighlightBehavior=True,
+                                    highlightColor="#FFFFFF"
+                                )
                      clicked_node = agraph(nodes=nodes, edges=edges, config=config)
-                              
-                              # agraph renvoie l'id du nœud cliqué (ou None)
-                         
                      if clicked_node:
-                              
                          st.session_state["selected_node"] = clicked_node
-                              
-                             
                          selected = st.session_state.get("selected_node")
-                             
-                         id_to_video = {str(mv["id"]): mv.get("video") or mv.get("video_url") for mv in movements}
-                              
-                             
                          if selected:
-                                  
-                             st.markdown(f"**Sélectionné :** {selected}")
-                                  
-                             video_url = id_to_video.get(selected)
-                                  
+                             st.markdown(f"**Mouvement sélectionné :** {selected}")
+                             mv = next((m for m in movements if str(m["id"]) == str(selected)), None)
+                             video_url = get_video_for_movement(mv)
                              if video_url:
-                                      
                                  st.video(video_url)
-                                  
                              else:
-                                      
-                                 st.info("Aucune vidéo configurée pour ce mouvement.")
-                             
-                         else:
-                                  
-                             st.info("Cliquez sur un nœud pour afficher sa vidéo.")
+                                 st.info("Aucune vidéo trouvée.")
+                    else:
+                        st.info("Cliquez sur un nœud pour afficher sa vidéo.")
 
-
-                 # if len(selected_tree) > 0 :
-                 #          idx_skill_tree = all_tree_list.index(selected_tree)
-                 #          movements = data[idx_skill_tree]["movements"]
-                 #          st.subheader(f"Arbre interactif : {selected_tree}")
-                 #          save_and_show_html_with_debug(movements)
-                          
-                          #show_calisthenics_tab(movements)
 
 
