@@ -68,8 +68,8 @@ if st.user.is_logged_in :
                           if selected:
                                    st.markdown(f"**Selected:** {selected}")
                                    video_url = id_to_video.get(str(selected))
-                          if video_url:
-                                   st.video(video_url)
+                                   if video_url:
+                                            st.video(video_url)
                           else:
                                    st.info("Aucune vidéo configurée pour ce mouvement.")
                  else:
