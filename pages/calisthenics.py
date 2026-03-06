@@ -67,16 +67,14 @@ if st.user.is_logged_in :
                             'mastered' : []}
                  selected_tree = st.selectbox("Quel arbre de compétence voulez vous voir ?", all_tree_list)
                  if "selected_node" not in st.session_state:
-                      st.session_state["selected_node"] = None
+                     st.session_state["selected_node"] = None
                      
                  if len(selected_tree) > 0 :
-                          idx_skill_tree = all_tree_list.index(selected_tree)
-                          movements = data[idx_skill_tree]["movements"]                 
-                          st.subheader("Arbre interactif")
-            
-                          nodes, edges = build_agraph_nodes_edges(movements)
-                              
-                          config = Config(
+                     idx_skill_tree = all_tree_list.index(selected_tree)
+                     movements = data[idx_skill_tree]["movements"]                 
+                     st.subheader("Arbre interactif")
+                     nodes, edges = build_agraph_nodes_edges(movements)
+                     config = Config(
                                   width="100%",
                                   height=550,
                                   directed=True,
@@ -85,24 +83,38 @@ if st.user.is_logged_in :
                                   nodeHighlightBehavior=True
                               )
                               
-                          clicked_node = agraph(nodes=nodes, edges=edges, config=config)
+                          
+                     clicked_node = agraph(nodes=nodes, edges=edges, config=config)
                               
                               # agraph renvoie l'id du nœud cliqué (ou None)
-                          if clicked_node:
-                              st.session_state["selected_node"] = clicked_node
+                         
+                     if clicked_node:
                               
-                             selected = st.session_state.get("selected_node")
-                             id_to_video = {str(mv["id"]): mv.get("video") or mv.get("video_url") for mv in movements}
+                         st.session_state["selected_node"] = clicked_node
                               
-                             if selected:
-                                  st.markdown(f"**Sélectionné :** {selected}")
-                                  video_url = id_to_video.get(selected)
-                                  if video_url:
-                                      st.video(video_url)
-                                  else:
-                                      st.info("Aucune vidéo configurée pour ce mouvement.")
+                             
+                         selected = st.session_state.get("selected_node")
+                             
+                         id_to_video = {str(mv["id"]): mv.get("video") or mv.get("video_url") for mv in movements}
+                              
+                             
+                         if selected:
+                                  
+                             st.markdown(f"**Sélectionné :** {selected}")
+                                  
+                             video_url = id_to_video.get(selected)
+                                  
+                             if video_url:
+                                      
+                                 st.video(video_url)
+                                  
                              else:
-                                  st.info("Cliquez sur un nœud pour afficher sa vidéo.")
+                                      
+                                 st.info("Aucune vidéo configurée pour ce mouvement.")
+                             
+                         else:
+                                  
+                             st.info("Cliquez sur un nœud pour afficher sa vidéo.")
 
 
                  # if len(selected_tree) > 0 :
