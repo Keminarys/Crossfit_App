@@ -18,7 +18,6 @@ from pyvis.network import Network
 import tempfile
 import streamlit.components.v1 as components
 from streamlit_agraph import agraph, Node, Edge, Config
-from youtubesearchpython import VideosSearch
 
 def get_conn_and_df(sheet_name) :
     conn = st.connection("gsheets", type=GSheetsConnection)
@@ -239,22 +238,35 @@ def build_agraph_nodes_edges(movements):
     return nodes, edges
 
 
-def find_youtube_tutorial(query):
+def find_youtube_tutorial_via_http(query, lang="en"):
+    if not query:
+        return None
+    suffix = " tutoriel" if lang.startswith("fr") else " tutorial"
+    q = f"{query}{suffix}"
+    encoded = urllib.parse.quote_plus(q)
+    url = f"https://www.youtube.com/results?search_query={encoded}"
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+    }
     try:
-        q = f"{query} tutorial"
-        videos_search = VideosSearch(q, limit=1)
-        res = videos_search.result()
-        first = res.get("result", [])
-        if first:
-            return first[0].get("link")
+        resp = requests.get(url, headers=headers, timeout=8)
+        if resp.status_code != 200:
+            return None
+        html = resp.text
+        matches = re.findall(r"\/watch\?v=([A-Za-z0-9_\-]{11})", html)
+        if not matches:
+            return None
+        seen = set()
+        for vid in matches:
+            if vid not in seen:
+                seen.add(vid)
+                return f"https://www.youtube.com/watch?v={vid}"
     except Exception:
-        pass
+        return None
     return None
 
-def get_video_for_movement(mv):
-    if not mv:
-        return None
+def get_video_for_movement(mv, lang="en"):
     query = mv.get("title") or mv.get("name") or ""
     if not query:
         return None
-    return find_youtube_tutorial(query)
+    return find_youtube_tutorial_via_http(query, lang=lang)
