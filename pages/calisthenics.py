@@ -54,9 +54,10 @@ if st.user.is_logged_in :
                           progressState = {'id' : athl, 
                             'mastered' : []}
                  selected_tree = st.selectbox("Quel arbre de compétence voulez vous voir ?", all_tree_list)
-                 if "selected_node" not in st.session_state:
-                     st.session_state["selected_node"] = None
-                     
+                 if "selected_nodes" not in st.session_state:
+                          st.session_state["selected_nodes"] = []  # liste de strings
+                 if "last_clicked" not in st.session_state:
+                          st.session_state["last_clicked"] = None
                  if len(selected_tree) > 0 :
                      idx_skill_tree = all_tree_list.index(selected_tree)
                      movements = data[idx_skill_tree]["movements"]                 
@@ -80,17 +81,23 @@ if st.user.is_logged_in :
                                 )
                      clicked_node = agraph(nodes=nodes, edges=edges, config=config)
                      if clicked_node:
-                         st.session_state["selected_node"] = clicked_node
-                         selected = st.session_state.get("selected_node")
-                         if selected:
-                             mv = next((m for m in movements if str(m["id"]) == str(selected)), None)
-                             video_url = get_video_for_movement(mv, lang='en')
-                             if video_url:
-                                 st.video(video_url)
-                             else:
-                                 st.info("Aucune vidéo trouvée.")
+                              nid = str(clicked_node)
+                              st.session_state["last_clicked"] = nid
+                              if nid in st.session_state["selected_nodes"]:
+                                       st.session_state["selected_nodes"].remove(nid)
+                              else:
+                                       st.session_state["selected_nodes"].append(nid)
+                              selected = st.session_state.get("last_clicked")
+                              if selected:
+                                       mv = next((m for m in movements if str(m["id"]) == str(selected)), None)
+                                       video_url = get_video_for_movement(mv, lang='en')
+                                       if video_url:
+                                                st.video(video_url)
+                                       else:
+                                                st.info("Aucune vidéo trouvée.")
                      else:
                               st.info("Cliquez sur un nœud pour afficher sa vidéo.")
+                     st.markdown(f"All clicked node : {st.session_state.get("selected_nodes")}")
 
 
 
