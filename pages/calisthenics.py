@@ -83,7 +83,6 @@ if st.user.is_logged_in :
                          st.session_state["selected_node"] = clicked_node
                          selected = st.session_state.get("selected_node")
                          if selected:
-                             st.markdown(f"**Mouvement sélectionné :** {selected}")
                              mv = next((m for m in movements if str(m["id"]) == str(selected)), None)
                              video_url = get_video_for_movement(mv, lang='en')
                              if video_url:
