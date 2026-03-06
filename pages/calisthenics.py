@@ -67,7 +67,13 @@ if st.user.is_logged_in :
                                     height=550,
                                     directed=True,
                                     physics=False,
-                                    hierarchical=True,
+                                    hierarchical=hierarchical={
+                                                              "enabled": True,
+                                                              "direction": "LR", 
+                                                              "sortMethod": "directed",
+                                                              "nodeSpacing": 180,
+                                                              "levelSeparation": 220
+                                                          },
                                     nodeHighlightBehavior=True,
                                     highlightColor="#FFFFFF"
                                 )
