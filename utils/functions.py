@@ -294,58 +294,58 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
 #     return net
 
 
-# def render_tree(movements, height=550):
-#     """
-#     Renders the pyvis graph and captures node clicks.
-#     - movements: list of dicts with at least 'id' and 'name'.
-#       Optionally include 'video' or 'video_url' on each movement.
-#     - returns: None (selected node stored in st.session_state['selected_node'])
-#     """
-#     net = build_pyvis_tree(movements)
-#     with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp:
-#         net.save_graph(tmp.name)
-#         html = open(tmp.name, "r", encoding="utf-8").read()
-#     html += """
-#     <script>
-#     document.addEventListener("DOMContentLoaded", function() {
-#         // try common selectors: pyvis uses id 'mynetwork' or a container with class 'pyvis-network'
-#         const container = document.getElementById('mynetwork') || document.querySelector('.pyvis-network') || document.querySelector('div');
-#         if (!container) return;
-#         container.addEventListener('click', function(e) {
-#             try {
-#                 var id = window.network.getNodeAt(e);
-#                 if (id) {
-#                     window.parent.postMessage(
-#                         {isStreamlitMessage: true, type: "pyvis_node_click", node_id: String(id)},
-#                         "*"
-#                     );
-#                 }
-#             } catch (err) {
-#                 // ignore
-#             }
-#         });
-#     });
-#     </script>
-#     """
-#     msg = components.html(html, height=height)
-#     if msg and isinstance(msg, dict) and msg.get("type") == "pyvis_node_click":
-#         st.session_state["selected_node"] = msg.get("node_id")
+def render_tree(movements, height=550):
+    """
+    Renders the pyvis graph and captures node clicks.
+    - movements: list of dicts with at least 'id' and 'name'.
+      Optionally include 'video' or 'video_url' on each movement.
+    - returns: None (selected node stored in st.session_state['selected_node'])
+    """
+    net = build_pyvis_tree(movements)
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp:
+        net.save_graph(tmp.name)
+        html = open(tmp.name, "r", encoding="utf-8").read()
+    html += """
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // try common selectors: pyvis uses id 'mynetwork' or a container with class 'pyvis-network'
+        const container = document.getElementById('mynetwork') || document.querySelector('.pyvis-network') || document.querySelector('div');
+        if (!container) return;
+        container.addEventListener('click', function(e) {
+            try {
+                var id = window.network.getNodeAt(e);
+                if (id) {
+                    window.parent.postMessage(
+                        {isStreamlitMessage: true, type: "pyvis_node_click", node_id: String(id)},
+                        "*"
+                    );
+                }
+            } catch (err) {
+                // ignore
+            }
+        });
+    });
+    </script>
+    """
+    msg = components.html(html, height=height)
+    if msg and isinstance(msg, dict) and msg.get("type") == "pyvis_node_click":
+        st.session_state["selected_node"] = msg.get("node_id")
 
 
-# def show_calisthenics_tab(movements):
-#     if "selected_node" not in st.session_state:
-#         st.session_state["selected_node"] = None
-#     render_tree(movements, height=550)
-#     selected = st.session_state.get("selected_node")
-#     if selected:
-#         st.markdown(f"**Selected:** {selected}")
-#         video_url = id_to_video.get(selected)
-#         if video_url:
-#             st.video(video_url)
-#         else:
-#             st.info("No video configured for this movement.")
-#     else:
-#         st.info("Click a node to show its video.")
+def show_calisthenics_tab(movements):
+    if "selected_node" not in st.session_state:
+        st.session_state["selected_node"] = None
+    render_tree(movements, height=550)
+    selected = st.session_state.get("selected_node")
+    if selected:
+        st.markdown(f"**Selected:** {selected}")
+        video_url = id_to_video.get(selected)
+        if video_url:
+            st.video(video_url)
+        else:
+            st.info("No video configured for this movement.")
+    else:
+        st.info("Click a node to show its video.")
 
 # paste this into a Python file in the same environment where pyvis is available
 import tempfile
