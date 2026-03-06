@@ -64,7 +64,7 @@ if st.user.is_logged_in :
                      nodes, edges = build_agraph_nodes_edges(movements)
                      config = Config(
                                     width="100%",
-                                    height=height,
+                                    height=550,
                                     directed=True,
                                     physics=False,
                                     hierarchical=True,
@@ -78,7 +78,7 @@ if st.user.is_logged_in :
                          if selected:
                              st.markdown(f"**Mouvement sélectionné :** {selected}")
                              mv = next((m for m in movements if str(m["id"]) == str(selected)), None)
-                             video_url = get_video_for_movement(mv, lang=lang)
+                             video_url = get_video_for_movement(mv, lang='en')
                              if video_url:
                                  st.video(video_url)
                              else:
