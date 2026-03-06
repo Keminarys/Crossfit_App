@@ -84,7 +84,7 @@ if st.user.is_logged_in :
                              else:
                                  st.info("Aucune vidéo trouvée.")
                     else:
-                        st.info("Cliquez sur un nœud pour afficher sa vidéo.")
+                             st.info("Cliquez sur un nœud pour afficher sa vidéo.")
 
 
 
