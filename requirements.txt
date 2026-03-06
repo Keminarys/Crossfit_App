@@ -13,5 +13,5 @@ requests
 streamlit-cookies-manager
 PyJWT
 Authlib
-pyvis
 streamlit_agraph
+youtubesearchpython
