@@ -211,7 +211,6 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
     return df
 
 # def build_pyvis_tree(movements):
-
 #     LEVEL_COLORS = {
 #         "Beginner": "#A3E4D7",
 #         "Intermediate": "#F9E79F",
@@ -231,11 +230,10 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
 #         title = (
 #             f"{mv['name']}\n"
 #             f"──────────────\n"
-#             f"Niveau : {mv['level']}\n"
-#             f"Muscles : {', '.join(mv['muscles'])}\n\n"
-#             f"{mv['description']}"
+#             f"Niveau : {mv.get('level','')}\n"
+#             f"Muscles : {', '.join(mv.get('muscles',[]))}\n\n"
+#             f"{mv.get('description','')}"
 #         )
-
 #         net.add_node(
 #             mv["id"],
 #             label=mv["name"],
@@ -295,28 +293,65 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
 #     """)
 #     return net
 
-# def render_tree(movements):
+
+# def render_tree(movements, height=550):
+#     """
+#     Renders the pyvis graph and captures node clicks.
+#     - movements: list of dicts with at least 'id' and 'name'.
+#       Optionally include 'video' or 'video_url' on each movement.
+#     - returns: None (selected node stored in st.session_state['selected_node'])
+#     """
 #     net = build_pyvis_tree(movements)
 #     with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp:
 #         net.save_graph(tmp.name)
-#         html = open(tmp.name, "r").read()
-#         html += """
-#                 <script>
-#                 document.addEventListener("DOMContentLoaded", function() {
-#                     const canvas = document.getElementsByTagName('canvas')[0];
-#                     canvas.onclick = function(e) {
-#                         var id = window.network.getNodeAt(e);
-#                         if (id) {
-#                             window.parent.postMessage(
-#                                 {type: "pyvis_node_click", node_id: id},
-#                                 "*"
-#                             );
-#                         }
-#                     };
-#                 });
-#                 </script>
-#                 """
-#     return components.html(html, height=550)
+#         html = open(tmp.name, "r", encoding="utf-8").read()
+#     html += """
+#     <script>
+#     document.addEventListener("DOMContentLoaded", function() {
+#         // try common selectors: pyvis uses id 'mynetwork' or a container with class 'pyvis-network'
+#         const container = document.getElementById('mynetwork') || document.querySelector('.pyvis-network') || document.querySelector('div');
+#         if (!container) return;
+#         container.addEventListener('click', function(e) {
+#             try {
+#                 var id = window.network.getNodeAt(e);
+#                 if (id) {
+#                     window.parent.postMessage(
+#                         {isStreamlitMessage: true, type: "pyvis_node_click", node_id: String(id)},
+#                         "*"
+#                     );
+#                 }
+#             } catch (err) {
+#                 // ignore
+#             }
+#         });
+#     });
+#     </script>
+#     """
+#     msg = components.html(html, height=height)
+#     if msg and isinstance(msg, dict) and msg.get("type") == "pyvis_node_click":
+#         st.session_state["selected_node"] = msg.get("node_id")
+
+
+# def show_calisthenics_tab(movements):
+#     if "selected_node" not in st.session_state:
+#         st.session_state["selected_node"] = None
+#     render_tree(movements, height=550)
+#     selected = st.session_state.get("selected_node")
+#     if selected:
+#         st.markdown(f"**Selected:** {selected}")
+#         video_url = id_to_video.get(selected)
+#         if video_url:
+#             st.video(video_url)
+#         else:
+#             st.info("No video configured for this movement.")
+#     else:
+#         st.info("Click a node to show its video.")
+
+# paste this into a Python file in the same environment where pyvis is available
+import tempfile
+from pyvis.network import Network
+import io
+import sys
 
 def build_pyvis_tree(movements):
     LEVEL_COLORS = {
@@ -325,133 +360,100 @@ def build_pyvis_tree(movements):
         "Advanced": "#F5B7B1",
         "Elite": "#D7BDE2"
     }
-    net = Network(
-        height="550px",
-        width="100%",
-        directed=True,
-        bgcolor="#111111",
-        font_color="#E5E5E5"
-    )
+    net = Network(height="550px", width="100%", directed=True, bgcolor="#111111", font_color="#E5E5E5")
     for mv in movements:
         level = mv.get("level", "Beginner")
         color = LEVEL_COLORS.get(level, "#85C1E9")
         title = (
-            f"{mv['name']}\n"
+            f"{mv.get('name','')}\n"
             f"──────────────\n"
             f"Niveau : {mv.get('level','')}\n"
             f"Muscles : {', '.join(mv.get('muscles',[]))}\n\n"
             f"{mv.get('description','')}"
         )
-        net.add_node(
-            mv["id"],
-            label=mv["name"],
-            title=title,
-            color=color,
-            shape="dot",
-            size=22,
-            borderWidth=1,
-            borderWidthSelected=2
-        )
+        net.add_node(mv["id"], label=mv.get("name",""), title=title, color=color, shape="dot", size=22, borderWidth=1, borderWidthSelected=2)
     for mv in movements:
         for target in mv.get("progressions_to", []):
-            net.add_edge(
-                mv["id"],
-                target,
-                color="#BBBBBB55",
-                width=1.5,
-                arrows="to"
-            )
-
+            net.add_edge(mv["id"], target, color="#BBBBBB55", width=1.5, arrows="to")
     net.set_options("""
     var options = {
-      "nodes": {
-        "font": {
-          "size": 14,
-          "face": "Inter",
-          "color": "#E5E5E5"
-        }
-      },
-      "edges": {
-        "smooth": {
-          "enabled": true,
-          "type": "cubicBezier"
-        },
-        "color": {
-          "color": "#999999",
-          "highlight": "#FFFFFF"
-        }
-      },
-      "layout": {
-        "hierarchical": {
-          "enabled": true,
-          "direction": "LR",
-          "sortMethod": "directed",
-          "nodeSpacing": 180,
-          "levelSeparation": 220
-        }
-      },
-      "interaction": {
-        "hover": true,
-        "tooltipDelay": 80
-      },
-      "physics": {
-        "enabled": false
-      }
+      "nodes": {"font": {"size": 14, "face": "Inter", "color": "#E5E5E5"}},
+      "edges": {"smooth": {"enabled": true, "type": "cubicBezier"}, "color": {"color": "#999999", "highlight": "#FFFFFF"}},
+      "layout": {"hierarchical": {"enabled": true, "direction": "LR", "sortMethod": "directed", "nodeSpacing": 180, "levelSeparation": 220}},
+      "interaction": {"hover": true, "tooltipDelay": 80},
+      "physics": {"enabled": false}
     }
     """)
     return net
 
-
-def render_tree(movements, height=550):
+def save_and_print_html(movements, out_path=None):
     """
-    Renders the pyvis graph and captures node clicks.
-    - movements: list of dicts with at least 'id' and 'name'.
-      Optionally include 'video' or 'video_url' on each movement.
-    - returns: None (selected node stored in st.session_state['selected_node'])
+    Save pyvis graph to an HTML file and print the full HTML to stdout.
+    Returns the path to the saved file.
     """
     net = build_pyvis_tree(movements)
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp:
-        net.save_graph(tmp.name)
-        html = open(tmp.name, "r", encoding="utf-8").read()
-    html += """
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // try common selectors: pyvis uses id 'mynetwork' or a container with class 'pyvis-network'
-        const container = document.getElementById('mynetwork') || document.querySelector('.pyvis-network') || document.querySelector('div');
-        if (!container) return;
-        container.addEventListener('click', function(e) {
-            try {
-                var id = window.network.getNodeAt(e);
-                if (id) {
-                    window.parent.postMessage(
-                        {isStreamlitMessage: true, type: "pyvis_node_click", node_id: String(id)},
-                        "*"
-                    );
-                }
-            } catch (err) {
-                // ignore
-            }
-        });
-    });
-    </script>
+    if out_path is None:
+        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
+        out_path = tmp.name
+        tmp.close()
+    net.save_graph(out_path)
+    with open(out_path, "r", encoding="utf-8") as f:
+        html = f.read()
+    # print to stdout so you can copy-paste the entire HTML
+    print(html)
+    # also write to a file (already saved) and return path
+    return out_path
+
+def save_and_print_html_with_debug(movements, out_path=None):
     """
-    msg = components.html(html, height=height)
-    if msg and isinstance(msg, dict) and msg.get("type") == "pyvis_node_click":
-        st.session_state["selected_node"] = msg.get("node_id")
+    Same as save_and_print_html but appends a debug script that:
+    - waits for window.network
+    - logs readiness and node/edge counts
+    - attaches network.on('click', ...) to postMessage clicked node id
+    """
+    net = build_pyvis_tree(movements)
+    if out_path is None:
+        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
+        out_path = tmp.name
+        tmp.close()
+    net.save_graph(out_path)
+    with open(out_path, "r", encoding="utf-8") as f:
+        html = f.read()
 
-
-def show_calisthenics_tab(movements):
-    if "selected_node" not in st.session_state:
-        st.session_state["selected_node"] = None
-    render_tree(movements, height=550)
-    selected = st.session_state.get("selected_node")
-    if selected:
-        st.markdown(f"**Selected:** {selected}")
-        video_url = id_to_video.get(selected)
-        if video_url:
-            st.video(video_url)
-        else:
-            st.info("No video configured for this movement.")
-    else:
-        st.info("Click a node to show its video.")
-
+    debug_script = r"""
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+  function attach() {
+    if (!window.network) {
+      console.log("pyvis-debug: window.network not ready yet");
+      setTimeout(attach, 200);
+      return;
+    }
+    console.log("pyvis-debug: window.network ready", window.network);
+    try {
+      const nodes = window.network.body.data.nodes.get();
+      const edges = window.network.body.data.edges.get();
+      console.log("pyvis-debug: nodes", nodes.length, "edges", edges.length);
+    } catch (e) {
+      console.log("pyvis-debug: cannot read nodes/edges", e);
+    }
+    window.network.on("click", function(params) {
+      console.log("pyvis-debug: click params", params);
+      if (params.nodes && params.nodes.length > 0) {
+        const id = String(params.nodes[0]);
+        console.log("pyvis-debug: clicked node id =", id);
+        window.parent.postMessage({isStreamlitMessage: true, type: "pyvis_node_click", node_id: id}, "*");
+      }
+    });
+  }
+  attach();
+});
+</script>
+"""
+    html += debug_script
+    # print the augmented HTML to stdout
+    print(html)
+    # overwrite file with debug script appended so you can open it locally
+    with open(out_path, "w", encoding="utf-8") as f:
+        f.write(html)
+    return out_path
