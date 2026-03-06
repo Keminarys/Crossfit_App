@@ -2,7 +2,7 @@ import streamlit as st
 import requests 
 import json 
 from google.oauth2 import service_account 
-from utils.functions import get_conn_and_df, load_drive_json, render_tree, newName, show_calisthenics_tab, save_and_print_html_with_debug
+from utils.functions import get_conn_and_df, load_drive_json, render_tree, newName, show_calisthenics_tab, save_and_show_html_with_debug
 from utils.allow import is_email_allowed, get_user_role, add_allowed_email
 from utils.ui_helpers import render_navbar
 import tempfile
@@ -60,9 +60,8 @@ if st.user.is_logged_in :
                           idx_skill_tree = all_tree_list.index(selected_tree)
                           movements = data[idx_skill_tree]["movements"]
                           st.subheader(f"Arbre interactif : {selected_tree}")
-                          path = save_and_print_html_with_debug(movements)
-                          st.write("\nSaved HTML to:", path, file=sys.stderr)
-
+                          save_and_show_html_with_debug(movements)
+                          
                           #show_calisthenics_tab(movements)
 
 
