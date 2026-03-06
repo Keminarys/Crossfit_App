@@ -210,8 +210,115 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
     conn.update(worksheet=sheet_name, data=df)
     return df
 
-def build_pyvis_tree(movements):
+# def build_pyvis_tree(movements):
 
+#     LEVEL_COLORS = {
+#         "Beginner": "#A3E4D7",
+#         "Intermediate": "#F9E79F",
+#         "Advanced": "#F5B7B1",
+#         "Elite": "#D7BDE2"
+#     }
+#     net = Network(
+#         height="550px",
+#         width="100%",
+#         directed=True,
+#         bgcolor="#111111",
+#         font_color="#E5E5E5"
+#     )
+#     for mv in movements:
+#         level = mv.get("level", "Beginner")
+#         color = LEVEL_COLORS.get(level, "#85C1E9")
+#         title = (
+#             f"{mv['name']}\n"
+#             f"──────────────\n"
+#             f"Niveau : {mv['level']}\n"
+#             f"Muscles : {', '.join(mv['muscles'])}\n\n"
+#             f"{mv['description']}"
+#         )
+
+#         net.add_node(
+#             mv["id"],
+#             label=mv["name"],
+#             title=title,
+#             color=color,
+#             shape="dot",
+#             size=22,
+#             borderWidth=1,
+#             borderWidthSelected=2
+#         )
+#     for mv in movements:
+#         for target in mv.get("progressions_to", []):
+#             net.add_edge(
+#                 mv["id"],
+#                 target,
+#                 color="#BBBBBB55",
+#                 width=1.5,
+#                 arrows="to"
+#             )
+
+#     net.set_options("""
+#     var options = {
+#       "nodes": {
+#         "font": {
+#           "size": 14,
+#           "face": "Inter",
+#           "color": "#E5E5E5"
+#         }
+#       },
+#       "edges": {
+#         "smooth": {
+#           "enabled": true,
+#           "type": "cubicBezier"
+#         },
+#         "color": {
+#           "color": "#999999",
+#           "highlight": "#FFFFFF"
+#         }
+#       },
+#       "layout": {
+#         "hierarchical": {
+#           "enabled": true,
+#           "direction": "LR",
+#           "sortMethod": "directed",
+#           "nodeSpacing": 180,
+#           "levelSeparation": 220
+#         }
+#       },
+#       "interaction": {
+#         "hover": true,
+#         "tooltipDelay": 80
+#       },
+#       "physics": {
+#         "enabled": false
+#       }
+#     }
+#     """)
+#     return net
+
+# def render_tree(movements):
+#     net = build_pyvis_tree(movements)
+#     with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp:
+#         net.save_graph(tmp.name)
+#         html = open(tmp.name, "r").read()
+#         html += """
+#                 <script>
+#                 document.addEventListener("DOMContentLoaded", function() {
+#                     const canvas = document.getElementsByTagName('canvas')[0];
+#                     canvas.onclick = function(e) {
+#                         var id = window.network.getNodeAt(e);
+#                         if (id) {
+#                             window.parent.postMessage(
+#                                 {type: "pyvis_node_click", node_id: id},
+#                                 "*"
+#                             );
+#                         }
+#                     };
+#                 });
+#                 </script>
+#                 """
+#     return components.html(html, height=550)
+
+def build_pyvis_tree(movements):
     LEVEL_COLORS = {
         "Beginner": "#A3E4D7",
         "Intermediate": "#F9E79F",
@@ -231,11 +338,10 @@ def build_pyvis_tree(movements):
         title = (
             f"{mv['name']}\n"
             f"──────────────\n"
-            f"Niveau : {mv['level']}\n"
-            f"Muscles : {', '.join(mv['muscles'])}\n\n"
-            f"{mv['description']}"
+            f"Niveau : {mv.get('level','')}\n"
+            f"Muscles : {', '.join(mv.get('muscles',[]))}\n\n"
+            f"{mv.get('description','')}"
         )
-
         net.add_node(
             mv["id"],
             label=mv["name"],
@@ -295,25 +401,57 @@ def build_pyvis_tree(movements):
     """)
     return net
 
-def render_tree(movements):
+
+def render_tree(movements, height=550):
+    """
+    Renders the pyvis graph and captures node clicks.
+    - movements: list of dicts with at least 'id' and 'name'.
+      Optionally include 'video' or 'video_url' on each movement.
+    - returns: None (selected node stored in st.session_state['selected_node'])
+    """
     net = build_pyvis_tree(movements)
     with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp:
         net.save_graph(tmp.name)
-        html = open(tmp.name, "r").read()
-        html += """
-                <script>
-                document.addEventListener("DOMContentLoaded", function() {
-                    const canvas = document.getElementsByTagName('canvas')[0];
-                    canvas.onclick = function(e) {
-                        var id = window.network.getNodeAt(e);
-                        if (id) {
-                            window.parent.postMessage(
-                                {type: "pyvis_node_click", node_id: id},
-                                "*"
-                            );
-                        }
-                    };
-                });
-                </script>
-                """
-    return components.html(html, height=550)
+        html = open(tmp.name, "r", encoding="utf-8").read()
+    html += """
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // try common selectors: pyvis uses id 'mynetwork' or a container with class 'pyvis-network'
+        const container = document.getElementById('mynetwork') || document.querySelector('.pyvis-network') || document.querySelector('div');
+        if (!container) return;
+        container.addEventListener('click', function(e) {
+            try {
+                var id = window.network.getNodeAt(e);
+                if (id) {
+                    window.parent.postMessage(
+                        {isStreamlitMessage: true, type: "pyvis_node_click", node_id: String(id)},
+                        "*"
+                    );
+                }
+            } catch (err) {
+                // ignore
+            }
+        });
+    });
+    </script>
+    """
+    msg = components.html(html, height=height)
+    if msg and isinstance(msg, dict) and msg.get("type") == "pyvis_node_click":
+        st.session_state["selected_node"] = msg.get("node_id")
+
+
+def show_calisthenics_tab(movements):
+    if "selected_node" not in st.session_state:
+        st.session_state["selected_node"] = None
+    render_tree(movements, height=550)
+    selected = st.session_state.get("selected_node")
+    if selected:
+        st.markdown(f"**Selected:** {selected}")
+        video_url = id_to_video.get(selected)
+        if video_url:
+            st.video(video_url)
+        else:
+            st.info("No video configured for this movement.")
+    else:
+        st.info("Click a node to show its video.")
+
