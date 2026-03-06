@@ -72,7 +72,7 @@ if st.user.is_logged_in :
                                    st.video(video_url)
                           else:
                                    st.info("Aucune vidéo configurée pour ce mouvement.")
-                  else:
+                 else:
                            st.info("Cliquez sur un nœud pour afficher sa vidéo.")
 
                  # if len(selected_tree) > 0 :
