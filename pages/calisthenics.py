@@ -61,7 +61,7 @@ if st.user.is_logged_in :
                           movements = data[idx_skill_tree]["movements"]
                           st.subheader(f"Arbre interactif : {selected_tree}")
                           path = save_and_print_html_with_debug(movements)
-                          print("\nSaved HTML to:", path, file=sys.stderr)
+                          st.write("\nSaved HTML to:", path, file=sys.stderr)
 
                           #show_calisthenics_tab(movements)
 
