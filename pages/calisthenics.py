@@ -56,11 +56,30 @@ if st.user.is_logged_in :
                           progressState = {'id' : athl, 
                             'mastered' : []}
                  selected_tree = st.selectbox("Quel arbre de compétence voulez vous voir ?", all_tree_list)
-                 if len(selected_tree) > 0 :
-                          idx_skill_tree = all_tree_list.index(selected_tree)
-                          movements = data[idx_skill_tree]["movements"]
-                          st.subheader(f"Arbre interactif : {selected_tree}")
-                          save_and_show_html_with_debug(movements)
+                 if "selected_node" not in st.session_state:
+                      st.session_state["selected_node"] = None 
+                  if selected_tree and len(selected_tree) > 0:
+                      idx_skill_tree = all_tree_list.index(selected_tree)
+                      movements = data[idx_skill_tree]["movements"]
+                      st.subheader(f"Arbre interactif : {selected_tree}")
+                      render_tree(movements, height=550)
+                      id_to_video = {str(mv["id"]): mv.get("video") or mv.get("video_url") for mv in movements}
+                      selected = st.session_state.get("selected_node")
+                      if selected:
+                          st.markdown(f"**Selected:** {selected}")
+                          video_url = id_to_video.get(str(selected))
+                          if video_url:
+                              st.video(video_url)
+                          else:
+                              st.info("Aucune vidéo configurée pour ce mouvement.")
+                      else:
+                          st.info("Cliquez sur un nœud pour afficher sa vidéo.")
+
+                 # if len(selected_tree) > 0 :
+                 #          idx_skill_tree = all_tree_list.index(selected_tree)
+                 #          movements = data[idx_skill_tree]["movements"]
+                 #          st.subheader(f"Arbre interactif : {selected_tree}")
+                 #          save_and_show_html_with_debug(movements)
                           
                           #show_calisthenics_tab(movements)
 
