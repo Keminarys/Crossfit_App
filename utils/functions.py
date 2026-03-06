@@ -234,7 +234,7 @@ def build_agraph_nodes_edges(movements):
             f"Muscles : {', '.join(mv.get('muscles',[]))}\n\n"
             f"{mv.get('description','')}"
         )
-        nodes.append(Node(id=nid, label=mv.get("name", nid), title=title, size=22, color=color))
+        nodes.append(Node(id=nid, label=mv.get("name", nid), title=title, size=22, color=color, font={"color": "#FFFFFF"}))
         for tgt in mv.get("progressions_to", []):
             edges.append(Edge(source=nid, target=str(tgt), color="#BBBBBB55"))
     return nodes, edges
