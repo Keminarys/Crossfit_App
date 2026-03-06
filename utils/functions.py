@@ -17,6 +17,8 @@ from google.auth.transport.requests import AuthorizedSession
 from pyvis.network import Network
 import tempfile
 import streamlit.components.v1 as components
+from streamlit_agraph import agraph, Node, Edge, Config
+from youtubesearchpython import VideosSearch
 
 def get_conn_and_df(sheet_name) :
     conn = st.connection("gsheets", type=GSheetsConnection)
@@ -210,160 +212,20 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
     conn.update(worksheet=sheet_name, data=df)
     return df
 
-# def build_pyvis_tree(movements):
-#     LEVEL_COLORS = {
-#         "Beginner": "#A3E4D7",
-#         "Intermediate": "#F9E79F",
-#         "Advanced": "#F5B7B1",
-#         "Elite": "#D7BDE2"
-#     }
-#     net = Network(
-#         height="550px",
-#         width="100%",
-#         directed=True,
-#         bgcolor="#111111",
-#         font_color="#E5E5E5"
-#     )
-#     for mv in movements:
-#         level = mv.get("level", "Beginner")
-#         color = LEVEL_COLORS.get(level, "#85C1E9")
-#         title = (
-#             f"{mv['name']}\n"
-#             f"──────────────\n"
-#             f"Niveau : {mv.get('level','')}\n"
-#             f"Muscles : {', '.join(mv.get('muscles',[]))}\n\n"
-#             f"{mv.get('description','')}"
-#         )
-#         net.add_node(
-#             mv["id"],
-#             label=mv["name"],
-#             title=title,
-#             color=color,
-#             shape="dot",
-#             size=22,
-#             borderWidth=1,
-#             borderWidthSelected=2
-#         )
-#     for mv in movements:
-#         for target in mv.get("progressions_to", []):
-#             net.add_edge(
-#                 mv["id"],
-#                 target,
-#                 color="#BBBBBB55",
-#                 width=1.5,
-#                 arrows="to"
-#             )
-
-#     net.set_options("""
-#     var options = {
-#       "nodes": {
-#         "font": {
-#           "size": 14,
-#           "face": "Inter",
-#           "color": "#E5E5E5"
-#         }
-#       },
-#       "edges": {
-#         "smooth": {
-#           "enabled": true,
-#           "type": "cubicBezier"
-#         },
-#         "color": {
-#           "color": "#999999",
-#           "highlight": "#FFFFFF"
-#         }
-#       },
-#       "layout": {
-#         "hierarchical": {
-#           "enabled": true,
-#           "direction": "LR",
-#           "sortMethod": "directed",
-#           "nodeSpacing": 180,
-#           "levelSeparation": 220
-#         }
-#       },
-#       "interaction": {
-#         "hover": true,
-#         "tooltipDelay": 80
-#       },
-#       "physics": {
-#         "enabled": false
-#       }
-#     }
-#     """)
-#     return net
-
-
-def render_tree(movements, height=550):
-    """
-    Renders the pyvis graph and captures node clicks.
-    - movements: list of dicts with at least 'id' and 'name'.
-      Optionally include 'video' or 'video_url' on each movement.
-    - returns: None (selected node stored in st.session_state['selected_node'])
-    """
-    net = build_pyvis_tree(movements)
-    with tempfile.NamedTemporaryFile(delete=False, suffix=".html") as tmp:
-        net.save_graph(tmp.name)
-        html = open(tmp.name, "r", encoding="utf-8").read()
-    html += """
-    <script>
-    document.addEventListener("DOMContentLoaded", function() {
-        // try common selectors: pyvis uses id 'mynetwork' or a container with class 'pyvis-network'
-        const container = document.getElementById('mynetwork') || document.querySelector('.pyvis-network') || document.querySelector('div');
-        if (!container) return;
-        container.addEventListener('click', function(e) {
-            try {
-                var id = window.network.getNodeAt(e);
-                if (id) {
-                    window.parent.postMessage(
-                        {isStreamlitMessage: true, type: "pyvis_node_click", node_id: String(id)},
-                        "*"
-                    );
-                }
-            } catch (err) {
-                // ignore
-            }
-        });
-    });
-    </script>
-    """
-    msg = components.html(html, height=height)
-    if msg and isinstance(msg, dict) and msg.get("type") == "pyvis_node_click":
-        st.session_state["selected_node"] = msg.get("node_id")
-
-
-def show_calisthenics_tab(movements):
-    if "selected_node" not in st.session_state:
-        st.session_state["selected_node"] = None
-    render_tree(movements, height=550)
-    selected = st.session_state.get("selected_node")
-    if selected:
-        st.markdown(f"**Selected:** {selected}")
-        video_url = id_to_video.get(selected)
-        if video_url:
-            st.video(video_url)
-        else:
-            st.info("No video configured for this movement.")
-    else:
-        st.info("Click a node to show its video.")
-
-# paste this into a Python file in the same environment where pyvis is available
-import tempfile
-from pyvis.network import Network
-import io
-import sys
-
-def build_pyvis_tree(movements):
+def build_agraph_nodes_edges(movements):
     LEVEL_COLORS = {
-        "Beginner": "#A3E4D7",
-        "Intermediate": "#F9E79F",
-        "Advanced": "#F5B7B1",
-        "Elite": "#D7BDE2"
+    "Beginner": "#A3E4D7",
+    "Intermediate": "#F9E79F",
+    "Advanced": "#F5B7B1",
+    "Elite": "#D7BDE2"
     }
-    net = Network(height="550px", width="100%", directed=True, bgcolor="#111111", font_color="#E5E5E5")
+    DEFAULT_COLOR = "#85C1E9"
+    nodes = []
+    edges = []
     for mv in movements:
+        nid = str(mv["id"])
         level = mv.get("level", "Beginner")
-        color = LEVEL_COLORS.get(level, "#85C1E9")
+        color = LEVEL_COLORS.get(level, DEFAULT_COLOR)
         title = (
             f"{mv.get('name','')}\n"
             f"──────────────\n"
@@ -371,96 +233,28 @@ def build_pyvis_tree(movements):
             f"Muscles : {', '.join(mv.get('muscles',[]))}\n\n"
             f"{mv.get('description','')}"
         )
-        net.add_node(mv["id"], label=mv.get("name",""), title=title, color=color, shape="dot", size=22, borderWidth=1, borderWidthSelected=2)
-    for mv in movements:
-        for target in mv.get("progressions_to", []):
-            net.add_edge(mv["id"], target, color="#BBBBBB55", width=1.5, arrows="to")
-    net.set_options("""
-    var options = {
-      "nodes": {"font": {"size": 14, "face": "Inter", "color": "#E5E5E5"}},
-      "edges": {"smooth": {"enabled": true, "type": "cubicBezier"}, "color": {"color": "#999999", "highlight": "#FFFFFF"}},
-      "layout": {"hierarchical": {"enabled": true, "direction": "LR", "sortMethod": "directed", "nodeSpacing": 180, "levelSeparation": 220}},
-      "interaction": {"hover": true, "tooltipDelay": 80},
-      "physics": {"enabled": false}
-    }
-    """)
-    return net
+        nodes.append(Node(id=nid, label=mv.get("name", nid), title=title, size=22, color=color))
+        for tgt in mv.get("progressions_to", []):
+            edges.append(Edge(source=nid, target=str(tgt), color="#BBBBBB55"))
+    return nodes, edges
 
-def save_and_print_html(movements, out_path=None):
-    """
-    Save pyvis graph to an HTML file and print the full HTML to stdout.
-    Returns the path to the saved file.
-    """
-    net = build_pyvis_tree(movements)
-    if out_path is None:
-        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
-        out_path = tmp.name
-        tmp.close()
-    net.save_graph(out_path)
-    with open(out_path, "r", encoding="utf-8") as f:
-        html = f.read()
-    # print to stdout so you can copy-paste the entire HTML
-    print(html)
-    # also write to a file (already saved) and return path
-    return out_path
 
-def save_and_show_html_with_debug(movements, out_path=None):
-    """
-    Save pyvis graph to an HTML file and display the full HTML in Streamlit for copy/paste.
-    - Shows saved path with st.markdown
-    - Shows full HTML in st.text_area for easy copy
-    - Appends a debug script that logs window.network readiness and posts node clicks
-    Returns the path to the saved file.
-    """
-    net = build_pyvis_tree(movements)
+def find_youtube_tutorial(query):
+    try:
+        q = f"{query} tutorial"
+        videos_search = VideosSearch(q, limit=1)
+        res = videos_search.result()
+        first = res.get("result", [])
+        if first:
+            return first[0].get("link")
+    except Exception:
+        pass
+    return None
 
-    if out_path is None:
-        tmp = tempfile.NamedTemporaryFile(delete=False, suffix=".html")
-        out_path = tmp.name
-        tmp.close()
-
-    net.save_graph(out_path)
-
-    with open(out_path, "r", encoding="utf-8") as f:
-        html = f.read()
-
-    debug_script = r"""
-<script>
-document.addEventListener("DOMContentLoaded", function() {
-  function attach() {
-    if (!window.network) {
-      console.log("pyvis-debug: window.network not ready yet");
-      setTimeout(attach, 200);
-      return;
-    }
-    console.log("pyvis-debug: window.network ready", window.network);
-    try {
-      const nodes = window.network.body.data.nodes.get();
-      const edges = window.network.body.data.edges.get();
-      console.log("pyvis-debug: nodes", nodes.length, "edges", edges.length);
-    } catch (e) {
-      console.log("pyvis-debug: cannot read nodes/edges", e);
-    }
-    window.network.on("click", function(params) {
-      console.log("pyvis-debug: click params", params);
-      if (params.nodes && params.nodes.length > 0) {
-        const id = String(params.nodes[0]);
-        console.log("pyvis-debug: clicked node id =", id);
-        window.parent.postMessage({isStreamlitMessage: true, type: "pyvis_node_click", node_id: id}, "*");
-      }
-    });
-  }
-  attach();
-});
-</script>
-"""
-    # append debug script and overwrite file so you can open it locally with debug enabled
-    html_with_debug = html + debug_script
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write(html_with_debug)
-
-    # show saved path and the full HTML in Streamlit so you can copy/paste
-    st.markdown(f"**Saved HTML to:** `{out_path}`")
-    st.text_area("Generated HTML (copy all and paste here)", value=html_with_debug, height=420)
-
-    return out_path
+def get_video_for_movement(mv):
+    if not mv:
+        return None
+    query = mv.get("title") or mv.get("name") or ""
+    if not query:
+        return None
+    return find_youtube_tutorial(query)
