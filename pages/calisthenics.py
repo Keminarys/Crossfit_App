@@ -78,7 +78,7 @@ if st.user.is_logged_in :
                          if selected:
                              st.markdown(f"**Mouvement sélectionné :** {selected}")
                              mv = next((m for m in movements if str(m["id"]) == str(selected)), None)
-                             video_url = get_video_for_movement(mv)
+                             video_url = get_video_for_movement(mv, lang=lang)
                              if video_url:
                                  st.video(video_url)
                              else:
