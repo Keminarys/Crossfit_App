@@ -69,10 +69,12 @@ if st.user.is_logged_in :
                                     physics=False,
                                     hierarchical={
                                             "enabled": True,
-                                            "direction": "LR", 
+                                            "direction": "LR",
                                             "sortMethod": "directed",
                                             "nodeSpacing": 180,
-                                            "levelSeparation": 220},
+                                            "levelSeparation": 220,
+                                            "blockShifting": True,
+                                            "edgeMinimization": True},
                                     nodeHighlightBehavior=True,
                                     highlightColor="#FFFFFF"
                                 )
