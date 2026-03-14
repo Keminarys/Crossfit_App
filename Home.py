@@ -50,12 +50,16 @@ def main():
                 st.title('Crossfit83 Le Beausset')
                 st.write(f"Bienvenue, {athl}!")
                 if role == "admin":
+                    
+                    st.write(f"There are actually {} emails")
                     st.subheader("Admin Panel – Add allowed email")
                     new_email = st.text_input("Email to allow")
                     new_role = st.selectbox("Role", ["user", "admin"])
                     if st.button("Add email"):
                         add_allowed_email(new_email, new_role, "allowList")
                         st.success("Email added to allowlist.")
+                        st.cache_data.clear()
+                        st.rerun()
                 if st.user.name not in OgDict.keys() : 
                     st.write(f"Le nom associé à votre compte google est le suivant : {st.user.name}, souhaitez vous apparaître sous un autre nom ?")
                     on = st.toggle("Changer de Nom")
