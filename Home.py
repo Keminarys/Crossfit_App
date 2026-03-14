@@ -50,8 +50,6 @@ def main():
                 st.title('Crossfit83 Le Beausset')
                 st.write(f"Bienvenue, {athl}!")
                 if role == "admin":
-                    
-                    st.write(f"There are actually {} emails")
                     st.subheader("Admin Panel – Add allowed email")
                     new_email = st.text_input("Email to allow")
                     new_role = st.selectbox("Role", ["user", "admin"])
