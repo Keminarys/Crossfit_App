@@ -16,7 +16,6 @@ import urllib.parse
 from bs4 import BeautifulSoup
 import json 
 from google.auth.transport.requests import AuthorizedSession 
-from pyvis.network import Network
 import tempfile
 import streamlit.components.v1 as components
 from streamlit_agraph import agraph, Node, Edge, Config
