@@ -98,6 +98,8 @@ if st.user.is_logged_in :
                                                          st.info("Aucune vidéo trouvée.")
                      else:
                               st.info("Cliquez sur un nœud pour afficher sa vidéo.")
+                     # if len(st.session_state["selected_nodes"]) > 0 :
+                              
 
 
 
