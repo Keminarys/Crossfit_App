@@ -73,7 +73,7 @@ if st.user.is_logged_in :
                                height=650,
                                directed=True,
                                physics=False,
-                               randomSeed = 7,
+                               randomSeed = 7777,
                                hierarchical={
                                    "enabled": True,
                                    "direction": "LR", 
