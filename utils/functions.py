@@ -270,3 +270,7 @@ def get_video_for_movement(mv, lang="en"):
     if not query:
         return None
     return find_youtube_tutorial_via_http(query, lang=lang)
+
+def get_name_from_id(movements, nid):
+    mv = next((m for m in movements if str(m["id"]) == str(nid)), None)
+    return mv["name"] if mv else None
