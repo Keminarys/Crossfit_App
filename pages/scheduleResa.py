@@ -57,55 +57,7 @@ if st.user.is_logged_in :
                     "Thursday": "Jeudi", "Friday": "Vendredi", "Saturday": "Samedi",
                     "Sunday": "Dimanche"
                 }
-                
-                st.subheader("Personnes présentes au cours aujourd'hui")
-                attendance_dict = pplComingToday(poll)
-                for time_slot, people in attendance_dict.items():
-                        with st.expander(f"🕒 {time_slot}", expanded=True):
-                                if people:
-                                    cols = st.columns(min(len(people), 4))
-                                    for idx, name in enumerate(people):
-                                        with cols[idx % 4]:
-                                            st.markdown(f"<div style='background-color:#8B0000;padding:10px;border-radius:5px;text-align:center;font-weight:bold;'>{name}</div>", unsafe_allow_html=True)
-                                else:
-                                    st.markdown("🚫 Personne n'est prévu pour ce créneau.")
-                
-                st.subheader("Inscription au WOD de la semaine :calendar:")
-                
-                
-                if athl not in poll["Nom"].unique() : 
-                    new_row = {col: False for col in poll.columns}
-                    new_row["Nom"] = athl
-                    
-                    edited = st.data_editor(
-                        pd.DataFrame([new_row]),
-                        column_config={
-                            "Nom": {"disabled": True}, 
-                        },
-                        hide_index=True,
-                        key="attendance_editor"
-                    )
-                
-                    if st.button("S'inscrire"):
-                        for col in edited.columns:
-                            if edited[col].dtype == "bool":
-                                edited[col] = edited[col].replace({False: "", True: "x"})
-                        dict_edited = {}
-                        for col in edited.columns :
-                          dict_edited[col] = edited[col][0]
-                        UpdateDB(poll, dict_edited, "Inscription")
-                        st.cache_data.clear()
-                        st.rerun() 
-                else : 
-                    st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
-                    if st.button("Modifier son inscription", key="btn_modify"):
-                        poll = poll[poll["Nom"] != athl]
-                        if poll.empty:
-                            poll = poll.iloc[0:0] 
-                        dropRecordDB(poll, "Inscription")
-                        st.cache_data.clear()
-                        st.rerun()
-                
+
                 # Define example workout details for each day
                 st.subheader("Planning de la semaine :calendar:")
                 cols = st.columns(7)
@@ -144,6 +96,54 @@ if st.user.is_logged_in :
                                         <p>{selected_planning.loc[i, selected_day]}</p>
                                         </div>
                                         """, unsafe_allow_html=True)
+                
+                with st.expander("Personnes présentes au cours aujourd'hui") : 
+                        attendance_dict = pplComingToday(poll)
+                        for time_slot, people in attendance_dict.items():
+                                with st.expander(f"🕒 {time_slot}", expanded=True):
+                                        if people:
+                                            cols = st.columns(min(len(people), 4))
+                                            for idx, name in enumerate(people):
+                                                with cols[idx % 4]:
+                                                    st.markdown(f"<div style='background-color:#8B0000;padding:10px;border-radius:5px;text-align:center;font-weight:bold;'>{name}</div>", unsafe_allow_html=True)
+                                        else:
+                                            st.markdown("🚫 Personne n'est prévu pour ce créneau.")
+                        
+                        st.subheader("Inscription au WOD de la semaine :calendar:")
+                        
+                        
+                        if athl not in poll["Nom"].unique() : 
+                            new_row = {col: False for col in poll.columns}
+                            new_row["Nom"] = athl
+                            
+                            edited = st.data_editor(
+                                pd.DataFrame([new_row]),
+                                column_config={
+                                    "Nom": {"disabled": True}, 
+                                },
+                                hide_index=True,
+                                key="attendance_editor"
+                            )
+                        
+                            if st.button("S'inscrire"):
+                                for col in edited.columns:
+                                    if edited[col].dtype == "bool":
+                                        edited[col] = edited[col].replace({False: "", True: "x"})
+                                dict_edited = {}
+                                for col in edited.columns :
+                                  dict_edited[col] = edited[col][0]
+                                UpdateDB(poll, dict_edited, "Inscription")
+                                st.cache_data.clear()
+                                st.rerun() 
+                        else : 
+                            st.write("Vous avez déjà rempli le formulaire pour cette semaine.")
+                            if st.button("Modifier son inscription", key="btn_modify"):
+                                poll = poll[poll["Nom"] != athl]
+                                if poll.empty:
+                                    poll = poll.iloc[0:0] 
+                                dropRecordDB(poll, "Inscription")
+                                st.cache_data.clear()
+                                st.rerun()
                 
                 with st.expander("📊 Personnes présentes cette semaine"):
                     st.dataframe(
