@@ -42,8 +42,8 @@ if st.user.is_logged_in :
                  data = load_drive_json(file_id, creds)
                  all_tree_list = []
                  mastered_df = get_conn_and_df("calistenicPathway")
-                 df["mastered"] = df["mastered"].apply(lambda x: json.loads(x) if isinstance(x, str) else x)
-                 df["mastered"] = df["mastered"].apply(flatten_list)
+                 mastered_df["mastered"] = mastered_df["mastered"].apply(lambda x: json.loads(x) if isinstance(x, str) else x)
+                 mastered_df["mastered"] = mastered_df["mastered"].apply(flatten_list)
                  athl = newName()
                  for i in range(0,len(data)):
                    tree = data[i]['movements'][0]['skill_tree_links']
