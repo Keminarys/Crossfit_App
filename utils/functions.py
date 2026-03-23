@@ -210,61 +210,125 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
         df.loc[idx, "mastered"] = json.dumps(mastered_list)
     conn.update(worksheet=sheet_name, data=df)
     return df
+    
+def build_agraph_nodes_edges(movements, mastered_ids=None, layout="LR"):
 
-def build_agraph_nodes_edges(movements, mastered_ids=None):
     if mastered_ids is None:
         mastered_ids = []
+
+    mastered_ids = {str(x) for x in mastered_ids}
+
     LEVEL_COLORS = {
         "Beginner": "#A3E4D7",
         "Intermediate": "#F9E79F",
         "Advanced": "#F5B7B1",
         "Elite": "#D7BDE2"
     }
+
     MASTERED_BORDER = "#2ECC71"
-    MASTERED_BG = "#ABEBC6" 
+    MASTERED_BG = "#ABEBC6"
     DEFAULT_COLOR = "#85C1E9"
 
     nodes = []
     edges = []
 
     for mv in movements:
-        nid = str(mv["id"])
+        nid = str(mv.get("id"))
         level = mv.get("level", "Beginner")
-        base_color = LEVEL_COLORS.get(level, DEFAULT_COLOR)
-        is_mastered = nid in {str(x) for x in mastered_ids}
-        label = f"✓ {mv['name']}" if is_mastered else mv["name"]
+        name = mv.get("name", nid)
+        is_mastered = nid in mastered_ids
+
+        label = f"✓ {name}" if is_mastered else name
+
         color = {
-            "background": MASTERED_BG if is_mastered else base_color,
+            "background": MASTERED_BG if is_mastered else LEVEL_COLORS.get(level, DEFAULT_COLOR),
             "border": MASTERED_BORDER if is_mastered else "#333333",
             "highlight": {
-                "background": MASTERED_BG if is_mastered else base_color,
+                "background": MASTERED_BG if is_mastered else LEVEL_COLORS.get(level, DEFAULT_COLOR),
                 "border": MASTERED_BORDER if is_mastered else "#555555",
             }
         }
+
         title = (
-            f"{mv.get('name','')}\n"
+            f"{name}\n"
             f"──────────────\n"
-            f"Niveau : {mv.get('level','')}\n"
-            f"Muscles : {', '.join(mv.get('muscles',[]))}\n\n"
-            f"{mv.get('description','')}"
+            f"Niveau : {level}\n"
+            f"Muscles : {', '.join(mv.get('muscles', []))}\n\n"
+            f"{mv.get('description', '')}"
         )
 
-        nodes.append(
-            Node(
-                id=nid,
-                label=label,
-                title=title,
-                size=24 if is_mastered else 22,
-                color=color,
-                font={"color": "#FFFFFF", "bold": is_mastered}))
+        nodes.append(Node(
+            id=nid,
+            label=label,
+            title=title,
+            size=23 if is_mastered else 22,
+            color=color,
+            font={"color": "#FFFFFF", "bold": is_mastered}
+        ))
+
         for tgt in mv.get("progressions_to", []):
-            edges.append(
-                Edge(
-                    source=nid,
-                    target=str(tgt),
-                    color="#BBBBBB55"))
+            edges.append(Edge(
+                source=nid,
+                target=str(tgt),
+                color="#BBBBBB55"
+            ))
 
     return nodes, edges
+
+# def build_agraph_nodes_edges(movements, mastered_ids=None):
+#     if mastered_ids is None:
+#         mastered_ids = []
+#     LEVEL_COLORS = {
+#         "Beginner": "#A3E4D7",
+#         "Intermediate": "#F9E79F",
+#         "Advanced": "#F5B7B1",
+#         "Elite": "#D7BDE2"
+#     }
+#     MASTERED_BORDER = "#2ECC71"
+#     MASTERED_BG = "#ABEBC6" 
+#     DEFAULT_COLOR = "#85C1E9"
+
+#     nodes = []
+#     edges = []
+
+#     for mv in movements:
+#         nid = str(mv["id"])
+#         level = mv.get("level", "Beginner")
+#         base_color = LEVEL_COLORS.get(level, DEFAULT_COLOR)
+#         is_mastered = nid in {str(x) for x in mastered_ids}
+#         label = f"✓ {mv['name']}" if is_mastered else mv["name"]
+#         color = {
+#             "background": MASTERED_BG if is_mastered else base_color,
+#             "border": MASTERED_BORDER if is_mastered else "#333333",
+#             "highlight": {
+#                 "background": MASTERED_BG if is_mastered else base_color,
+#                 "border": MASTERED_BORDER if is_mastered else "#555555",
+#             }
+#         }
+#         title = (
+#             f"{mv.get('name','')}\n"
+#             f"──────────────\n"
+#             f"Niveau : {mv.get('level','')}\n"
+#             f"Muscles : {', '.join(mv.get('muscles',[]))}\n\n"
+#             f"{mv.get('description','')}"
+#         )
+
+#         nodes.append(
+#             Node(
+#                 id=nid,
+#                 label=label,
+#                 title=title,
+#                 size=24 if is_mastered else 22,
+#                 color=color,
+#                 font={"color": "#FFFFFF", "bold": is_mastered}))
+#         for tgt in mv.get("progressions_to", []):
+#             edges.append(
+#                 Edge(
+#                     source=nid,
+#                     target=str(tgt),
+#                     color="#BBBBBB55"))
+
+#     return nodes, edges
 
 
 def find_youtube_tutorial_via_http(query, lang="en"):
