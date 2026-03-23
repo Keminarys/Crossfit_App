@@ -118,9 +118,8 @@ if st.user.is_logged_in :
                                    }
                                    UpdateDB(df_new, new_entry, "calistenicPathway")
                                    st.cache_data.clear()
+                                   del st.session_state["selected_nodes"]
                                    st.rerun()
-                                   
-                          return 
                           
                  if len(st.session_state["selected_nodes"]) > 0 :
                           if st.button("Consulter et Enregistrer mes progrès"):
