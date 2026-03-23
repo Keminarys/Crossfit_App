@@ -110,8 +110,8 @@ if st.user.is_logged_in :
                                        with st.expander("Vidéo démonstration"):
                                                 if video_url:
                                                          st.video(video_url)
-                                       else:
-                                                st.info("Aucune vidéo trouvée.")
+                                                else:
+                                                         st.info("Aucune vidéo trouvée.")
 
                               mastered = nid in st.session_state["selected_nodes"]
                               new_state = st.checkbox("Marquer comme maîtrisé", value=mastered)
