@@ -98,8 +98,9 @@ if st.user.is_logged_in :
                                                          st.info("Aucune vidéo trouvée.")
                      else:
                               st.info("Cliquez sur un nœud pour afficher sa vidéo.")
-                     # if len(st.session_state["selected_nodes"]) > 0 :
-                              
+                     if len(st.session_state["selected_nodes"]) > 0 :
+                              list_mastered = [x for x in st.session_state["selected_nodes"]]
+                              st.markdown(f"Les exercices suivant sont renseignés comme maitrisés : {list_mastered}")
 
 
 
