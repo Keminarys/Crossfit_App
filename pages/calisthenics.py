@@ -64,8 +64,8 @@ if st.user.is_logged_in :
                           st.session_state["last_clicked"] = None
                  if len(selected_tree) > 0 :
                      idx_skill_tree = all_tree_list.index(selected_tree)
-                     desc_tree = desc.index(selected_tree)
-                     st.markdown(desc_tree["description"])
+                     desc_tree_description = desc[selected_tree]["description"]
+                     st.markdown(desc_tree_description)
                      movements = data[idx_skill_tree]["movements"]    
                      progress = compute_weighted_progress(movements, progressState["mastered"])
                      st.markdown(f"### 📊 Progression pondérée : **{progress['progress_pct']}%**")
