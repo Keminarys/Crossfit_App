@@ -80,27 +80,54 @@ if st.user.is_logged_in :
                                     highlightColor="#FFFFFF"
                                 )
                      clicked_node = agraph(nodes=nodes, edges=edges, config=config)
+                     # if clicked_node:
+                     #          nid = str(clicked_node)
+                     #          st.session_state["last_clicked"] = nid
+                     #          if nid in st.session_state["selected_nodes"]:
+                     #                   st.session_state["selected_nodes"].remove(nid)
+                     #          else:
+                     #                   st.session_state["selected_nodes"].append(nid)
+                     #          selected = st.session_state.get("last_clicked")
+                     #          if selected:
+                     #                   mv = next((m for m in movements if str(m["id"]) == str(selected)), None)
+                     #                   video_url = get_video_for_movement(mv, lang='en')
+                     #                   with st.expander("Video démonstration") :
+                     #                            if video_url:
+                     #                                     st.video(video_url)
+                     #                            else:
+                     #                                     st.info("Aucune vidéo trouvée.")
+                     # else:
+                              # st.info("Cliquez sur un nœud pour afficher sa vidéo.")
                      if clicked_node:
                               nid = str(clicked_node)
                               st.session_state["last_clicked"] = nid
-                              if nid in st.session_state["selected_nodes"]:
-                                       st.session_state["selected_nodes"].remove(nid)
-                              else:
-                                       st.session_state["selected_nodes"].append(nid)
-                              selected = st.session_state.get("last_clicked")
-                              if selected:
-                                       mv = next((m for m in movements if str(m["id"]) == str(selected)), None)
+                              mv = next((m for m in movements if str(m["id"]) == nid), None)
+                              if mv:
+                                       st.subheader(f"📌 {mv['name']}")
+                           
+                                   # Video
                                        video_url = get_video_for_movement(mv, lang='en')
-                                       with st.expander("Video démonstration") :
+                                       with st.expander("Vidéo démonstration"):
                                                 if video_url:
                                                          st.video(video_url)
-                                                else:
-                                                         st.info("Aucune vidéo trouvée.")
+                                       else:
+                                                st.info("Aucune vidéo trouvée.")
+
+                              mastered = nid in st.session_state["selected_nodes"]
+                              new_state = st.checkbox("Marquer comme maîtrisé", value=mastered)
+                           
+                              if new_state and not mastered:
+                                       st.session_state["selected_nodes"].append(nid)
+                              elif not new_state and mastered:
+                                       st.session_state["selected_nodes"].remove(nid)
+                           
                      else:
                               st.info("Cliquez sur un nœud pour afficher sa vidéo.")
+
                      if len(st.session_state["selected_nodes"]) > 0 :
-                              list_mastered = [x for x in st.session_state["selected_nodes"]]
-                              st.markdown(f"Les exercices suivant sont renseignés comme maitrisés : {list_mastered}")
+                              mastered_names = [get_name_from_id(movements, nid)for nid in st.session_state["selected_nodes"]]
+                              st.markdown("### 🟩 Exercices maîtrisés")        
+                              st.write(mastered_names)
 
 
 
