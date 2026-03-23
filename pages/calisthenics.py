@@ -42,6 +42,7 @@ if st.user.is_logged_in :
                  data = load_drive_json(file_id, creds)
                  all_tree_list = []
                  mastered_df = get_conn_and_df("calistenicPathway")
+                 mastered_df["mastered"] = mastered_df["mastered"].apply(json.loads)
                  athl = newName()
                  for i in range(0,len(data)):
                    tree = data[i]['movements'][0]['skill_tree_links']
@@ -113,7 +114,7 @@ if st.user.is_logged_in :
                                             mastered_id = mastered_id + already_mastered
                                    new_entry = {
                                             "id" : athl,
-                                            "mastered" : mastered_id
+                                            "mastered" : json.dumps(mastered_id)
                                    }
                                    UpdateDB(df_new, new_entry, "calistenicPathway")
                                    st.cache_data.clear()
