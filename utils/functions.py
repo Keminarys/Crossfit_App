@@ -211,20 +211,36 @@ def progressCalistenics(df, user_id, new_mastered, sheet_name):
     conn.update(worksheet=sheet_name, data=df)
     return df
 
-def build_agraph_nodes_edges(movements):
+def build_agraph_nodes_edges(movements, mastered_ids=None):
+    if mastered_ids is None:
+        mastered_ids = []
     LEVEL_COLORS = {
-    "Beginner": "#A3E4D7",
-    "Intermediate": "#F9E79F",
-    "Advanced": "#F5B7B1",
-    "Elite": "#D7BDE2"
+        "Beginner": "#A3E4D7",
+        "Intermediate": "#F9E79F",
+        "Advanced": "#F5B7B1",
+        "Elite": "#D7BDE2"
     }
+    MASTERED_BORDER = "#2ECC71"
+    MASTERED_BG = "#ABEBC6" 
     DEFAULT_COLOR = "#85C1E9"
+
     nodes = []
     edges = []
+
     for mv in movements:
         nid = str(mv["id"])
         level = mv.get("level", "Beginner")
-        color = LEVEL_COLORS.get(level, DEFAULT_COLOR)
+        base_color = LEVEL_COLORS.get(level, DEFAULT_COLOR)
+        is_mastered = nid in {str(x) for x in mastered_ids}
+        label = f"✓ {mv['name']}" if is_mastered else mv["name"]
+        color = {
+            "background": MASTERED_BG if is_mastered else base_color,
+            "border": MASTERED_BORDER if is_mastered else "#333333",
+            "highlight": {
+                "background": MASTERED_BG if is_mastered else base_color,
+                "border": MASTERED_BORDER if is_mastered else "#555555",
+            }
+        }
         title = (
             f"{mv.get('name','')}\n"
             f"──────────────\n"
@@ -232,9 +248,22 @@ def build_agraph_nodes_edges(movements):
             f"Muscles : {', '.join(mv.get('muscles',[]))}\n\n"
             f"{mv.get('description','')}"
         )
-        nodes.append(Node(id=nid, label=mv.get("name", nid), title=title, size=22, color=color, font={"color": "#FFFFFF"}))
+
+        nodes.append(
+            Node(
+                id=nid,
+                label=label,
+                title=title,
+                size=24 if is_mastered else 22,
+                color=color,
+                font={"color": "#FFFFFF", "bold": is_mastered}))
         for tgt in mv.get("progressions_to", []):
-            edges.append(Edge(source=nid, target=str(tgt), color="#BBBBBB55"))
+            edges.append(
+                Edge(
+                    source=nid,
+                    target=str(tgt),
+                    color="#BBBBBB55"))
+
     return nodes, edges
 
 
