@@ -39,7 +39,9 @@ if st.user.is_logged_in :
                  scopes=["https://www.googleapis.com/auth/drive.readonly"]
                  )
                  file_id = st.secrets["drive"]["json_file_id"]
+                 desc_id = st.secrets["drive"]["json_desc_id"]
                  data = load_drive_json(file_id, creds)
+                 desc = load_drive_json(desc_id, creds)
                  all_tree_list = []
                  mastered_df = get_conn_and_df("calistenicPathway")
                  mastered_df["mastered"] = mastered_df["mastered"].apply(lambda x: json.loads(x) if isinstance(x, str) else x)
@@ -62,6 +64,8 @@ if st.user.is_logged_in :
                           st.session_state["last_clicked"] = None
                  if len(selected_tree) > 0 :
                      idx_skill_tree = all_tree_list.index(selected_tree)
+                     desc_tree = desc.index(selected_tree)
+                     st.markdown(desc_tree["description"])
                      movements = data[idx_skill_tree]["movements"]    
                      progress = compute_weighted_progress(movements, progressState["mastered"])
                      st.markdown(f"### 📊 Progression pondérée : **{progress['progress_pct']}%**")
