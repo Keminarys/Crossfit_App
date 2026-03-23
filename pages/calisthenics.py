@@ -2,7 +2,7 @@ import streamlit as st
 import requests 
 import json 
 from google.oauth2 import service_account 
-from utils.functions import get_conn_and_df, load_drive_json, newName, build_agraph_nodes_edges, get_video_for_movement, get_name_from_id, UpdateDB, compute_weighted_progress
+from utils.functions import get_conn_and_df, load_drive_json, newName, build_agraph_nodes_edges, get_video_for_movement, get_name_from_id, UpdateDB, compute_weighted_progress, flatten_list
 from utils.allow import is_email_allowed, get_user_role, add_allowed_email
 from utils.ui_helpers import render_navbar
 import streamlit.components.v1 as components
@@ -42,7 +42,8 @@ if st.user.is_logged_in :
                  data = load_drive_json(file_id, creds)
                  all_tree_list = []
                  mastered_df = get_conn_and_df("calistenicPathway")
-                 mastered_df["mastered"] = mastered_df["mastered"].apply(json.loads)
+                 df["mastered"] = df["mastered"].apply(lambda x: json.loads(x) if isinstance(x, str) else x)
+                 df["mastered"] = df["mastered"].apply(flatten_list)
                  athl = newName()
                  for i in range(0,len(data)):
                    tree = data[i]['movements'][0]['skill_tree_links']
@@ -118,7 +119,11 @@ if st.user.is_logged_in :
                                    df_new = df.loc[df.id != athl]
                                    if athl in df.id.unique():
                                             already_mastered = df.loc[df.id == athl]['mastered'].tolist() 
-                                            mastered_id = mastered_id + already_mastered
+                                            mastered_id = flatten_list(mastered_id)
+                                            already_mastered = flatten_list(already_mastered)
+                                            mastered_id = list(set(mastered_id + already_mastered))
+                                   else : 
+                                            mastered_id = flatten_list(mastered_id)
                                    new_entry = {
                                             "id" : athl,
                                             "mastered" : json.dumps(mastered_id)
