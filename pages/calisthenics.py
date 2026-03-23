@@ -2,7 +2,7 @@ import streamlit as st
 import requests 
 import json 
 from google.oauth2 import service_account 
-from utils.functions import get_conn_and_df, load_drive_json, newName, build_agraph_nodes_edges, get_video_for_movement, get_name_from_id, UpdateDB
+from utils.functions import get_conn_and_df, load_drive_json, newName, build_agraph_nodes_edges, get_video_for_movement, get_name_from_id, UpdateDB, compute_weighted_progress
 from utils.allow import is_email_allowed, get_user_role, add_allowed_email
 from utils.ui_helpers import render_navbar
 import streamlit.components.v1 as components
@@ -61,7 +61,10 @@ if st.user.is_logged_in :
                           st.session_state["last_clicked"] = None
                  if len(selected_tree) > 0 :
                      idx_skill_tree = all_tree_list.index(selected_tree)
-                     movements = data[idx_skill_tree]["movements"]                 
+                     movements = data[idx_skill_tree]["movements"]    
+                     progress = compute_weighted_progress(movements, progressState["mastered"])
+                     st.markdown(f"### 📊 Progression pondérée : **{progress['progress_pct']}%**")
+                     st.progress(progress["progress_pct"] / 100)
                      st.subheader("Arbre interactif")
                      nodes, edges = build_agraph_nodes_edges(movements)
                      config = Config(
