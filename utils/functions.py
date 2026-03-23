@@ -274,3 +274,32 @@ def get_video_for_movement(mv, lang="en"):
 def get_name_from_id(movements, nid):
     mv = next((m for m in movements if str(m["id"]) == str(nid)), None)
     return mv["name"] if mv else None
+
+# utils/progression.py
+
+def compute_weighted_progress(movements, mastered_ids):
+    LEVEL_WEIGHTS = {
+        "Beginner": 1,
+        "Intermediate": 3,
+        "Advanced": 6,
+        "Elite": 10
+    }
+    total_weight = sum(
+        LEVEL_WEIGHTS.get(mv.get("level"), 1)
+        for mv in movements
+    )
+    mastered_weight = sum(
+        LEVEL_WEIGHTS.get(mv.get("level"), 1)
+        for mv in movements
+        if str(mv.get("id")) in {str(x) for x in mastered_ids}
+    )
+    if total_weight == 0:
+        progress_pct = 0
+    else:
+        progress_pct = int((mastered_weight / total_weight) * 100)
+    return {
+        "progress_pct": progress_pct,
+        "mastered_weight": mastered_weight,
+        "total_weight": total_weight
+    }
+
