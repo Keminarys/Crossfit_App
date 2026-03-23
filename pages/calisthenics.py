@@ -111,7 +111,7 @@ if st.user.is_logged_in :
                                    if athl in df.id.unique():
                                             already_mastered = df.loc[df.id == athl]['mastered'].tolist() 
                                             mastered_id = mastered_id + already_mastered
-                                   new_entry : {
+                                   new_entry = {
                                             "id" : athl,
                                             "mastered" : mastered_id
                                    }
