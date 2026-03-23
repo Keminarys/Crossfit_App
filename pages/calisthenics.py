@@ -66,7 +66,7 @@ if st.user.is_logged_in :
                      st.markdown(f"### 📊 Progression pondérée : **{progress['progress_pct']}%**")
                      st.progress(progress["progress_pct"] / 100)
                      st.subheader("Arbre interactif")
-                     nodes, edges = build_agraph_nodes_edges(movements, progressState.get('mastered', None))
+                     nodes, edges = build_agraph_nodes_edges(movements, progressState.get('mastered', None), layout = "LR")
                      config = Config(
                                width="100%",
                                height=650,
@@ -74,13 +74,13 @@ if st.user.is_logged_in :
                                physics=False,
                                hierarchical={
                                    "enabled": True,
-                                   "direction": "UD",         
+                                   "direction": "LR", 
                                    "sortMethod": "directed",
-                                   "nodeSpacing": 120,        
-                                   "levelSeparation": 180,    
-                                   "treeSpacing": 200,         
-                                   "blockShifting": False,    
-                                   "edgeMinimization": False, 
+                                   "nodeSpacing": 120,
+                                   "levelSeparation": 180,
+                                   "treeSpacing": 200,
+                                   "blockShifting": False,
+                                   "edgeMinimization": False,
                                    "parentCentralization": True
                                },
                                nodeHighlightBehavior=True,
