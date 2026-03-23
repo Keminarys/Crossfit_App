@@ -68,21 +68,25 @@ if st.user.is_logged_in :
                      st.subheader("Arbre interactif")
                      nodes, edges = build_agraph_nodes_edges(movements, progressState.get('mastered', None))
                      config = Config(
-                                    width="100%",
-                                    height=550,
-                                    directed=True,
-                                    physics=False,
-                                    hierarchical={
-                                            "enabled": True,
-                                            "direction": "UD",
-                                            "sortMethod": "directed",
-                                            "nodeSpacing": 180,
-                                            "levelSeparation": 220,
-                                            "blockShifting": True,
-                                            "edgeMinimization": True},
-                                    nodeHighlightBehavior=True,
-                                    highlightColor="#FFFFFF"
-                                )
+                               width="100%",
+                               height=650,
+                               directed=True,
+                               physics=False,
+                               hierarchical={
+                                   "enabled": True,
+                                   "direction": "UD",         
+                                   "sortMethod": "directed",
+                                   "nodeSpacing": 120,        
+                                   "levelSeparation": 180,    
+                                   "treeSpacing": 200,         
+                                   "blockShifting": False,    
+                                   "edgeMinimization": False, 
+                                   "parentCentralization": True
+                               },
+                               nodeHighlightBehavior=True,
+                               highlightColor="#FFFFFF"
+                           )
+
                      clicked_node = agraph(nodes=nodes, edges=edges, config=config)
                      if clicked_node:
                               nid = str(clicked_node)
