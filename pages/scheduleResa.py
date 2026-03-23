@@ -70,7 +70,7 @@ if st.user.is_logged_in :
                 
                 
                 if selected_day:
-                        st.subheader("Workout of the Day")
+                        st.subheader(f"Workout of the Day : {selected_day}")
                         selected_planning = planning[['WOD', selected_day]]
                         
                         st.markdown("""
