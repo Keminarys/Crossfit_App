@@ -275,8 +275,6 @@ def get_name_from_id(movements, nid):
     mv = next((m for m in movements if str(m["id"]) == str(nid)), None)
     return mv["name"] if mv else None
 
-# utils/progression.py
-
 def compute_weighted_progress(movements, mastered_ids):
     LEVEL_WEIGHTS = {
         "Beginner": 1,
