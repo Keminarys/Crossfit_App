@@ -82,7 +82,7 @@ if st.user.is_logged_in :
                                    "treeSpacing": 200,
                                    "blockShifting": False,
                                    "edgeMinimization": False,
-                                   "parentCentralization": True
+                                   "parentCentralization": False
                                },
                                nodeHighlightBehavior=True,
                                highlightColor="#FFFFFF"
