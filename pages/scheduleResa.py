@@ -60,45 +60,36 @@ if st.user.is_logged_in :
 
                 # Define example workout details for each day
                 st.subheader("Planning de la semaine :calendar:")
-                cols = st.columns(7)
-                selected_day = None
-                for i, day in enumerate(days):
-                        button_label = f"{daysConvert[day.strftime('%A')]} {day.strftime('%d')}"  # Example: "Monday 28"
-                        if cols[i].button(button_label):
-                                selected_day = daysConvert[day.strftime('%A')]
+                st.subheader("Planning de la semaine :calendar:")
+                week_days = [daysConvert[d.strftime('%A')] for d in days]
+                table = planning[['WOD'] + week_days].copy()
+                for day in week_days:
+                    table[day] = table[day].str.replace("\n", "<br>")
+
+                st.markdown("""
+                <style>
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th {
+                    background-color: #2E3B4E;
+                    color: white;
+                    padding: 10px;
+                    text-align: center;
+                }
+                td {
+                    background-color: #1F2937;
+                    color: white;
+                    padding: 10px;
+                    border: 1px solid #444;
+                    vertical-align: top;
+                }
+                </style>
+                """, unsafe_allow_html=True)
                 
-                
-                
-                if selected_day:
-                        st.subheader(f"Workout of the Day : {selected_day}")
-                        selected_planning = planning[['WOD', selected_day]]
-                        
-                        st.markdown("""
-                        <style>
-                        .card {
-                            border-radius: 10px;
-                            padding: 20px;
-                            margin-bottom: 15px;
-                            background-color: #2E3B4E;
-                            color: white;
-                            text-align: center;
-                            font-size: 18px;
-                            box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
-                        }
-                        </style>
-                        """, unsafe_allow_html=True)
-                        
-                        for i in range(len(selected_planning)):
-                            wod_title = selected_planning.loc[i, "WOD"]
-                            wod_text = selected_planning.loc[i, selected_day]
-                            wod_text = wod_text.replace("\n", "<br>")
-                        
-                            st.markdown(f"""
-                            <div class="card">
-                                <h2>{wod_title}</h2>
-                                <p>{wod_text}</p>
-                            </div>
-                            """, unsafe_allow_html=True)
+                st.markdown(table.to_html(escape=False, index=False), unsafe_allow_html=True)
+
                 
                 with st.expander("Personnes présentes au cours aujourd'hui") : 
                         attendance_dict = pplComingToday(poll)
