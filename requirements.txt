@@ -12,5 +12,5 @@ bs4
 requests
 streamlit-cookies-manager
 PyJWT
-Authlib
+Authlib>=1.3.2
 streamlit_agraph
