@@ -13,4 +13,4 @@ streamlit-cookies-manager
 PyJWT
 streamlit_agraph
 streamlit
-Authlib
+streamlit[auth]
