@@ -59,7 +59,8 @@ if st.user.is_logged_in :
                 }
                 st.subheader("Planning de la semaine :calendar:")
 
-                # Convert weekday names
+                # Build weekday labels with dates
+                header_labels = [f"{daysConvert[d.strftime('%A')]} {d.strftime('%d')}" for d in days]
                 week_days = [daysConvert[d.strftime('%A')] for d in days]
                 
                 # Copy relevant columns
@@ -69,18 +70,31 @@ if st.user.is_logged_in :
                 for day in week_days:
                     table[day] = table[day].str.replace("\n", "<br>")
                 
+                # Color palette per day
+                day_colors = {
+                    "Lundi": "#8B0000",
+                    "Mardi": "#AA0000",
+                    "Mercredi": "#B22222",
+                    "Jeudi": "#CD5C5C",
+                    "Vendredi": "#E9967A",
+                    "Samedi": "#A52A2A",
+                    "Dimanche": "#800000",
+                }
+                
                 # CSS styling
                 st.markdown("""
                 <style>
                 table {
                     width: 100%;
                     border-collapse: collapse;
+                    text-align: center;
                 }
                 th {
                     background-color: #2E3B4E;
                     color: white;
-                    padding: 10px;
+                    padding: 12px;
                     text-align: center;
+                    font-size: 18px;
                 }
                 td {
                     background-color: #1F2937;
@@ -88,15 +102,16 @@ if st.user.is_logged_in :
                     padding: 10px;
                     border: 1px solid #444;
                     vertical-align: top;
+                    text-align: center;
                 }
                 
                 /* Bubble style */
                 .bubble {
-                    background-color: #2E3B4E;
                     padding: 12px;
                     margin-bottom: 10px;
                     border-radius: 12px;
                     box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+                    text-align: center;
                 }
                 .bubble h4 {
                     margin: 0 0 6px 0;
@@ -113,24 +128,26 @@ if st.user.is_logged_in :
                 # Build HTML table
                 html = "<table><tr>"
                 
-                # Header row
-                for day in week_days:
-                    html += f"<th>{day}</th>"
+                # Header row with dates
+                for label in header_labels:
+                    html += f"<th>{label}</th>"
                 html += "</tr><tr>"
                 
-                # Single row containing all days
-                for day in week_days:
+                # One row containing all days
+                for day, label in zip(week_days, header_labels):
                     content = table.loc[0, day].split("<br>")
                 
                     gtg = content[0] if len(content) > 0 else ""
                     freq = content[1] if len(content) > 1 else ""
                     method = "<br>".join(content[2:]) if len(content) > 2 else ""
                 
+                    color = day_colors.get(day, "#2E3B4E")
+                
                     html += (
-                        "<td>"
-                        "<div class='bubble'><h4>Grease the Groove</h4><p>" + gtg + "</p></div>"
-                        "<div class='bubble'><h4>Méthode</h4><p>" + method + "</p></div>"
-                        "<div class='bubble'><h4>Fréquence</h4><p>" + freq + "</p></div>"
+                        f"<td>"
+                        f"<div class='bubble' style='background-color:{color};'><h4>Grease the Groove</h4><p>{gtg}</p></div>"
+                        f"<div class='bubble' style='background-color:{color};'><h4>Méthode</h4><p>{method}</p></div>"
+                        f"<div class='bubble' style='background-color:{color};'><h4>Fréquence</h4><p>{freq}</p></div>"
                         "</td>"
                     )
                 
