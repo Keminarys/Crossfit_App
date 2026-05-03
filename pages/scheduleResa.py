@@ -44,6 +44,7 @@ if st.user.is_logged_in :
                 athl = newName()
                 planning = get_conn_and_df("WODSemaine")
                 planning = planning[['WOD', 'Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']].dropna()
+                st.dataframe(planning)
                 poll = get_conn_and_df("Inscription")
                 
                 # Get current date and determine Monday of the current week
@@ -65,7 +66,7 @@ if st.user.is_logged_in :
                 
                 # Copy relevant columns
                 table = planning[['WOD'] + week_days].copy()
-                st.dataframe(table)
+                
                 
                 # Replace line breaks for HTML display
                 for day in week_days:
