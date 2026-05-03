@@ -58,7 +58,7 @@ if st.user.is_logged_in :
                     "Sunday": "Dimanche"
                 }
                 st.subheader("Planning de la semaine :calendar:")
-                
+
                 # Convert weekday names
                 week_days = [daysConvert[d.strftime('%A')] for d in days]
                 
@@ -110,38 +110,33 @@ if st.user.is_logged_in :
                 </style>
                 """, unsafe_allow_html=True)
                 
-                # Build HTML table dynamically (no indentation)
-                html = "<table><tr><th>WOD</th>"
+                # Build HTML table
+                html = "<table><tr>"
+                
+                # Header row
                 for day in week_days:
                     html += f"<th>{day}</th>"
-                html += "</tr>"
+                html += "</tr><tr>"
                 
-                for i in range(len(table)):
-                    html += "<tr>"
-                    html += f"<td>{table.loc[i, 'WOD']}</td>"
+                # Single row containing all days
+                for day in week_days:
+                    content = table.loc[0, day].split("<br>")
                 
-                    for day in week_days:
-                        content = table.loc[i, day].split("<br>")
-                        gtg = content[0] if len(content) > 0 else ""
-                        freq = content[1] if len(content) > 1 else ""
-                        method = "<br>".join(content[2:]) if len(content) > 2 else ""
+                    gtg = content[0] if len(content) > 0 else ""
+                    freq = content[1] if len(content) > 1 else ""
+                    method = "<br>".join(content[2:]) if len(content) > 2 else ""
                 
-                        html += (
-                            "<td>"
-                            "<div class='bubble'><h4>Grease the Groove</h4><p>" + gtg + "</p></div>"
-                            "<div class='bubble'><h4>Fréquence</h4><p>" + freq + "</p></div>"
-                            "<div class='bubble'><h4>Méthode</h4><p>" + method + "</p></div>"
-                            "</td>"
-                        )
+                    html += (
+                        "<td>"
+                        "<div class='bubble'><h4>Grease the Groove</h4><p>" + gtg + "</p></div>"
+                        "<div class='bubble'><h4>Méthode</h4><p>" + method + "</p></div>"
+                        "<div class='bubble'><h4>Fréquence</h4><p>" + freq + "</p></div>"
+                        "</td>"
+                    )
                 
-                    html += "</tr>"
+                html += "</tr></table>"
                 
-                html += "</table>"
-                
-                # Render HTML correctly
                 st.markdown(html, unsafe_allow_html=True)
-
-
 
                 
                 with st.expander("Personnes présentes au cours aujourd'hui") : 
