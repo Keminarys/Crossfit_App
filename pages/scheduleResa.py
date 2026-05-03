@@ -58,14 +58,18 @@ if st.user.is_logged_in :
                     "Sunday": "Dimanche"
                 }
                 st.subheader("Planning de la semaine :calendar:")
-
+                
+                # Convert weekday names
                 week_days = [daysConvert[d.strftime('%A')] for d in days]
+                
+                # Copy relevant columns
                 table = planning[['WOD'] + week_days].copy()
                 
+                # Replace line breaks for HTML display
                 for day in week_days:
                     table[day] = table[day].str.replace("\n", "<br>")
                 
-                # CSS
+                # CSS styling
                 st.markdown("""
                 <style>
                 table {
@@ -85,6 +89,8 @@ if st.user.is_logged_in :
                     border: 1px solid #444;
                     vertical-align: top;
                 }
+                
+                /* Bubble style */
                 .bubble {
                     background-color: #2E3B4E;
                     padding: 12px;
@@ -104,9 +110,8 @@ if st.user.is_logged_in :
                 </style>
                 """, unsafe_allow_html=True)
                 
-                # Build HTML WITHOUT indentation
+                # Build HTML table dynamically (no indentation)
                 html = "<table><tr><th>WOD</th>"
-                
                 for day in week_days:
                     html += f"<th>{day}</th>"
                 html += "</tr>"
@@ -133,7 +138,9 @@ if st.user.is_logged_in :
                 
                 html += "</table>"
                 
+                # Render HTML correctly
                 st.markdown(html, unsafe_allow_html=True)
+
 
 
                 
