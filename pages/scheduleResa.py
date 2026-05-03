@@ -72,13 +72,13 @@ if st.user.is_logged_in :
                 
                 # Color palette per day
                 day_colors = {
-                    "Lundi": "#8B0000",
-                    "Mardi": "#AA0000",
-                    "Mercredi": "#B22222",
-                    "Jeudi": "#CD5C5C",
-                    "Vendredi": "#E9967A",
-                    "Samedi": "#A52A2A",
-                    "Dimanche": "#800000",
+                    "Lundi": "#7A2E2E",
+                    "Mardi": "#8C3A3A",
+                    "Mercredi": "#9E4A4A",
+                    "Jeudi": "#B05C5C",
+                    "Vendredi": "#C26E6E",
+                    "Samedi": "#A05252",
+                    "Dimanche": "#6E2B2B",
                 }
                 
                 # CSS styling
