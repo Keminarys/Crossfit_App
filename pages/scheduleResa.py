@@ -57,38 +57,36 @@ if st.user.is_logged_in :
                     "Thursday": "Jeudi", "Friday": "Vendredi", "Saturday": "Samedi",
                     "Sunday": "Dimanche"
                 }
-
-                # Define example workout details for each day
-                st.subheader("Planning de la semaine :calendar:")
+                
                 st.subheader("Planning de la semaine :calendar:")
                 week_days = [daysConvert[d.strftime('%A')] for d in days]
                 table = planning[['WOD'] + week_days].copy()
                 for day in week_days:
-                    table[day] = table[day].str.replace("\n", "<br>")
-
-                st.markdown("""
-                <style>
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-                th {
-                    background-color: #2E3B4E;
-                    color: white;
-                    padding: 10px;
-                    text-align: center;
-                }
-                td {
-                    background-color: #1F2937;
-                    color: white;
-                    padding: 10px;
-                    border: 1px solid #444;
-                    vertical-align: top;
-                }
-                </style>
-                """, unsafe_allow_html=True)
+                        table[day] = table[day].str.replace("\n", "<br>")
                 
+                st.markdown("""
+                        <style>
+                        table {
+                            width: 100%;
+                            border-collapse: collapse;
+                        }
+                        th {
+                            background-color: #2E3B4E;
+                            color: white;
+                            padding: 10px;
+                            text-align: center;
+                        }
+                        td {
+                            background-color: #1F2937;
+                            color: white;
+                            padding: 10px;
+                            border: 1px solid #444;
+                            vertical-align: top;
+                        }
+                        </style>
+                        """, unsafe_allow_html=True)
                 st.markdown(table.to_html(escape=False, index=False), unsafe_allow_html=True)
+
 
                 
                 with st.expander("Personnes présentes au cours aujourd'hui") : 
