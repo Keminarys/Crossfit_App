@@ -146,8 +146,8 @@ if st.user.is_logged_in :
                     html += (
                         f"<td>"
                         f"<div class='bubble' style='background-color:{color};'><h4>Grease the Groove</h4><p>{gtg}</p></div>"
-                        f"<div class='bubble' style='background-color:{color};'><h4>Méthode</h4><p>{method}</p></div>"
-                        f"<div class='bubble' style='background-color:{color};'><h4>Fréquence</h4><p>{freq}</p></div>"
+                        f"<div class='bubble' style='background-color:{color};'><h4>Méthode</h4><p>{freq}</p></div>"
+                        f"<div class='bubble' style='background-color:{color};'><h4>Fréquence</h4><p>{method}</p></div>"
                         "</td>"
                     )
                 
