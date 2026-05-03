@@ -136,10 +136,9 @@ if st.user.is_logged_in :
                 
                 # One row containing all days
                 for day, label in zip(week_days, header_labels):
-                    content = table.iloc[:,day].split("<br>") 
-                    gtg = content[0] if len(content) > 0 else ""
-                    freq = content[1] if len(content) > 1 else ""
-                    method = "<br>".join(content[2:]) if len(content) > 2 else ""
+                    gtg = table.loc[0,day].split("<br>") if len(table.loc[0,day]) > 0 else ""
+                    freq = table.loc[1,day].split("<br>") if len(table.loc[1,day]) > 0 else ""
+                    method = table.loc[2,day].split("<br>") if len(table.loc[2,day]) > 0 else ""
                 
                     color = day_colors.get(day, "#2E3B4E")
                 
