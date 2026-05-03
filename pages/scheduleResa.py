@@ -57,35 +57,103 @@ if st.user.is_logged_in :
                     "Thursday": "Jeudi", "Friday": "Vendredi", "Saturday": "Samedi",
                     "Sunday": "Dimanche"
                 }
-                
                 st.subheader("Planning de la semaine :calendar:")
+
+                # Build list of converted weekday names
                 week_days = [daysConvert[d.strftime('%A')] for d in days]
-                table = planning[['WOD'] + week_days].copy()
-                for day in week_days:
-                        table[day] = table[day].str.replace("\n", "<br>")
                 
+                # Build the table with WOD + all days
+                table = planning[['WOD'] + week_days].copy()
+                
+                # Convert line breaks for HTML display
+                for day in week_days:
+                    table[day] = table[day].str.replace("\n", "<br>")
+                
+                # CSS styling for table + bubbles
                 st.markdown("""
-                        <style>
-                        table {
-                            width: 100%;
-                            border-collapse: collapse;
-                        }
-                        th {
-                            background-color: #2E3B4E;
-                            color: white;
-                            padding: 10px;
-                            text-align: center;
-                        }
-                        td {
-                            background-color: #1F2937;
-                            color: white;
-                            padding: 10px;
-                            border: 1px solid #444;
-                            vertical-align: top;
-                        }
-                        </style>
-                        """, unsafe_allow_html=True)
-                st.markdown(table.to_html(escape=False, index=False), unsafe_allow_html=True)
+                <style>
+                table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                th {
+                    background-color: #2E3B4E;
+                    color: white;
+                    padding: 10px;
+                    text-align: center;
+                }
+                td {
+                    background-color: #1F2937;
+                    color: white;
+                    padding: 10px;
+                    border: 1px solid #444;
+                    vertical-align: top;
+                }
+                
+                /* Bubble style */
+                .bubble {
+                    background-color: #2E3B4E;
+                    padding: 12px;
+                    margin-bottom: 10px;
+                    border-radius: 12px;
+                    box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+                }
+                .bubble h4 {
+                    margin: 0 0 6px 0;
+                    font-size: 16px;
+                    color: #FFD166;
+                }
+                .bubble p {
+                    margin: 0;
+                    font-size: 14px;
+                }
+                </style>
+                """, unsafe_allow_html=True)
+                
+                
+                # Build HTML table manually so each cell contains 3 bubbles
+                html = "<table><tr><th>WOD</th>"
+                
+                # Header row
+                for day in week_days:
+                    html += f"<th>{day}</th>"
+                html += "</tr>"
+                
+                # Rows
+                for i in range(len(table)):
+                    html += "<tr>"
+                    html += f"<td>{table.loc[i, 'WOD']}</td>"
+                
+                    for day in week_days:
+                        content = table.loc[i, day].split("<br>")
+                
+                        # Expecting 3 blocks: GTG / Frequence / Methode
+                        gtg = content[0] if len(content) > 0 else ""
+                        freq = content[1] if len(content) > 1 else ""
+                        method = "<br>".join(content[2:]) if len(content) > 2 else ""
+                
+                        html += f"""
+                        <td>
+                            <div class="bubble">
+                                <h4>Grease the Groove</h4>
+                                <p>{gtg}</p>
+                            </div>
+                            <div class="bubble">
+                                <h4>Fréquence</h4>
+                                <p>{freq}</p>
+                            </div>
+                            <div class="bubble">
+                                <h4>Méthode</h4>
+                                <p>{method}</p>
+                            </div>
+                        </td>
+                        """
+                
+                    html += "</tr>"
+                
+                html += "</table>"
+                
+                st.markdown(html, unsafe_allow_html=True)
 
 
                 
