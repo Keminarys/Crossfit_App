@@ -136,7 +136,7 @@ if st.user.is_logged_in :
                 # One row containing all days
                 for day, label in zip(week_days, header_labels):
                     content = table.loc[0, day].split("<br>")
-                
+                    st.write(content)    
                     gtg = content[0] if len(content) > 0 else ""
                     freq = content[1] if len(content) > 1 else ""
                     method = "<br>".join(content[2:]) if len(content) > 2 else ""
