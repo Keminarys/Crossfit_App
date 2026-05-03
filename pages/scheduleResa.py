@@ -59,17 +59,13 @@ if st.user.is_logged_in :
                 }
                 st.subheader("Planning de la semaine :calendar:")
 
-                # Build list of converted weekday names
                 week_days = [daysConvert[d.strftime('%A')] for d in days]
-                
-                # Build the table with WOD + all days
                 table = planning[['WOD'] + week_days].copy()
                 
-                # Convert line breaks for HTML display
                 for day in week_days:
                     table[day] = table[day].str.replace("\n", "<br>")
                 
-                # CSS styling for table + bubbles
+                # CSS
                 st.markdown("""
                 <style>
                 table {
@@ -89,8 +85,6 @@ if st.user.is_logged_in :
                     border: 1px solid #444;
                     vertical-align: top;
                 }
-                
-                /* Bubble style */
                 .bubble {
                     background-color: #2E3B4E;
                     padding: 12px;
@@ -110,44 +104,30 @@ if st.user.is_logged_in :
                 </style>
                 """, unsafe_allow_html=True)
                 
-                
-                # Build HTML table manually so each cell contains 3 bubbles
+                # Build HTML WITHOUT indentation
                 html = "<table><tr><th>WOD</th>"
                 
-                # Header row
                 for day in week_days:
                     html += f"<th>{day}</th>"
                 html += "</tr>"
                 
-                # Rows
                 for i in range(len(table)):
                     html += "<tr>"
                     html += f"<td>{table.loc[i, 'WOD']}</td>"
                 
                     for day in week_days:
                         content = table.loc[i, day].split("<br>")
-                
-                        # Expecting 3 blocks: GTG / Frequence / Methode
                         gtg = content[0] if len(content) > 0 else ""
                         freq = content[1] if len(content) > 1 else ""
                         method = "<br>".join(content[2:]) if len(content) > 2 else ""
                 
-                        html += f"""
-                        <td>
-                            <div class="bubble">
-                                <h4>Grease the Groove</h4>
-                                <p>{gtg}</p>
-                            </div>
-                            <div class="bubble">
-                                <h4>Fréquence</h4>
-                                <p>{freq}</p>
-                            </div>
-                            <div class="bubble">
-                                <h4>Méthode</h4>
-                                <p>{method}</p>
-                            </div>
-                        </td>
-                        """
+                        html += (
+                            "<td>"
+                            "<div class='bubble'><h4>Grease the Groove</h4><p>" + gtg + "</p></div>"
+                            "<div class='bubble'><h4>Fréquence</h4><p>" + freq + "</p></div>"
+                            "<div class='bubble'><h4>Méthode</h4><p>" + method + "</p></div>"
+                            "</td>"
+                        )
                 
                     html += "</tr>"
                 
