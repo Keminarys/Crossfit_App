@@ -44,7 +44,6 @@ if st.user.is_logged_in :
                 athl = newName()
                 planning = get_conn_and_df("WODSemaine")
                 planning = planning[['WOD', 'Lundi','Mardi','Mercredi','Jeudi','Vendredi','Samedi','Dimanche']].dropna()
-                st.dataframe(planning)
                 poll = get_conn_and_df("Inscription")
                 
                 # Get current date and determine Monday of the current week
@@ -137,6 +136,7 @@ if st.user.is_logged_in :
                 
                 # One row containing all days
                 for day, label in zip(week_days, header_labels):
+                        st.dataframe(table)
                     content = table.loc[0,day].split("<br>") 
                     gtg = content[0] if len(content) > 0 else ""
                     freq = content[1] if len(content) > 1 else ""
