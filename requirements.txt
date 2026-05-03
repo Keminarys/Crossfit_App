@@ -9,8 +9,7 @@ streamlit-calendar
 pyyaml
 bs4
 requests
-streamlit-cookies-manager
-PyJWT
 streamlit_agraph
 streamlit
 streamlit[auth]
+Authlib>=1.3.2
